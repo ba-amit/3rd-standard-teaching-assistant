@@ -318,7 +318,7 @@
 
     const ttsAudio = new Audio();
     function speak(text) {
-      const url = "https://translate.google.com/translate_tts?ie=UTF-8&tl=hi&client=tw-ob&q="
+      const url = "https://translate.googleapis.com/translate_tts?ie=UTF-8&tl=hi&client=gtx&q="
         + encodeURIComponent(text);
       ttsAudio.onerror = () => speakBrowser(text);
       ttsAudio.src = url;
