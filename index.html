@@ -210,6 +210,60 @@
       color: var(--muted);
     }
 
+    .tabs {
+      display: flex;
+      gap: 8px;
+      justify-content: center;
+      margin-bottom: 12px;
+      flex-wrap: wrap;
+    }
+
+    .tab {
+      background: rgba(255,255,255,.75);
+      color: var(--muted);
+      padding: 10px 16px;
+      border-radius: 999px;
+      font-size: .95rem;
+    }
+
+    .tab.active { background: var(--accent2); color: #fff; }
+    .tab.set.active { background: var(--accent); color: #fff; }
+
+    .sets { margin-bottom: 16px; }
+    .sets .tab { padding: 8px 14px; font-size: .85rem; }
+
+    .listen {
+      width: 100%;
+      height: 100%;
+      border-radius: 28px;
+      background:
+        radial-gradient(circle at 25% 20%, rgba(168,85,247,.18), transparent 30%),
+        radial-gradient(circle at 80% 80%, rgba(255,138,61,.18), transparent 30%),
+        #fff;
+      box-shadow: 0 18px 45px rgba(31, 41, 55, .18);
+      border: 5px solid rgba(255,255,255,.85);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      flex-direction: column;
+      gap: 10px;
+      padding: 24px;
+    }
+
+    .earBtn {
+      width: clamp(130px, 34vw, 190px);
+      height: clamp(130px, 34vw, 190px);
+      border-radius: 50%;
+      background: var(--accent2);
+      color: #fff;
+      font-size: clamp(3.5rem, 12vw, 5rem);
+      box-shadow: 0 14px 30px rgba(59,130,246,.35);
+    }
+
+    .listen .hint { margin-top: 6px; font-size: 1.05rem; }
+    .listen .note { color: var(--muted); font-size: .85rem; max-width: 30ch; }
+    .hidden { display: none !important; }
+
     @media (max-width: 640px) {
       .controls { grid-template-columns: repeat(2, 1fr); }
       .scene { min-height: 360px; }
@@ -218,17 +272,33 @@
 </head>
 <body>
   <main class="app">
-    <h1>हिंदी वर्णमाला फ़्लैशकार्ड</h1>
-    <p class="subtitle">अक्षर पहचानो, फिर कार्ड पलटकर उत्तर देखो</p>
+    <h1>हिंदी वर्णमाला अभ्यास</h1>
+    <p class="subtitle" id="subtitle">अक्षर पहचानो, फिर कार्ड पलटकर उत्तर देखो</p>
+
+    <div class="tabs" role="tablist">
+      <button class="tab active" id="modeReadBtn">👀 अक्षर देखो, बोलो</button>
+      <button class="tab" id="modeWriteBtn">✍️ सुनो, लिखो</button>
+    </div>
+
+    <div class="tabs sets">
+      <button class="tab set active" data-set="all">सब</button>
+      <button class="tab set" data-set="swar">स्वर</button>
+      <button class="tab set" data-set="vyanjan">व्यंजन</button>
+    </div>
 
     <div class="status">
       <div class="pill" id="counter">1 / 1</div>
       <div class="pill" id="setName">स्वर + व्यंजन</div>
     </div>
 
-    <label class="toggle">
+    <label class="toggle" id="autoSpeakRow">
       <input type="checkbox" id="autoSpeak" />
       🔊 हर कार्ड पर आवाज़ अपने आप बोले
+    </label>
+
+    <label class="toggle hidden" id="withWordRow">
+      <input type="checkbox" id="withWord" />
+      🗣️ अक्षर के साथ उदाहरण शब्द भी बोलें
     </label>
 
     <section class="scene" id="scene" aria-label="Flashcard. Click to flip.">
@@ -247,14 +317,28 @@
       </div>
     </section>
 
-    <div class="controls">
+    <section class="scene hidden" id="listenScene">
+      <div class="listen">
+        <button class="earBtn" id="earBtn" title="अक्षर सुनें">🔊</button>
+        <div class="hint">सुनो और कॉपी में लिखो</div>
+        <div class="note">फिर से सुनने के लिए 🔊 दबाओ</div>
+      </div>
+    </section>
+
+    <div class="controls" id="readControls">
       <button class="secondary" id="prevBtn">← पिछला</button>
       <button class="primary" id="flipBtn">पलटें</button>
       <button class="secondary" id="nextBtn">अगला →</button>
       <button class="shuffle" id="shuffleBtn">🔀 फिर से मिलाएँ</button>
     </div>
 
-    <div class="footer">
+    <div class="controls hidden" id="writeControls">
+      <button class="primary" id="repeatBtn">🔁 फिर से सुनो</button>
+      <button class="secondary" id="nextWriteBtn">अगला अक्षर →</button>
+      <button class="shuffle" id="shuffleWriteBtn">🔀 फिर से मिलाएँ</button>
+    </div>
+
+    <div class="footer" id="footer">
       Keyboard: ← Previous · Space Flip · → Next · S Shuffle · V Voice
     </div>
   </main>
@@ -281,6 +365,17 @@
       ["क्ष","क्षत्रिय","Kshatriya","🛡️"], ["त्र","त्रिशूल","Trishul","🔱"], ["ज्ञ","ज्ञानी","Gyaani","🧠"]
     ];
 
+    // Data order: first 13 entries are swar, the rest are vyanjan.
+    const SWAR_COUNT = 13;
+    const sets = {
+      all: () => cards,
+      swar: () => cards.slice(0, SWAR_COUNT),
+      vyanjan: () => cards.slice(SWAR_COUNT)
+    };
+    const setLabels = { all: "स्वर + व्यंजन", swar: "स्वर", vyanjan: "व्यंजन" };
+
+    let currentSet = "all";
+    let mode = "read"; // "read" = show letter, kid speaks. "write" = dictate, kid writes.
     let deck = [];
     let index = 0;
     let flipped = false;
@@ -291,7 +386,17 @@
     const romanEl = document.getElementById("roman");
     const emojiEl = document.getElementById("emoji");
     const counterEl = document.getElementById("counter");
+    const setNameEl = document.getElementById("setName");
     const autoSpeakEl = document.getElementById("autoSpeak");
+    const withWordEl = document.getElementById("withWord");
+    const subtitleEl = document.getElementById("subtitle");
+    const sceneEl = document.getElementById("scene");
+    const listenSceneEl = document.getElementById("listenScene");
+    const readControlsEl = document.getElementById("readControls");
+    const writeControlsEl = document.getElementById("writeControls");
+    const autoSpeakRow = document.getElementById("autoSpeakRow");
+    const withWordRow = document.getElementById("withWordRow");
+    const footerEl = document.getElementById("footer");
 
     const isIOS = /iPad|iPhone|iPod/.test(navigator.userAgent)
       || (navigator.platform === "MacIntel" && navigator.maxTouchPoints > 1);
@@ -352,7 +457,13 @@
     }
 
     function speakLetter() {
-      const [letter] = deck[index];
+      const [letter, word] = deck[index];
+      // In dictation mode bare consonants ("क" vs "ख") can be hard to tell apart
+      // by ear, so optionally follow the letter with its example word.
+      if (mode === "write" && withWordEl.checked) {
+        speak(letter + ", " + letter + " से " + word);
+        return;
+      }
       speak(letter);
     }
 
@@ -372,14 +483,51 @@
 
     function render() {
       const [letter, word, roman, emoji] = deck[index];
+      counterEl.textContent = `${index + 1} / ${deck.length}`;
+      flipped = false;
+      cardEl.classList.remove("flipped");
+
+      if (mode === "write") {
+        // Never put the answer in the DOM in dictation mode — the kid writes it.
+        letterEl.textContent = wordEl.textContent = "";
+        romanEl.textContent = emojiEl.textContent = "";
+        speakLetter();
+        return;
+      }
+
       letterEl.textContent = letter;
       wordEl.textContent = word;
       romanEl.textContent = roman;
       emojiEl.textContent = emoji;
-      counterEl.textContent = `${index + 1} / ${deck.length}`;
-      flipped = false;
-      cardEl.classList.remove("flipped");
       if (autoSpeakEl.checked) speakLetter();
+    }
+
+    function setMode(next) {
+      mode = next;
+      const write = mode === "write";
+      document.getElementById("modeReadBtn").classList.toggle("active", !write);
+      document.getElementById("modeWriteBtn").classList.toggle("active", write);
+      sceneEl.classList.toggle("hidden", write);
+      listenSceneEl.classList.toggle("hidden", !write);
+      readControlsEl.classList.toggle("hidden", write);
+      writeControlsEl.classList.toggle("hidden", !write);
+      autoSpeakRow.classList.toggle("hidden", write);
+      withWordRow.classList.toggle("hidden", !write);
+      subtitleEl.textContent = write
+        ? "सुनो और कॉपी में लिखो — अक्षर दिखाया नहीं जाएगा"
+        : "अक्षर पहचानो, फिर कार्ड पलटकर उत्तर देखो";
+      footerEl.textContent = write
+        ? "Keyboard: R Repeat · → Next · S Shuffle"
+        : "Keyboard: ← Previous · Space Flip · → Next · S Shuffle · V Voice";
+      reshuffle();
+    }
+
+    function setSet(name) {
+      currentSet = name;
+      setNameEl.textContent = setLabels[name];
+      document.querySelectorAll(".tab.set").forEach(b =>
+        b.classList.toggle("active", b.dataset.set === name));
+      reshuffle();
     }
 
     function flipCard() {
@@ -401,7 +549,7 @@
     }
 
     function reshuffle() {
-      deck = shuffle(cards);
+      deck = shuffle(sets[currentSet]());
       index = 0;
       render();
     }
@@ -421,11 +569,25 @@
       speakWord();
     });
 
+    document.getElementById("modeReadBtn").addEventListener("click", () => setMode("read"));
+    document.getElementById("modeWriteBtn").addEventListener("click", () => setMode("write"));
+    document.querySelectorAll(".tab.set").forEach(b =>
+      b.addEventListener("click", () => setSet(b.dataset.set)));
+
+    document.getElementById("earBtn").addEventListener("click", speakLetter);
+    document.getElementById("repeatBtn").addEventListener("click", speakLetter);
+    document.getElementById("nextWriteBtn").addEventListener("click", nextCard);
+    document.getElementById("shuffleWriteBtn").addEventListener("click", reshuffle);
+
     document.addEventListener("keydown", (e) => {
       if (e.key === "ArrowRight") nextCard();
+      if (e.key.toLowerCase() === "s") reshuffle();
+      if (mode === "write") {
+        if (e.key.toLowerCase() === "r") speakLetter();
+        return;
+      }
       if (e.key === "ArrowLeft") prevCard();
       if (e.key === " ") { e.preventDefault(); flipCard(); }
-      if (e.key.toLowerCase() === "s") reshuffle();
       if (e.key.toLowerCase() === "v") flipped ? speakWord() : speakLetter();
     });
 
