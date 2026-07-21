@@ -264,6 +264,87 @@
     .listen .note { color: var(--muted); font-size: .85rem; max-width: 30ch; }
     .hidden { display: none !important; }
 
+    /* --- side panel --- */
+    .sidebar {
+      position: fixed;
+      top: 0;
+      left: 0;
+      bottom: 0;
+      width: 250px;
+      padding: 22px 16px;
+      background: rgba(255,255,255,.92);
+      backdrop-filter: blur(8px);
+      box-shadow: 4px 0 24px rgba(31,41,55,.10);
+      display: flex;
+      flex-direction: column;
+      gap: 8px;
+      overflow-y: auto;
+      z-index: 30;
+    }
+
+    .sidebar h2 {
+      margin: 0 0 6px;
+      font-size: 1.05rem;
+      color: var(--muted);
+      letter-spacing: .04em;
+    }
+
+    .navItem {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      width: 100%;
+      text-align: left;
+      background: transparent;
+      color: var(--ink);
+      box-shadow: none;
+      padding: 12px 14px;
+      font-size: .98rem;
+    }
+
+    .navItem:hover { background: rgba(59,130,246,.08); }
+    .navItem.active { background: var(--accent2); color: #fff; }
+    .navItem .ico { font-size: 1.25rem; }
+
+    .menuBtn {
+      position: fixed;
+      top: 12px;
+      left: 12px;
+      z-index: 40;
+      width: 46px;
+      height: 46px;
+      border-radius: 14px;
+      background: rgba(255,255,255,.92);
+      font-size: 1.2rem;
+      padding: 0;
+      display: none;
+    }
+
+    .overlay {
+      position: fixed;
+      inset: 0;
+      background: rgba(15,23,42,.35);
+      z-index: 25;
+      display: none;
+    }
+
+    .overlay.show { display: block; }
+
+    body { padding-left: 290px; }
+
+    @media (max-width: 900px) {
+      body { padding-left: 20px; }
+      .menuBtn { display: flex; align-items: center; justify-content: center; }
+      .sidebar {
+        transform: translateX(-105%);
+        transition: transform .25s ease;
+      }
+      .sidebar.open { transform: none; }
+      /* the hamburger would sit on top of the open drawer's heading */
+      body:has(.sidebar.open) .menuBtn { display: none; }
+      h1 { margin-top: 44px; }
+    }
+
     @media (max-width: 640px) {
       .controls { grid-template-columns: repeat(2, 1fr); }
       .scene { min-height: 360px; }
@@ -271,16 +352,19 @@
   </style>
 </head>
 <body>
+  <button class="menuBtn" id="menuBtn" aria-label="अभ्यास सूची">☰</button>
+  <div class="overlay" id="overlay"></div>
+
+  <aside class="sidebar" id="sidebar">
+    <h2>अभ्यास</h2>
+    <nav id="activityNav"></nav>
+  </aside>
+
   <main class="app">
     <h1>हिंदी वर्णमाला अभ्यास</h1>
     <p class="subtitle" id="subtitle">अक्षर पहचानो, फिर कार्ड पलटकर उत्तर देखो</p>
 
-    <div class="tabs" role="tablist">
-      <button class="tab active" id="modeReadBtn">👀 अक्षर देखो, बोलो</button>
-      <button class="tab" id="modeWriteBtn">✍️ सुनो, लिखो</button>
-    </div>
-
-    <div class="tabs sets">
+    <div class="tabs sets" id="setFilter">
       <button class="tab set active" data-set="all">सब</button>
       <button class="tab set" data-set="swar">स्वर</button>
       <button class="tab set" data-set="vyanjan">व्यंजन</button>
@@ -374,8 +458,59 @@
     };
     const setLabels = { all: "स्वर + व्यंजन", swar: "स्वर", vyanjan: "व्यंजन" };
 
+    // Every practice activity is one entry here plus one <section> / controls
+    // block in the markup. Adding an activity should need nothing else.
+    //   scene / controls / extras : element ids shown only while it is active
+    //   hideAnswer                : blank the card fields so the DOM never
+    //                               carries the answer (dictation)
+    //   speechText                : what 🔊 says for a deck entry
+    //   usesSetFilter             : show the स्वर / व्यंजन filter
+    //   onKey                     : keyboard handler while active
+    const ACTIVITIES = [
+      {
+        id: "read",
+        icon: "👀",
+        label: "अक्षर देखो, बोलो",
+        subtitle: "अक्षर पहचानो, फिर कार्ड पलटकर उत्तर देखो",
+        footer: "Keyboard: ← Previous · Space Flip · → Next · S Shuffle · V Voice",
+        scene: "scene",
+        controls: "readControls",
+        extras: ["autoSpeakRow"],
+        usesSetFilter: true,
+        onKey(e) {
+          if (e.key === "ArrowRight") nextCard();
+          if (e.key === "ArrowLeft") prevCard();
+          if (e.key === " ") { e.preventDefault(); flipCard(); }
+          if (e.key.toLowerCase() === "s") reshuffle();
+          if (e.key.toLowerCase() === "v") flipped ? speakWord() : speakLetter();
+        }
+      },
+      {
+        id: "write",
+        icon: "✍️",
+        label: "सुनो, लिखो",
+        subtitle: "सुनो और कॉपी में लिखो — अक्षर दिखाया नहीं जाएगा",
+        footer: "Keyboard: R Repeat · → Next · S Shuffle",
+        scene: "listenScene",
+        controls: "writeControls",
+        extras: ["withWordRow"],
+        usesSetFilter: true,
+        hideAnswer: true,
+        // Bare consonants ("क" vs "ख") are hard to tell apart by ear, so the
+        // example word can follow the letter without revealing its shape.
+        speechText: ([letter, word]) =>
+          withWordEl.checked ? `${letter}, ${letter} से ${word}` : letter,
+        onKey(e) {
+          if (e.key === "ArrowRight") nextCard();
+          if (e.key.toLowerCase() === "s") reshuffle();
+          if (e.key.toLowerCase() === "r") speakLetter();
+        }
+      }
+    ];
+
     let currentSet = "all";
-    let mode = "read"; // "read" = show letter, kid speaks. "write" = dictate, kid writes.
+    let mode = ACTIVITIES[0].id;
+    const activity = () => ACTIVITIES.find(a => a.id === mode);
     let deck = [];
     let index = 0;
     let flipped = false;
@@ -390,13 +525,11 @@
     const autoSpeakEl = document.getElementById("autoSpeak");
     const withWordEl = document.getElementById("withWord");
     const subtitleEl = document.getElementById("subtitle");
-    const sceneEl = document.getElementById("scene");
-    const listenSceneEl = document.getElementById("listenScene");
-    const readControlsEl = document.getElementById("readControls");
-    const writeControlsEl = document.getElementById("writeControls");
-    const autoSpeakRow = document.getElementById("autoSpeakRow");
-    const withWordRow = document.getElementById("withWordRow");
     const footerEl = document.getElementById("footer");
+    const navEl = document.getElementById("activityNav");
+    const sidebarEl = document.getElementById("sidebar");
+    const overlayEl = document.getElementById("overlay");
+    const setFilterEl = document.getElementById("setFilter");
 
     const isIOS = /iPad|iPhone|iPod/.test(navigator.userAgent)
       || (navigator.platform === "MacIntel" && navigator.maxTouchPoints > 1);
@@ -457,14 +590,8 @@
     }
 
     function speakLetter() {
-      const [letter, word] = deck[index];
-      // In dictation mode bare consonants ("क" vs "ख") can be hard to tell apart
-      // by ear, so optionally follow the letter with its example word.
-      if (mode === "write" && withWordEl.checked) {
-        speak(letter + ", " + letter + " से " + word);
-        return;
-      }
-      speak(letter);
+      const a = activity();
+      speak(a.speechText ? a.speechText(deck[index]) : deck[index][0]);
     }
 
     function speakWord() {
@@ -487,8 +614,8 @@
       flipped = false;
       cardEl.classList.remove("flipped");
 
-      if (mode === "write") {
-        // Never put the answer in the DOM in dictation mode — the kid writes it.
+      if (activity().hideAnswer) {
+        // Never put the answer in the DOM — the kid writes it from the sound.
         letterEl.textContent = wordEl.textContent = "";
         romanEl.textContent = emojiEl.textContent = "";
         speakLetter();
@@ -502,24 +629,49 @@
       if (autoSpeakEl.checked) speakLetter();
     }
 
+    function buildNav() {
+      navEl.innerHTML = "";
+      ACTIVITIES.forEach(a => {
+        const btn = document.createElement("button");
+        btn.className = "navItem";
+        btn.dataset.id = a.id;
+        btn.innerHTML = `<span class="ico"></span><span class="lbl"></span>`;
+        btn.querySelector(".ico").textContent = a.icon;
+        btn.querySelector(".lbl").textContent = a.label;
+        btn.addEventListener("click", () => { setMode(a.id); closeDrawer(); });
+        navEl.appendChild(btn);
+      });
+    }
+
     function setMode(next) {
       mode = next;
-      const write = mode === "write";
-      document.getElementById("modeReadBtn").classList.toggle("active", !write);
-      document.getElementById("modeWriteBtn").classList.toggle("active", write);
-      sceneEl.classList.toggle("hidden", write);
-      listenSceneEl.classList.toggle("hidden", !write);
-      readControlsEl.classList.toggle("hidden", write);
-      writeControlsEl.classList.toggle("hidden", !write);
-      autoSpeakRow.classList.toggle("hidden", write);
-      withWordRow.classList.toggle("hidden", !write);
-      subtitleEl.textContent = write
-        ? "सुनो और कॉपी में लिखो — अक्षर दिखाया नहीं जाएगा"
-        : "अक्षर पहचानो, फिर कार्ड पलटकर उत्तर देखो";
-      footerEl.textContent = write
-        ? "Keyboard: R Repeat · → Next · S Shuffle"
-        : "Keyboard: ← Previous · Space Flip · → Next · S Shuffle · V Voice";
+      const a = activity();
+      const ownIds = act => [act.scene, act.controls, ...(act.extras || [])].filter(Boolean);
+      const shown = new Set(ownIds(a));
+      // Hide every activity's elements, then show the active one's. A block
+      // shared by two activities stays visible because `shown` wins.
+      ACTIVITIES.forEach(other => ownIds(other).forEach(id => {
+        const el = document.getElementById(id);
+        if (el) el.classList.toggle("hidden", !shown.has(id));
+      }));
+      navEl.querySelectorAll(".navItem").forEach(b =>
+        b.classList.toggle("active", b.dataset.id === a.id));
+      setFilterEl.classList.toggle("hidden", !a.usesSetFilter);
+      subtitleEl.textContent = a.subtitle;
+      footerEl.textContent = a.footer;
+      localStorage.setItem("varnamalaMode", a.id);
+      if (a.onEnter) a.onEnter();
       reshuffle();
+    }
+
+    function openDrawer() {
+      sidebarEl.classList.add("open");
+      overlayEl.classList.add("show");
+    }
+
+    function closeDrawer() {
+      sidebarEl.classList.remove("open");
+      overlayEl.classList.remove("show");
     }
 
     function setSet(name) {
@@ -569,8 +721,8 @@
       speakWord();
     });
 
-    document.getElementById("modeReadBtn").addEventListener("click", () => setMode("read"));
-    document.getElementById("modeWriteBtn").addEventListener("click", () => setMode("write"));
+    document.getElementById("menuBtn").addEventListener("click", openDrawer);
+    overlayEl.addEventListener("click", closeDrawer);
     document.querySelectorAll(".tab.set").forEach(b =>
       b.addEventListener("click", () => setSet(b.dataset.set)));
 
@@ -580,18 +732,14 @@
     document.getElementById("shuffleWriteBtn").addEventListener("click", reshuffle);
 
     document.addEventListener("keydown", (e) => {
-      if (e.key === "ArrowRight") nextCard();
-      if (e.key.toLowerCase() === "s") reshuffle();
-      if (mode === "write") {
-        if (e.key.toLowerCase() === "r") speakLetter();
-        return;
-      }
-      if (e.key === "ArrowLeft") prevCard();
-      if (e.key === " ") { e.preventDefault(); flipCard(); }
-      if (e.key.toLowerCase() === "v") flipped ? speakWord() : speakLetter();
+      if (e.key === "Escape") closeDrawer();
+      const handler = activity().onKey;
+      if (handler) handler(e);
     });
 
-    reshuffle();
+    buildNav();
+    const saved = localStorage.getItem("varnamalaMode");
+    setMode(ACTIVITIES.some(a => a.id === saved) ? saved : ACTIVITIES[0].id);
 
     if ("serviceWorker" in navigator) {
       window.addEventListener("load", () => {
