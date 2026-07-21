@@ -4,7 +4,7 @@
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover" />
   <meta name="referrer" content="no-referrer" />
-  <title>Hindi Varnamala Flashcards</title>
+  <title>3rd Standard Teaching Assistant</title>
 
   <link rel="manifest" href="manifest.json" />
   <link rel="icon" href="icon-192.png" />
@@ -12,7 +12,7 @@
   <meta name="theme-color" content="#3b82f6" />
   <meta name="apple-mobile-web-app-capable" content="yes" />
   <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent" />
-  <meta name="apple-mobile-web-app-title" content="वर्णमाला" />
+  <meta name="apple-mobile-web-app-title" content="3rd Standard" />
 
   <style>
     :root {
@@ -264,6 +264,82 @@
     .listen .note { color: var(--muted); font-size: .85rem; max-width: 30ch; }
     .hidden { display: none !important; }
 
+    /* --- maths quiz --- */
+    .quiz {
+      width: 100%;
+      height: 100%;
+      border-radius: 28px;
+      background:
+        radial-gradient(circle at 20% 15%, rgba(16,185,129,.16), transparent 30%),
+        radial-gradient(circle at 85% 85%, rgba(59,130,246,.16), transparent 30%),
+        #fff;
+      box-shadow: 0 18px 45px rgba(31, 41, 55, .18);
+      border: 5px solid rgba(255,255,255,.85);
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      gap: 16px;
+      padding: 24px;
+      overflow-y: auto;
+    }
+
+    .qLabel {
+      color: var(--muted);
+      font-weight: 800;
+      letter-spacing: .04em;
+      font-size: .9rem;
+      text-transform: uppercase;
+    }
+
+    .qText {
+      font-size: clamp(1.5rem, 5vw, 2.6rem);
+      font-weight: 800;
+      line-height: 1.35;
+      max-width: 24ch;
+    }
+
+    .ansInput {
+      width: min(260px, 80%);
+      padding: 14px 18px;
+      font-size: clamp(1.6rem, 5vw, 2.2rem);
+      font-weight: 800;
+      text-align: center;
+      border: 3px solid rgba(59,130,246,.35);
+      border-radius: 18px;
+      outline: none;
+      font-family: inherit;
+    }
+
+    .ansInput:focus { border-color: var(--accent2); }
+
+    .choices { display: flex; gap: 10px; flex-wrap: wrap; justify-content: center; }
+
+    .choice {
+      background: #fff;
+      border: 3px solid rgba(59,130,246,.35);
+      color: var(--ink);
+      min-width: 76px;
+      padding: 12px 18px;
+      font-size: 1.4rem;
+    }
+
+    .choice.picked { background: var(--accent2); color: #fff; border-color: var(--accent2); }
+
+    .feedback { font-weight: 800; font-size: 1.15rem; min-height: 1.6em; }
+    .feedback.right { color: #0f766e; }
+    .feedback.wrong { color: #be123c; }
+
+    .navGroup {
+      margin: 14px 0 4px;
+      font-size: .78rem;
+      font-weight: 800;
+      letter-spacing: .08em;
+      text-transform: uppercase;
+      color: var(--muted);
+      padding-left: 14px;
+    }
+
     /* --- side panel --- */
     .sidebar {
       position: fixed;
@@ -356,13 +432,15 @@
   <div class="overlay" id="overlay"></div>
 
   <aside class="sidebar" id="sidebar">
-    <h2>अभ्यास</h2>
+    <h2>Activities</h2>
     <nav id="activityNav"></nav>
   </aside>
 
   <main class="app">
-    <h1>हिंदी वर्णमाला अभ्यास</h1>
+    <h1 id="pageTitle">3rd Standard Teaching Assistant</h1>
     <p class="subtitle" id="subtitle">अक्षर पहचानो, फिर कार्ड पलटकर उत्तर देखो</p>
+
+    <div class="tabs sets hidden" id="skillFilter"></div>
 
     <div class="tabs sets" id="setFilter">
       <button class="tab set active" data-set="all">सब</button>
@@ -409,6 +487,17 @@
       </div>
     </section>
 
+    <section class="scene hidden" id="mathScene">
+      <div class="quiz">
+        <div class="qLabel" id="qLabel">Addition</div>
+        <div class="qText" id="qText">431 + 128 = ?</div>
+        <input class="ansInput" id="ansInput" type="text" inputmode="numeric"
+               autocomplete="off" placeholder="Answer" />
+        <div class="choices hidden" id="choices"></div>
+        <div class="feedback" id="feedback"></div>
+      </div>
+    </section>
+
     <div class="controls" id="readControls">
       <button class="secondary" id="prevBtn">← पिछला</button>
       <button class="primary" id="flipBtn">पलटें</button>
@@ -420,6 +509,12 @@
       <button class="primary" id="repeatBtn">🔁 फिर से सुनो</button>
       <button class="secondary" id="nextWriteBtn">अगला अक्षर →</button>
       <button class="shuffle" id="shuffleWriteBtn">🔀 फिर से मिलाएँ</button>
+    </div>
+
+    <div class="controls hidden" id="mathControls">
+      <button class="primary" id="checkBtn">✓ Check</button>
+      <button class="secondary" id="nextQBtn">Next question →</button>
+      <button class="shuffle" id="restartBtn">🔄 New set</button>
     </div>
 
     <div class="footer" id="footer">
@@ -458,6 +553,181 @@
     };
     const setLabels = { all: "स्वर + व्यंजन", swar: "स्वर", vyanjan: "व्यंजन" };
 
+    // ---------------- maths question generators ----------------
+    // Each skill mirrors an exercise type from the class-3 workbook (ch.1
+    // Numbers, ch.2 Addition) but makes fresh numbers every time, so the kid
+    // never runs out of practice. gen() returns:
+    //   { q: question text, a: answer, type: "number" | "choice", options?: [] }
+    const rnd = (min, max) => min + Math.floor(Math.random() * (max - min + 1));
+    const digitsOf = n => String(n).split("").map(Number);
+    const pickSome = (arr, n) => shuffle(arr).slice(0, n);
+    const roundTo = (n, step) => Math.round(n / step) * step;
+    const PLACES = [["ones", 1], ["tens", 10], ["hundreds", 100], ["thousands", 1000]];
+
+    // Two 3-digit numbers whose per-column digits never exceed 9 (no carrying).
+    function noCarryPair() {
+      const a = [], b = [];
+      for (let i = 0; i < 3; i++) {
+        const x = rnd(i === 0 ? 1 : 0, 8);
+        a.push(x);
+        b.push(rnd(i === 0 ? 1 : 0, 9 - x));
+      }
+      return [Number(a.join("")), Number(b.join(""))];
+    }
+
+    const MATH_SKILLS = [
+      {
+        id: "placeValue",
+        label: "Place value",
+        gen() {
+          const n = rnd(1000, 9999);
+          const p = rnd(0, 3);
+          const digit = digitsOf(n)[3 - p];
+          return {
+            q: `In ${n}, what is the place value of the ${PLACES[p][0]} digit (${digit})?`,
+            a: digit * PLACES[p][1]
+          };
+        }
+      },
+      {
+        id: "expanded",
+        label: "Expanded form",
+        gen() {
+          const n = rnd(1000, 9999);
+          const parts = digitsOf(n).map((x, i) => x * Math.pow(10, 3 - i));
+          return { q: `Write the standard form: ${parts.join(" + ")} = ?`, a: n };
+        }
+      },
+      {
+        id: "compare",
+        label: "Compare >, <, =",
+        gen() {
+          const a = rnd(100, 9999);
+          const b = Math.random() < 0.25 ? a : rnd(100, 9999);
+          return {
+            q: `${a} ___ ${b}`,
+            a: a > b ? ">" : a < b ? "<" : "=",
+            type: "choice",
+            options: [">", "<", "="]
+          };
+        }
+      },
+      {
+        id: "successor",
+        label: "Successor & predecessor",
+        gen() {
+          const n = rnd(100, 9998);
+          const after = Math.random() < 0.5;
+          return {
+            q: `Which number comes just ${after ? "after" : "before"} ${n}?`,
+            a: after ? n + 1 : n - 1
+          };
+        }
+      },
+      {
+        id: "skipCount",
+        label: "Skip counting",
+        gen() {
+          const step = [2, 10, 100, 1000][rnd(0, 3)];
+          const start = rnd(1000, 5000);
+          const seq = [0, 1, 2, 3].map(i => start + i * step);
+          return { q: `Skip count in ${step}s: ${seq.slice(0, 3).join(", ")}, ___`, a: seq[3] };
+        }
+      },
+      {
+        id: "rounding",
+        label: "Rounding off",
+        gen() {
+          const step = [10, 100, 1000][rnd(0, 2)];
+          const n = rnd(step === 1000 ? 1000 : 100, 9999);
+          return { q: `Round off ${n} to the nearest ${step}.`, a: roundTo(n, step) };
+        }
+      },
+      {
+        id: "formNumber",
+        label: "Form a number",
+        gen() {
+          const digits = pickSome([1, 2, 3, 4, 5, 6, 7, 8, 9], 4);
+          const biggest = Math.random() < 0.5;
+          const sorted = [...digits].sort((x, y) => biggest ? y - x : x - y);
+          return {
+            q: `Using the digits ${digits.join(", ")} without repeating any digit, write the ${biggest ? "largest" : "smallest"} 4-digit number.`,
+            a: Number(sorted.join(""))
+          };
+        }
+      },
+      {
+        id: "addNoCarry",
+        label: "Add (no carrying)",
+        gen() {
+          const [a, b] = noCarryPair();
+          return { q: `${a} + ${b} = ?`, a: a + b };
+        }
+      },
+      {
+        id: "addCarry",
+        label: "Add (with carrying)",
+        gen() {
+          const a = rnd(150, 899);
+          const b = rnd(150, 899);
+          return { q: `${a} + ${b} = ?`, a: a + b };
+        }
+      },
+      {
+        id: "addThree",
+        label: "Add three numbers",
+        gen() {
+          const [a, b, c] = [rnd(100, 499), rnd(100, 499), rnd(100, 399)];
+          return { q: `${a} + ${b} + ${c} = ?`, a: a + b + c };
+        }
+      },
+      {
+        id: "mentalAdd",
+        label: "Mental addition",
+        gen() {
+          const a = rnd(21, 89);
+          const b = rnd(11, 89);
+          return { q: `Add mentally: ${a} + ${b} = ?`, a: a + b };
+        }
+      },
+      {
+        id: "missingAddend",
+        label: "Missing number",
+        gen() {
+          const a = rnd(120, 600);
+          const b = rnd(50, 380);
+          return { q: `${a} + ___ = ${a + b}`, a: b };
+        }
+      },
+      {
+        id: "estimateSum",
+        label: "Estimate the sum",
+        gen() {
+          const step = Math.random() < 0.5 ? 10 : 100;
+          const nums = [rnd(120, 590), rnd(120, 590), rnd(120, 390)];
+          return {
+            q: `Estimate ${nums.join(" + ")} by rounding off each number to the nearest ${step}, then adding.`,
+            a: nums.reduce((s, n) => s + roundTo(n, step), 0)
+          };
+        }
+      },
+      {
+        id: "wordProblem",
+        label: "Word problems",
+        gen() {
+          const stories = [
+            (x, y, z) => `A library has ${x} storybooks, ${y} academic books and ${z} competition books. How many books are there in all?`,
+            (x, y, z) => `Ravi sold ${x} tickets, Meera sold ${y} tickets and Ayesha sold ${z} tickets for the school fest. How many tickets were sold in all?`,
+            (x, y, z) => `A garden has ${x} red roses, ${y} pink roses and ${z} white roses. How many roses are there altogether?`,
+            (x, y, z) => `Anuj's storybook has ${x} pages, Riya's has ${y} pages and Shaina's has ${z} pages. How many pages are there in all?`,
+            (x, y, z) => `A postman delivered ${x} letters in the first week, ${y} in the second week and ${z} in the third week. How many letters did he deliver in all?`
+          ];
+          const [x, y, z] = [rnd(110, 480), rnd(110, 480), rnd(105, 320)];
+          return { q: stories[rnd(0, stories.length - 1)](x, y, z), a: x + y + z };
+        }
+      }
+    ];
+
     // Every practice activity is one entry here plus one <section> / controls
     // block in the markup. Adding an activity should need nothing else.
     //   scene / controls / extras : element ids shown only while it is active
@@ -465,10 +735,12 @@
     //                               carries the answer (dictation)
     //   speechText                : what 🔊 says for a deck entry
     //   usesSetFilter             : show the स्वर / व्यंजन filter
+    //   usesDeck: false           : activity manages its own content (maths)
     //   onKey                     : keyboard handler while active
     const ACTIVITIES = [
       {
         id: "read",
+        group: "Hindi",
         icon: "👀",
         label: "अक्षर देखो, बोलो",
         subtitle: "अक्षर पहचानो, फिर कार्ड पलटकर उत्तर देखो",
@@ -487,6 +759,7 @@
       },
       {
         id: "write",
+        group: "Hindi",
         icon: "✍️",
         label: "सुनो, लिखो",
         subtitle: "सुनो और कॉपी में लिखो — अक्षर दिखाया नहीं जाएगा",
@@ -505,6 +778,33 @@
           if (e.key.toLowerCase() === "s") reshuffle();
           if (e.key.toLowerCase() === "r") speakLetter();
         }
+      },
+      {
+        id: "mathPractice",
+        group: "Math",
+        icon: "🔢",
+        label: "Math practice",
+        subtitle: "Pick a skill and solve as many questions as you like",
+        footer: "Keyboard: Enter · Check / Next question",
+        scene: "mathScene",
+        controls: "mathControls",
+        extras: ["skillFilter"],
+        usesDeck: false,
+        onEnter: () => startQuiz({ test: false }),
+        onKey(e) { if (e.key === "Enter") { e.preventDefault(); checkAnswer(); } }
+      },
+      {
+        id: "mathTest",
+        group: "Math",
+        icon: "📝",
+        label: "Math test (10 questions)",
+        subtitle: "Ten mixed questions — you get a score at the end",
+        footer: "Keyboard: Enter · Check / Next question",
+        scene: "mathScene",
+        controls: "mathControls",
+        usesDeck: false,
+        onEnter: () => startQuiz({ test: true, length: 10 }),
+        onKey(e) { if (e.key === "Enter") { e.preventDefault(); checkAnswer(); } }
       }
     ];
 
@@ -530,6 +830,13 @@
     const sidebarEl = document.getElementById("sidebar");
     const overlayEl = document.getElementById("overlay");
     const setFilterEl = document.getElementById("setFilter");
+    const skillFilterEl = document.getElementById("skillFilter");
+    const qLabelEl = document.getElementById("qLabel");
+    const qTextEl = document.getElementById("qText");
+    const ansInputEl = document.getElementById("ansInput");
+    const choicesEl = document.getElementById("choices");
+    const feedbackEl = document.getElementById("feedback");
+    const checkBtn = document.getElementById("checkBtn");
 
     const isIOS = /iPad|iPhone|iPod/.test(navigator.userAgent)
       || (navigator.platform === "MacIntel" && navigator.maxTouchPoints > 1);
@@ -631,7 +938,15 @@
 
     function buildNav() {
       navEl.innerHTML = "";
+      let group = null;
       ACTIVITIES.forEach(a => {
+        if (a.group && a.group !== group) {
+          group = a.group;
+          const h = document.createElement("div");
+          h.className = "navGroup";
+          h.textContent = group;
+          navEl.appendChild(h);
+        }
         const btn = document.createElement("button");
         btn.className = "navItem";
         btn.dataset.id = a.id;
@@ -661,7 +976,117 @@
       footerEl.textContent = a.footer;
       localStorage.setItem("varnamalaMode", a.id);
       if (a.onEnter) a.onEnter();
-      reshuffle();
+      if (a.usesDeck !== false) reshuffle();
+    }
+
+    // ---------------- maths quiz engine ----------------
+    // Practice mode: endless questions from one skill (or a mix).
+    // Test mode: a fixed-length mixed paper that ends with a score.
+    let quiz = { skill: "mix", test: false, length: 0, asked: 0, done: 0, correct: 0, q: null, answered: false, over: false };
+
+    function buildSkillChips() {
+      skillFilterEl.innerHTML = "";
+      [{ id: "mix", label: "Mixed" }, ...MATH_SKILLS].forEach(s => {
+        const b = document.createElement("button");
+        b.className = "tab set" + (s.id === quiz.skill ? " active" : "");
+        b.dataset.skill = s.id;
+        b.textContent = s.label;
+        b.addEventListener("click", () => {
+          quiz.skill = s.id;
+          buildSkillChips();
+          startQuiz({ test: quiz.test, length: quiz.length });
+        });
+        skillFilterEl.appendChild(b);
+      });
+    }
+
+    function startQuiz({ test, length = 0 }) {
+      quiz = { skill: test ? "mix" : quiz.skill, test, length, asked: 0, done: 0, correct: 0, q: null, answered: false, over: false };
+      buildSkillChips();
+      newQuestion();
+    }
+
+    function newQuestion() {
+      const pool = quiz.skill === "mix"
+        ? MATH_SKILLS
+        : MATH_SKILLS.filter(s => s.id === quiz.skill);
+      const skill = pool[rnd(0, pool.length - 1)];
+      const q = skill.gen();
+      quiz.q = { ...q, type: q.type || "number", skill };
+      quiz.answered = false;
+      quiz.asked++;
+
+      qLabelEl.textContent = skill.label;
+      qTextEl.textContent = quiz.q.q;
+      feedbackEl.textContent = "";
+      feedbackEl.className = "feedback";
+      checkBtn.textContent = "✓ Check";
+
+      const isChoice = quiz.q.type === "choice";
+      ansInputEl.classList.toggle("hidden", isChoice);
+      choicesEl.classList.toggle("hidden", !isChoice);
+      ansInputEl.value = "";
+      choicesEl.innerHTML = "";
+      if (isChoice) {
+        quiz.q.options.forEach(opt => {
+          const b = document.createElement("button");
+          b.className = "choice";
+          b.textContent = opt;
+          b.addEventListener("click", () => {
+            choicesEl.querySelectorAll(".choice").forEach(c => c.classList.remove("picked"));
+            b.classList.add("picked");
+            quiz.picked = opt;
+          });
+          choicesEl.appendChild(b);
+        });
+        quiz.picked = null;
+      } else {
+        ansInputEl.focus();
+      }
+      updateQuizStatus();
+    }
+
+    function updateQuizStatus() {
+      counterEl.textContent = quiz.test
+        ? `Question ${Math.min(quiz.asked, quiz.length)} / ${quiz.length}`
+        : `Question ${quiz.asked}`;
+      setNameEl.textContent = `Score ${quiz.correct} / ${quiz.done}`;
+    }
+
+    function checkAnswer() {
+      if (quiz.over) { startQuiz({ test: quiz.test, length: quiz.length }); return; }
+      if (quiz.answered) { nextQuestion(); return; }
+
+      const given = quiz.q.type === "choice" ? quiz.picked : ansInputEl.value.trim();
+      if (given === null || given === "") return;
+      const right = String(given) === String(quiz.q.a);
+      quiz.answered = true;
+      quiz.done++;
+      if (right) quiz.correct++;
+      feedbackEl.textContent = right
+        ? "Correct! 🎉"
+        : `Not quite — the answer is ${quiz.q.a}`;
+      feedbackEl.className = "feedback " + (right ? "right" : "wrong");
+      checkBtn.textContent = "Next question →";
+      updateQuizStatus();
+    }
+
+    function nextQuestion() {
+      if (quiz.over) { startQuiz({ test: quiz.test, length: quiz.length }); return; }
+      if (quiz.test && quiz.asked >= quiz.length && quiz.answered) { finishTest(); return; }
+      newQuestion();
+    }
+
+    function finishTest() {
+      quiz.over = true;
+      const pct = Math.round((quiz.correct / quiz.length) * 100);
+      qLabelEl.textContent = "Result";
+      qTextEl.textContent = `You scored ${quiz.correct} out of ${quiz.length} (${pct}%)`;
+      feedbackEl.textContent = pct >= 80 ? "Excellent work! ⭐" : pct >= 50 ? "Good try — keep practising!" : "Let's practise a bit more 💪";
+      feedbackEl.className = "feedback right";
+      ansInputEl.classList.add("hidden");
+      choicesEl.classList.add("hidden");
+      checkBtn.textContent = "🔄 Start again";
     }
 
     function openDrawer() {
@@ -731,6 +1156,10 @@
     document.getElementById("nextWriteBtn").addEventListener("click", nextCard);
     document.getElementById("shuffleWriteBtn").addEventListener("click", reshuffle);
 
+    checkBtn.addEventListener("click", checkAnswer);
+    document.getElementById("nextQBtn").addEventListener("click", nextQuestion);
+    document.getElementById("restartBtn").addEventListener("click", () =>
+      startQuiz({ test: quiz.test, length: quiz.length }));
     document.addEventListener("keydown", (e) => {
       if (e.key === "Escape") closeDrawer();
       const handler = activity().onKey;
