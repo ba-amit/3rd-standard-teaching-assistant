@@ -330,6 +330,41 @@
     .feedback.right { color: #0f766e; }
     .feedback.wrong { color: #be123c; }
 
+    /* --- reading view --- */
+    .reader {
+      width: 100%;
+      height: 100%;
+      border-radius: 28px;
+      background:
+        radial-gradient(circle at 15% 12%, rgba(59,130,246,.10), transparent 30%),
+        radial-gradient(circle at 88% 90%, rgba(255,138,61,.12), transparent 30%),
+        #fff;
+      box-shadow: 0 18px 45px rgba(31, 41, 55, .18);
+      border: 5px solid rgba(255,255,255,.85);
+      padding: 26px clamp(18px, 4vw, 40px);
+      overflow-y: auto;
+      text-align: left;
+    }
+
+    .readTitle {
+      font-size: clamp(1.4rem, 4vw, 2rem);
+      font-weight: 800;
+      color: var(--accent2);
+      margin-bottom: 4px;
+    }
+
+    .readMeta { color: var(--muted); font-weight: 700; margin-bottom: 16px; font-size: .95rem; }
+
+    .readBody p {
+      font-size: clamp(1.1rem, 2.6vw, 1.35rem);
+      line-height: 1.75;
+      margin: 0 0 16px;
+      max-width: 60ch;
+    }
+
+    .readBody p.speaking { background: rgba(255,214,102,.35); border-radius: 8px; }
+    .readBody .empty { color: var(--muted); font-weight: 700; }
+
     .navGroup {
       margin: 14px 0 4px;
       font-size: .78rem;
@@ -441,6 +476,7 @@
     <p class="subtitle" id="subtitle">अक्षर पहचानो, फिर कार्ड पलटकर उत्तर देखो</p>
 
     <div class="tabs sets hidden" id="skillFilter"></div>
+    <div class="tabs sets hidden" id="chapterFilter"></div>
 
     <div class="tabs sets" id="setFilter">
       <button class="tab set active" data-set="all">सब</button>
@@ -498,6 +534,19 @@
       </div>
     </section>
 
+    <section class="scene hidden" id="readScene">
+      <div class="reader">
+        <div class="readTitle" id="readTitle"></div>
+        <div class="readMeta" id="readMeta"></div>
+        <div class="readBody" id="readBody"></div>
+      </div>
+    </section>
+
+    <div class="controls hidden" id="readerControls">
+      <button class="primary" id="readAloudBtn">🔊 Read aloud</button>
+      <button class="secondary" id="stopReadBtn">⏹ Stop</button>
+    </div>
+
     <div class="controls" id="readControls">
       <button class="secondary" id="prevBtn">← पिछला</button>
       <button class="primary" id="flipBtn">पलटें</button>
@@ -522,6 +571,9 @@
     </div>
   </main>
 
+  <!-- Optional private reading text: a local chapters.js (kept out of the
+       public repo) may define window.ENGLISH_CHAPTERS. Absent → reader shows a note. -->
+  <script src="chapters.js"></script>
   <script>
     const cards = [
       ["अ","अनार","Anaar","🍎"], ["आ","आम","Aam","🥭"], ["इ","इमली","Imli","🫘"],
@@ -1056,6 +1108,57 @@
       }
     }));
 
+    // ---------------- English reading comprehension ----------------
+    // Questions are reworded from the two class-3 reader chapters and are
+    // answerable from the stories. The chapter TEXT itself is not bundled in
+    // this file — it loads from a local chapters.js (see loadChapters).
+    const COMP_TOPICS = [
+      { id: "ultapur", label: "Day for Night in Ultapur", facts: [
+        ["Who was the king of Ultapur?", "Badshah Batata",
+          ["Badshah Kodkani", "King Rooster", "King Ultapur"]],
+        ["How many ministers did the badshah have?", "Six",
+          ["Three", "Four", "Ten"]],
+        ["What did the badshah order everyone to do?", "Wake up at sunset and sleep at sunrise",
+          ["Wake at noon and sleep at midnight", "Work only at weekends", "Never sleep at all"]],
+        ["Why did travellers call Ultapur a ghost town?", "Its streets were empty in the daytime",
+          ["Ghosts really lived there", "The houses were broken", "Nobody lived there at all"]],
+        ["What surprising event happened in the story?", "A total solar eclipse",
+          ["A big storm", "An earthquake", "A flood"]],
+        ["What did the animals do when the shadow fell over the town?", "Owls hooted, dogs howled and cows mooed",
+          ["They all fell asleep", "They ran out of Ultapur", "They started to dance"]],
+        ["What is a solar eclipse?", "When the moon passes in front of the sun",
+          ["When the sun hides behind a hill", "When it rains in the daytime", "When the stars come out early"]],
+        ["How did Ultapur live in the end?", "Woke at sunrise and slept at sunset, like most people",
+          ["Kept waking at sunset forever", "Stopped sleeping", "Moved to a new kingdom"]]
+      ]},
+      { id: "windhover", label: "Safe Again", facts: [
+        ["A windhover is also called a __.", "Kestrel",
+          ["Sparrow", "Parrot", "Owl"]],
+        ["Where did the windhover family live?", "In a hole in the wall of a school",
+          ["In a tree in the forest", "In a barn", "On a mountain"]],
+        ["What did the parents bring the chicks to eat?", "Mice",
+          ["Worms", "Fish", "Seeds"]],
+        ["Who took the windhover chick away from its nest?", "A boy",
+          ["A girl", "A teacher", "A cat"]],
+        ["Why couldn't the windhover eat the food the boy gave it?", "The boy did not tear it into small pieces",
+          ["It was not hungry", "It was the wrong food", "It was too dark"]],
+        ["Who rescued the windhover?", "The girl who used to feed the birds",
+          ["The boy's mother", "A teacher", "A police officer"]],
+        ["What did the girl promise the boy if he put the bird back?", "Not to tell anybody",
+          ["To give him a new pet", "To play with him daily", "To help him catch another"]],
+        ["How did the windhover know it was finally safe?", "Its mother flew down to feed it",
+          ["It saw the sky again", "The school bell rang", "The boy went away"]]
+      ]},
+    ];
+    const COMP_SKILLS = COMP_TOPICS.map(topic => ({
+      id: topic.id,
+      label: topic.label,
+      gen() {
+        const [q, a, distractors] = pick(topic.facts);
+        return choiceQ(q, a, distractors);
+      }
+    }));
+
     // Every practice activity is one entry here plus one <section> / controls
     // block in the markup. Adding an activity should need nothing else.
     //   scene / controls / extras : element ids shown only while it is active
@@ -1106,6 +1209,33 @@
           if (e.key.toLowerCase() === "s") reshuffle();
           if (e.key.toLowerCase() === "r") speakLetter();
         }
+      },
+      {
+        id: "reading",
+        group: "English",
+        icon: "📖",
+        label: "Read a chapter",
+        subtitle: "Pick a chapter and read it — tap Read aloud to listen",
+        footer: "Tap a chapter above · Read aloud to listen",
+        scene: "readScene",
+        controls: "readerControls",
+        extras: ["chapterFilter"],
+        usesDeck: false,
+        onEnter: () => renderChapter()
+      },
+      {
+        id: "comprehension",
+        group: "English",
+        icon: "❓",
+        label: "Story questions",
+        subtitle: "Questions about the two stories — answer as many as you like",
+        footer: "Keyboard: Enter · Check / Next question",
+        scene: "mathScene",
+        controls: "mathControls",
+        extras: ["skillFilter"],
+        usesDeck: false,
+        onEnter: () => startQuiz({ bank: COMP_SKILLS, bankId: "comp", test: false }),
+        onKey(e) { if (e.key === "Enter") { e.preventDefault(); checkAnswer(); } }
       },
       {
         id: "grammarPractice",
@@ -1219,6 +1349,11 @@
     const choicesEl = document.getElementById("choices");
     const feedbackEl = document.getElementById("feedback");
     const checkBtn = document.getElementById("checkBtn");
+    const chapterFilterEl = document.getElementById("chapterFilter");
+    const readTitleEl = document.getElementById("readTitle");
+    const readMetaEl = document.getElementById("readMeta");
+    const readBodyEl = document.getElementById("readBody");
+    const readerControlsEl = document.getElementById("readerControls");
 
     const isIOS = /iPad|iPhone|iPod/.test(navigator.userAgent)
       || (navigator.platform === "MacIntel" && navigator.maxTouchPoints > 1);
@@ -1341,6 +1476,7 @@
     }
 
     function setMode(next) {
+      stopReading();
       mode = next;
       const a = activity();
       const ownIds = act => [act.scene, act.controls, ...(act.extras || [])].filter(Boolean);
@@ -1477,6 +1613,89 @@
       checkBtn.textContent = "🔄 Start again";
     }
 
+    // ---------------- reading view ----------------
+    // Chapter text is NOT bundled here (it is copyrighted). A local, private
+    // chapters.js may define window.ENGLISH_CHAPTERS = [{id,title,author,type,
+    // paragraphs:[...]}]. Without it, the reader shows a friendly note.
+    const chapters = () => Array.isArray(window.ENGLISH_CHAPTERS) ? window.ENGLISH_CHAPTERS : [];
+    let currentChapter = 0;
+    let readAloudChunks = [], readAloudIdx = 0, reading = false;
+
+    function buildChapterChips() {
+      chapterFilterEl.innerHTML = "";
+      chapters().forEach((c, i) => {
+        const b = document.createElement("button");
+        b.className = "tab set" + (i === currentChapter ? " active" : "");
+        b.textContent = c.title;
+        b.addEventListener("click", () => { currentChapter = i; renderChapter(); });
+        chapterFilterEl.appendChild(b);
+      });
+    }
+
+    function renderChapter() {
+      stopReading();
+      buildChapterChips();
+      const list = chapters();
+      readBodyEl.innerHTML = "";
+      if (!list.length) {
+        readTitleEl.textContent = "Reading chapters";
+        readMetaEl.textContent = "";
+        const p = document.createElement("p");
+        p.className = "empty";
+        p.textContent = "The reading chapters are not loaded on this version. "
+          + "They live in a private chapters.js file kept off the public site.";
+        readBodyEl.appendChild(p);
+        readerControlsEl.classList.add("hidden");
+        counterEl.textContent = "";
+        setNameEl.textContent = "Reading";
+        return;
+      }
+      readerControlsEl.classList.remove("hidden");
+      const ch = list[currentChapter];
+      readTitleEl.textContent = ch.title;
+      readMetaEl.textContent = [ch.author && "by " + ch.author, ch.type].filter(Boolean).join(" · ");
+      (ch.paragraphs || []).forEach(text => {
+        const p = document.createElement("p");
+        p.textContent = text;
+        readBodyEl.appendChild(p);
+      });
+      readBodyEl.parentElement.scrollTop = 0;
+      counterEl.textContent = `${currentChapter + 1} / ${list.length}`;
+      setNameEl.textContent = "Reading";
+    }
+
+    // Read the chapter aloud paragraph by paragraph, highlighting the current
+    // one. speechSynthesis handles long English text more reliably than the
+    // short-query TTS endpoint, and can be stopped cleanly.
+    function readChapterAloud() {
+      if (!("speechSynthesis" in window)) return;
+      stopReading();
+      readAloudChunks = [...readBodyEl.querySelectorAll("p")].filter(p => !p.classList.contains("empty"));
+      if (!readAloudChunks.length) return;
+      readAloudIdx = 0;
+      reading = true;
+      speakChunk();
+    }
+
+    function speakChunk() {
+      if (!reading || readAloudIdx >= readAloudChunks.length) { stopReading(); return; }
+      const p = readAloudChunks[readAloudIdx];
+      readAloudChunks.forEach(x => x.classList.remove("speaking"));
+      p.classList.add("speaking");
+      p.scrollIntoView({ block: "center" });
+      const u = new SpeechSynthesisUtterance(p.textContent);
+      u.lang = "en-IN";
+      u.rate = 0.9;
+      u.onend = () => { readAloudIdx++; speakChunk(); };
+      speechSynthesis.speak(u);
+    }
+
+    function stopReading() {
+      reading = false;
+      if ("speechSynthesis" in window) speechSynthesis.cancel();
+      readBodyEl.querySelectorAll("p.speaking").forEach(p => p.classList.remove("speaking"));
+    }
+
     function openDrawer() {
       sidebarEl.classList.add("open");
       overlayEl.classList.add("show");
@@ -1544,6 +1763,8 @@
     document.getElementById("nextWriteBtn").addEventListener("click", nextCard);
     document.getElementById("shuffleWriteBtn").addEventListener("click", reshuffle);
 
+    document.getElementById("readAloudBtn").addEventListener("click", readChapterAloud);
+    document.getElementById("stopReadBtn").addEventListener("click", stopReading);
     checkBtn.addEventListener("click", checkAnswer);
     document.getElementById("nextQBtn").addEventListener("click", nextQuestion);
     document.getElementById("restartBtn").addEventListener("click", () =>
