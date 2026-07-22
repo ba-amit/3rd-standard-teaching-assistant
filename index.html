@@ -571,8 +571,9 @@
     </div>
   </main>
 
-  <!-- Optional private reading text: a local chapters.js (kept out of the
-       public repo) may define window.ENGLISH_CHAPTERS. Absent → reader shows a note. -->
+  <!-- Reading text: chapter.js provides public sample chapters. A local
+       chapters.js (kept out of the public repo) may override them. -->
+  <script src="chapter.js"></script>
   <script src="chapters.js"></script>
   <script>
     const cards = [
@@ -1614,9 +1615,9 @@
     }
 
     // ---------------- reading view ----------------
-    // Chapter text is NOT bundled here (it is copyrighted). A local, private
-    // chapters.js may define window.ENGLISH_CHAPTERS = [{id,title,author,type,
-    // paragraphs:[...]}]. Without it, the reader shows a friendly note.
+    // chapter.js provides public sample chapters. A local, private chapters.js
+    // (kept out of the public repo) may override them by redefining
+    // window.ENGLISH_CHAPTERS = [{id,title,author,type,paragraphs:[...]}].
     const chapters = () => Array.isArray(window.ENGLISH_CHAPTERS) ? window.ENGLISH_CHAPTERS : [];
     let currentChapter = 0;
     let readAloudChunks = [], readAloudIdx = 0, reading = false;
