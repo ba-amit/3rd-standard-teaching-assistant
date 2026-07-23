@@ -1,4 +1,4 @@
-const CACHE = "varnamala-v11";
+const CACHE = "varnamala-v13";
 const ASSETS = ["./", "./index.html", "./chapter.js", "./manifest.json", "./icon-192.png", "./icon-512.png"];
 
 self.addEventListener("install", (e) => {

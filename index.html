@@ -126,6 +126,31 @@
       line-height: 1;
       color: var(--accent2);
       text-shadow: 0 6px 0 rgba(59,130,246,.10);
+      transition: transform .15s ease, color .15s ease;
+    }
+    .letter.speaking { color: #b45309; transform: scale(1.06); }
+
+    /* The letter being recited stays visible on the back of the card, so the
+       kid can see which अक्षर the word belongs to while it is spoken. */
+    .backLetter {
+      position: absolute;
+      top: 14px;
+      left: 14px;
+      min-width: 62px;
+      padding: 6px 14px;
+      border-radius: 18px;
+      background: rgba(59,130,246,.12);
+      border: 2px solid rgba(59,130,246,.28);
+      color: var(--accent2);
+      font-size: clamp(1.8rem, 6vw, 2.6rem);
+      font-weight: 800;
+      line-height: 1.2;
+      text-align: center;
+    }
+    .backLetter.speaking {
+      background: rgba(255,214,102,.55);
+      border-color: rgba(255,138,61,.7);
+      color: #b45309;
     }
 
     .hint {
@@ -262,6 +287,41 @@
 
     .listen .hint { margin-top: 6px; font-size: 1.05rem; }
     .listen .note { color: var(--muted); font-size: .85rem; max-width: 30ch; }
+
+    /* Dictation self-check: a small card the kid flips after writing, to see
+       the अक्षर. The answer only enters the DOM at the moment of the flip. */
+    .revealScene {
+      perspective: 1000px;
+      width: min(280px, 70vw);
+      height: clamp(110px, 22vw, 150px);
+      margin-top: 6px;
+    }
+    .revealCard {
+      position: relative;
+      width: 100%;
+      height: 100%;
+      transform-style: preserve-3d;
+      transition: transform .5s cubic-bezier(.2,.8,.2,1);
+      cursor: pointer;
+    }
+    .revealCard.flipped { transform: rotateY(180deg); }
+    .revealCard .face {
+      border-radius: 22px;
+      padding: 10px;
+      gap: 2px;
+      box-shadow: 0 10px 24px rgba(31,41,55,.14);
+    }
+    .revealCard .front { background: rgba(59,130,246,.10); color: var(--muted); font-weight: 800; }
+    .revealCard .front .q { font-size: 2.4rem; line-height: 1; margin-bottom: 4px; }
+    .revealCard .back { background: #fff; }
+    .revealCard .revealLetter {
+      font-size: clamp(2.6rem, 9vw, 3.6rem);
+      font-weight: 800;
+      color: var(--accent2);
+      line-height: 1;
+    }
+    .revealCard .revealWord { font-weight: 800; color: #0f766e; font-size: 1.05rem; }
+    .revealCard .revealRoman { color: var(--muted); font-weight: 700; font-size: .8rem; }
     .hidden { display: none !important; }
 
     /* --- maths quiz --- */
@@ -364,6 +424,45 @@
 
     .readBody p.speaking { background: rgba(255,214,102,.35); border-radius: 8px; }
     .readBody .empty { color: var(--muted); font-weight: 700; }
+
+    /* Infographics: an optional picture strip for the chapter and an optional
+       emoji / image beside a paragraph. Chapters without them look unchanged. */
+    .readArt {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 10px;
+      margin: 0 0 18px;
+    }
+    .readArt .chip {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      background: rgba(59,130,246,.08);
+      border: 2px solid rgba(59,130,246,.18);
+      border-radius: 16px;
+      padding: 8px 14px;
+      font-weight: 700;
+      color: var(--accent2);
+      font-size: .95rem;
+    }
+    .readArt .chip .pic { font-size: 1.6rem; line-height: 1; }
+    .readArt img.pic { width: 40px; height: 40px; object-fit: contain; }
+
+    .readRow { display: flex; align-items: flex-start; gap: 14px; margin: 0 0 16px; }
+    .readRow .side { font-size: 2.4rem; line-height: 1.2; flex: 0 0 auto; }
+    .readRow img.side { width: 84px; height: 84px; object-fit: contain; border-radius: 12px; }
+    .readRow p { margin: 0; }
+
+    .readFig {
+      margin: 0 0 18px;
+      padding: 14px 16px;
+      background: rgba(255,214,102,.18);
+      border: 2px dashed rgba(255,138,61,.45);
+      border-radius: 18px;
+      max-width: 60ch;
+    }
+    .readFig img { width: 100%; border-radius: 12px; display: block; }
+    .readFig .cap { font-weight: 700; color: var(--muted); font-size: .9rem; margin-top: 8px; }
 
     .navGroup {
       margin: 14px 0 4px;
@@ -508,6 +607,7 @@
         </div>
         <div class="face back">
           <button class="soundBtn" id="speakWordBtn" title="शब्द सुनें">🔊</button>
+          <div class="backLetter" id="backLetter">अ</div>
           <div class="emoji" id="emoji">🍎</div>
           <div class="word" id="word">अनार</div>
           <div class="roman" id="roman">Anaar</div>
@@ -520,6 +620,19 @@
         <button class="earBtn" id="earBtn" title="अक्षर सुनें">🔊</button>
         <div class="hint">सुनो और कॉपी में लिखो</div>
         <div class="note">फिर से सुनने के लिए 🔊 दबाओ</div>
+        <div class="revealScene" id="revealScene" aria-label="Flip to see the letter.">
+          <div class="revealCard" id="revealCard">
+            <div class="face front">
+              <div class="q">❓</div>
+              <div>लिखने के बाद कार्ड पलटो</div>
+            </div>
+            <div class="face back">
+              <div class="revealLetter" id="revealLetter"></div>
+              <div class="revealWord" id="revealWord"></div>
+              <div class="revealRoman" id="revealRoman"></div>
+            </div>
+          </div>
+        </div>
       </div>
     </section>
 
@@ -556,6 +669,7 @@
 
     <div class="controls hidden" id="writeControls">
       <button class="primary" id="repeatBtn">🔁 फिर से सुनो</button>
+      <button class="secondary" id="revealBtn">👀 अक्षर देखो</button>
       <button class="secondary" id="nextWriteBtn">अगला अक्षर →</button>
       <button class="shuffle" id="shuffleWriteBtn">🔀 फिर से मिलाएँ</button>
     </div>
@@ -574,6 +688,7 @@
   <!-- Reading text: chapter.js defines window.ENGLISH_CHAPTERS. chapters.js, if
        present, overrides it so local edits can be kept separate. -->
   <script src="chapter.js"></script>
+  <script>window.__BUNDLED_CHAPTERS = window.ENGLISH_CHAPTERS;</script>
   <script src="chapters.js"></script>
   <script>
     const cards = [
@@ -1195,7 +1310,7 @@
         icon: "✍️",
         label: "सुनो, लिखो",
         subtitle: "सुनो और कॉपी में लिखो — अक्षर दिखाया नहीं जाएगा",
-        footer: "Keyboard: R Repeat · → Next · S Shuffle",
+        footer: "Keyboard: R Repeat · Space Show letter · → Next · S Shuffle",
         scene: "listenScene",
         controls: "writeControls",
         extras: ["withWordRow"],
@@ -1209,6 +1324,7 @@
           if (e.key === "ArrowRight") nextCard();
           if (e.key.toLowerCase() === "s") reshuffle();
           if (e.key.toLowerCase() === "r") speakLetter();
+          if (e.key === " ") { e.preventDefault(); toggleReveal(); }
         }
       },
       {
@@ -1330,6 +1446,11 @@
 
     const cardEl = document.getElementById("card");
     const letterEl = document.getElementById("letter");
+    const backLetterEl = document.getElementById("backLetter");
+    const revealCardEl = document.getElementById("revealCard");
+    const revealLetterEl = document.getElementById("revealLetter");
+    const revealWordEl = document.getElementById("revealWord");
+    const revealRomanEl = document.getElementById("revealRoman");
     const wordEl = document.getElementById("word");
     const romanEl = document.getElementById("roman");
     const emojiEl = document.getElementById("emoji");
@@ -1356,9 +1477,6 @@
     const readBodyEl = document.getElementById("readBody");
     const readerControlsEl = document.getElementById("readerControls");
 
-    const isIOS = /iPad|iPhone|iPod/.test(navigator.userAgent)
-      || (navigator.platform === "MacIntel" && navigator.maxTouchPoints > 1);
-
     let hindiVoice = null;
     function pickVoice() {
       const voices = speechSynthesis.getVoices();
@@ -1371,15 +1489,17 @@
       speechSynthesis.onvoiceschanged = pickVoice;
     }
 
-    function speakBrowser(text, rate = 0.6) {
-      if (!("speechSynthesis" in window)) return;
+    function speakBrowser(text, opts = {}) {
+      if (!("speechSynthesis" in window)) { opts.onend && opts.onend(); return; }
       speechSynthesis.cancel();
       const utter = new SpeechSynthesisUtterance(text);
       utter.lang = "hi-IN";
       if (hindiVoice) utter.voice = hindiVoice;
-      utter.rate = rate;
+      utter.rate = opts.rate || 0.6;
       utter.pitch = 1;
       utter.volume = 1;
+      utter.onstart = () => opts.onstart && opts.onstart();
+      utter.onend = utter.onerror = () => opts.onend && opts.onend();
       speechSynthesis.speak(utter);
     }
 
@@ -1387,41 +1507,144 @@
     // gesture, so prime it with an empty utterance on the first touch/click.
     let speechUnlocked = false;
     function unlockSpeech() {
-      if (speechUnlocked || !("speechSynthesis" in window)) return;
+      if (speechUnlocked) return;
       speechUnlocked = true;
-      const warmup = new SpeechSynthesisUtterance("");
-      warmup.volume = 0;
-      speechSynthesis.speak(warmup);
-      pickVoice();
+      if ("speechSynthesis" in window) {
+        const warmup = new SpeechSynthesisUtterance("");
+        warmup.volume = 0;
+        speechSynthesis.speak(warmup);
+        pickVoice();
+      }
+      // Prime the <audio> element inside the gesture too, so the Google TTS
+      // clips can start later without a fresh tap (needed on iOS/Safari).
+      try {
+        ttsAudio.muted = true;
+        ttsAudio.src = SILENT_WAV;
+        const p = ttsAudio.play();
+        if (p && p.catch) p.catch(() => {});
+        ttsAudio.muted = false;
+      } catch (e) { /* nothing to prime */ }
     }
     document.addEventListener("touchend", unlockSpeech, { once: true });
     document.addEventListener("click", unlockSpeech, { once: true });
     document.addEventListener("keydown", unlockSpeech, { once: true });
 
+    // ---------------- Google Translate TTS ----------------
+    // The endpoint wants the full query set — ie/tl/client/q plus idx, total
+    // and textlen — and it only honours the slow "ttsspeed" reading when they
+    // are all present. A bare q= is what made single letters sound clipped and
+    // rushed.
+    const SILENT_WAV = "data:audio/wav;base64,UklGRiQAAABXQVZFZm10IBAAAAABAAEAgD4AAAB9AAACABAAZGF0YQAAAAA=";
+    // The endpoint only switches to its slow reading below ~0.3 — 0.4 returns
+    // the same clip as normal speed, 0.24 is measurably longer.
+    const TTS_SPEED = 0.24;
+    const TTS_MAX = 190;                   // endpoint truncates past ~200 chars
+
+    // Per-letter override hook: if any अक्षर still comes out wrong, map it here
+    // to the spelling the TTS pronounces the way the letter is recited,
+    // e.g. "अः": "अह".
+    const SPEECH_FIX = {};
+
+    function ttsUrl(text, lang, slow) {
+      const q = text.slice(0, TTS_MAX);
+      return "https://translate.googleapis.com/translate_tts"
+        + "?ie=UTF-8&client=gtx"
+        + "&tl=" + encodeURIComponent(lang)
+        + (slow ? "&ttsspeed=" + TTS_SPEED : "")
+        + "&idx=0&total=1"
+        + "&textlen=" + q.length
+        + "&q=" + encodeURIComponent(q);
+    }
+
     const ttsAudio = new Audio();
-    function speak(text) {
-      // On iOS the HTML5 audio path is silenced by the ringer switch and the
-      // async play() fallback runs too late to keep the user-gesture context,
-      // so go straight to speechSynthesis there.
-      if (isIOS) {
-        speakBrowser(text);
-        return;
-      }
-      const url = "https://translate.googleapis.com/translate_tts?ie=UTF-8&tl=hi&client=gtx&q="
-        + encodeURIComponent(text);
-      ttsAudio.onerror = () => speakBrowser(text);
-      ttsAudio.src = url;
-      ttsAudio.play().catch(() => speakBrowser(text));
+    ttsAudio.preload = "auto";
+    let speakToken = 0;
+
+    // Cancel whatever the audio element is doing or waiting for.
+    function abortAudio() {
+      try {
+        ttsAudio.onerror = ttsAudio.onstalled = ttsAudio.onplaying = ttsAudio.onended = null;
+        ttsAudio.pause();
+        ttsAudio.removeAttribute("src");
+        ttsAudio.load();
+      } catch (e) { /* nothing playing */ }
+    }
+
+    // speak(text, {lang, slow, onstart, onend}) — Google voice first, the
+    // built-in browser voice as the fallback when the request fails or hangs.
+    //
+    // iOS caveat: <audio> obeys the hardware silent switch while speechSynthesis
+    // does not. A muted iPad plays the Google clip silently — it still fires
+    // playing/ended, so nothing here can detect it and no fallback kicks in.
+    // The iPad has to be unmuted for the Google voice.
+    function speak(text, opts = {}) {
+      if (!text) return;
+      const lang = opts.lang || "hi";
+      const token = ++speakToken;
+      let settled = false, started = false;
+      const done = () => { if (!settled) { settled = true; opts.onend && opts.onend(); } };
+      const fallback = () => {
+        if (settled || token !== speakToken) return;
+        settled = true;
+        // Drop the pending clip, so a slow response cannot play on top of the
+        // browser voice a few seconds later.
+        abortAudio();
+        speakBrowser(text, { rate: opts.rate, onstart: opts.onstart, onend: opts.onend });
+      };
+
+      if ("speechSynthesis" in window) speechSynthesis.cancel();
+      abortAudio();
+
+      // src first, handlers after: the empty-src error from abortAudio() above
+      // is then already past and cannot be mistaken for this clip failing.
+      ttsAudio.src = ttsUrl(text, lang, opts.slow !== false);
+      ttsAudio.onerror = fallback;
+      ttsAudio.onstalled = fallback;
+      ttsAudio.onplaying = () => {
+        started = true;
+        if (token === speakToken) opts.onstart && opts.onstart();
+      };
+      ttsAudio.onended = () => { if (token === speakToken) done(); };
+      const played = ttsAudio.play();
+      if (played && played.catch) played.catch(fallback);
+      // A blocked or very slow request leaves the element buffering forever —
+      // paused is already false by then — so watch for "no sound yet" instead
+      // and hand over to the browser voice rather than leaving the kid in
+      // silence.
+      setTimeout(() => { if (!started) fallback(); }, 1800);
+    }
+
+    function stopSpeaking() {
+      speakToken++;
+      if ("speechSynthesis" in window) speechSynthesis.cancel();
+      abortAudio();
+      markSpeaking(false);
+    }
+
+    // Highlight whichever letter is being recited, on both faces of the card.
+    function markSpeaking(on) {
+      letterEl.classList.toggle("speaking", !!on);
+      backLetterEl.classList.toggle("speaking", !!on);
     }
 
     function speakLetter() {
+      if (!deck[index]) return;          // reading / maths activities have no deck
       const a = activity();
-      speak(a.speechText ? a.speechText(deck[index]) : deck[index][0]);
+      const raw = a.speechText ? a.speechText(deck[index]) : deck[index][0];
+      const text = SPEECH_FIX[raw] || raw;
+      speak(text, { onstart: () => markSpeaking(true), onend: () => markSpeaking(false) });
     }
 
     function speakWord() {
-      const [, word] = deck[index];
-      speak(word);
+      if (!deck[index]) return;
+      const [letter, word] = deck[index];
+      // Recite the letter, then the word it belongs to, so the kid hears the
+      // link while the letter stays visible on the back of the card.
+      const lead = SPEECH_FIX[letter] || letter;
+      speak(`${lead}, ${lead} से ${word}`, {
+        onstart: () => markSpeaking(true),
+        onend: () => markSpeaking(false)
+      });
     }
 
     function shuffle(array) {
@@ -1438,16 +1661,19 @@
       counterEl.textContent = `${index + 1} / ${deck.length}`;
       flipped = false;
       cardEl.classList.remove("flipped");
+      stopSpeaking();
+      resetReveal();
 
       if (activity().hideAnswer) {
         // Never put the answer in the DOM — the kid writes it from the sound.
-        letterEl.textContent = wordEl.textContent = "";
+        letterEl.textContent = wordEl.textContent = backLetterEl.textContent = "";
         romanEl.textContent = emojiEl.textContent = "";
         speakLetter();
         return;
       }
 
       letterEl.textContent = letter;
+      backLetterEl.textContent = letter;
       wordEl.textContent = word;
       romanEl.textContent = roman;
       emojiEl.textContent = emoji;
@@ -1617,7 +1843,37 @@
     // ---------------- reading view ----------------
     // chapter.js defines window.ENGLISH_CHAPTERS = [{id,title,author,type,
     // paragraphs:[...]}]. A local chapters.js may override it.
-    const chapters = () => Array.isArray(window.ENGLISH_CHAPTERS) ? window.ENGLISH_CHAPTERS : [];
+    // A paragraph is either a string or {text, art, caption, image}. Chapters
+    // still carrying the <<PASTE ...>> placeholders count as unfilled, so a
+    // half-written chapters.js never hides the text bundled in chapter.js.
+    const paraText = (p) => typeof p === "string" ? p : (p && p.text) || "";
+    const isFilled = (ch) => Array.isArray(ch && ch.paragraphs)
+      && ch.paragraphs.some(p => {
+        const t = paraText(p).trim();
+        return t && !/^<<.*>>$/.test(t);
+      });
+
+    // Merge by id: a filled chapter in chapters.js replaces the bundled one of
+    // the same id, and anything extra is appended.
+    function chapters() {
+      const local = Array.isArray(window.ENGLISH_CHAPTERS) ? window.ENGLISH_CHAPTERS : [];
+      const bundled = Array.isArray(window.__BUNDLED_CHAPTERS) ? window.__BUNDLED_CHAPTERS : [];
+      const out = [], slot = new Map();
+      const add = (ch) => {
+        if (!ch) return;
+        const key = ch.id || ch.title;
+        if (slot.has(key)) {
+          // Keep the chapter's place in the book; only real text replaces it.
+          if (isFilled(ch)) out[slot.get(key)] = ch;
+        } else {
+          slot.set(key, out.length);
+          out.push(ch);
+        }
+      };
+      bundled.forEach(add);
+      local.forEach(add);
+      return out.filter(isFilled);
+    }
     let currentChapter = 0;
     let readAloudChunks = [], readAloudIdx = 0, reading = false;
 
@@ -1632,6 +1888,41 @@
       });
     }
 
+    // An "art" value is either an emoji/text string or {img, alt}.
+    function artNode(art, cls) {
+      if (art && art.img) {
+        const img = document.createElement("img");
+        img.className = cls;
+        img.src = art.img;
+        img.alt = art.alt || "";
+        img.loading = "lazy";
+        return img;
+      }
+      const span = document.createElement("span");
+      span.className = cls;
+      span.textContent = typeof art === "string" ? art : (art && art.text) || "";
+      return span;
+    }
+
+    // Chapter-level picture strip: art: [{pic:"🦅", label:"windhover"}, ...]
+    function renderChapterArt(art) {
+      if (!Array.isArray(art) || !art.length) return;
+      const strip = document.createElement("div");
+      strip.className = "readArt";
+      art.forEach(item => {
+        const chip = document.createElement("div");
+        chip.className = "chip";
+        chip.appendChild(artNode(item.pic != null ? item.pic : item, "pic"));
+        if (item && item.label) {
+          const lbl = document.createElement("span");
+          lbl.textContent = item.label;
+          chip.appendChild(lbl);
+        }
+        strip.appendChild(chip);
+      });
+      readBodyEl.appendChild(strip);
+    }
+
     function renderChapter() {
       stopReading();
       buildChapterChips();
@@ -1642,8 +1933,9 @@
         readMetaEl.textContent = "";
         const p = document.createElement("p");
         p.className = "empty";
-        p.textContent = "No reading chapters are loaded. "
-          + "Add them to chapter.js (or a local chapters.js file).";
+        p.textContent = "No reading chapters are loaded. Paste the chapter "
+          + "paragraphs into chapter.js (or into a local chapters.js, which "
+          + "overrides it) — the <<PASTE ...>> placeholders are skipped.";
         readBodyEl.appendChild(p);
         readerControlsEl.classList.add("hidden");
         counterEl.textContent = "";
@@ -1654,10 +1946,37 @@
       const ch = list[currentChapter];
       readTitleEl.textContent = ch.title;
       readMetaEl.textContent = [ch.author && "by " + ch.author, ch.type].filter(Boolean).join(" · ");
-      (ch.paragraphs || []).forEach(text => {
+      renderChapterArt(ch.art);
+      (ch.paragraphs || []).forEach(item => {
+        const text = paraText(item);
+        if (!text.trim() || /^<<.*>>$/.test(text.trim())) return;
+        const art = typeof item === "string" ? null : item;
         const p = document.createElement("p");
         p.textContent = text;
-        readBodyEl.appendChild(p);
+
+        if (art && art.side) {
+          // Small picture beside the paragraph.
+          const row = document.createElement("div");
+          row.className = "readRow";
+          row.appendChild(artNode(art.side, "side"));
+          row.appendChild(p);
+          readBodyEl.appendChild(row);
+        } else {
+          readBodyEl.appendChild(p);
+        }
+
+        if (art && art.figure) {
+          const fig = document.createElement("div");
+          fig.className = "readFig";
+          fig.appendChild(artNode(art.figure, "pic"));
+          if (art.caption) {
+            const cap = document.createElement("div");
+            cap.className = "cap";
+            cap.textContent = art.caption;
+            fig.appendChild(cap);
+          }
+          readBodyEl.appendChild(fig);
+        }
       });
       readBodyEl.parentElement.scrollTop = 0;
       counterEl.textContent = `${currentChapter + 1} / ${list.length}`;
@@ -1665,10 +1984,27 @@
     }
 
     // Read the chapter aloud paragraph by paragraph, highlighting the current
-    // one. speechSynthesis handles long English text more reliably than the
-    // short-query TTS endpoint, and can be stopped cleanly.
+    // one. Each paragraph is cut into sentence-sized pieces because the Google
+    // voice (much clearer than the built-in one) only takes short queries; the
+    // browser voice still covers each piece if a request fails.
+    let readAloudParts = [], readAloudPart = 0;
+
+    function splitForTTS(text) {
+      const out = [];
+      text.split(/(?<=[.!?])\s+/).forEach(sentence => {
+        let s = sentence.trim();
+        while (s.length > TTS_MAX) {
+          let cut = s.lastIndexOf(" ", TTS_MAX);
+          if (cut < 40) cut = TTS_MAX;
+          out.push(s.slice(0, cut));
+          s = s.slice(cut).trim();
+        }
+        if (s) out.push(s);
+      });
+      return out;
+    }
+
     function readChapterAloud() {
-      if (!("speechSynthesis" in window)) return;
       stopReading();
       readAloudChunks = [...readBodyEl.querySelectorAll("p")].filter(p => !p.classList.contains("empty"));
       if (!readAloudChunks.length) return;
@@ -1683,16 +2019,23 @@
       readAloudChunks.forEach(x => x.classList.remove("speaking"));
       p.classList.add("speaking");
       p.scrollIntoView({ block: "center" });
-      const u = new SpeechSynthesisUtterance(p.textContent);
-      u.lang = "en-IN";
-      u.rate = 0.9;
-      u.onend = () => { readAloudIdx++; speakChunk(); };
-      speechSynthesis.speak(u);
+      readAloudParts = splitForTTS(p.textContent);
+      readAloudPart = 0;
+      speakPart();
+    }
+
+    function speakPart() {
+      if (!reading) return;
+      if (readAloudPart >= readAloudParts.length) { readAloudIdx++; speakChunk(); return; }
+      const part = readAloudParts[readAloudPart++];
+      // Story text reads at normal pace; only the single अक्षर go slow.
+      speak(part, { lang: "en", rate: 0.9, slow: false, onend: () => speakPart() });
     }
 
     function stopReading() {
       reading = false;
-      if ("speechSynthesis" in window) speechSynthesis.cancel();
+      readAloudParts = [];
+      stopSpeaking();
       readBodyEl.querySelectorAll("p.speaking").forEach(p => p.classList.remove("speaking"));
     }
 
@@ -1714,9 +2057,29 @@
       reshuffle();
     }
 
+    // Dictation self-check. The letter is written into the DOM only when the
+    // kid flips the card, and wiped again on the next letter.
+    function resetReveal() {
+      revealCardEl.classList.remove("flipped");
+      revealLetterEl.textContent = "";
+      revealWordEl.textContent = "";
+      revealRomanEl.textContent = "";
+    }
+
+    function toggleReveal() {
+      if (!deck[index]) return;
+      if (revealCardEl.classList.contains("flipped")) { resetReveal(); return; }
+      const [letter, word, roman, emoji] = deck[index];
+      revealLetterEl.textContent = letter;
+      revealWordEl.textContent = `${emoji} ${word}`;
+      revealRomanEl.textContent = roman;
+      revealCardEl.classList.add("flipped");
+    }
+
     function flipCard() {
       flipped = !flipped;
       cardEl.classList.toggle("flipped", flipped);
+      stopSpeaking();
       if (autoSpeakEl.checked) {
         flipped ? speakWord() : speakLetter();
       }
@@ -1760,6 +2123,8 @@
 
     document.getElementById("earBtn").addEventListener("click", speakLetter);
     document.getElementById("repeatBtn").addEventListener("click", speakLetter);
+    document.getElementById("revealBtn").addEventListener("click", toggleReveal);
+    revealCardEl.addEventListener("click", toggleReveal);
     document.getElementById("nextWriteBtn").addEventListener("click", nextCard);
     document.getElementById("shuffleWriteBtn").addEventListener("click", reshuffle);
 
