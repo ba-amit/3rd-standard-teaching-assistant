@@ -1,5 +1,5 @@
-const CACHE = "varnamala-v14";
-const ASSETS = ["./", "./index.html", "./chapter.js", "./manifest.json", "./icon-192.png", "./icon-512.png"];
+const CACHE = "varnamala-v15";
+const ASSETS = ["./", "./index.html", "./chapter.js", "./chapters.js", "./manifest.json", "./icon-192.png", "./icon-512.png"];
 
 self.addEventListener("install", (e) => {
   e.waitUntil(caches.open(CACHE).then((c) => c.addAll(ASSETS)));
