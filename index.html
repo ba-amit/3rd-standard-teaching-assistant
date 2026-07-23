@@ -1318,8 +1318,7 @@
         hideAnswer: true,
         // Bare consonants ("क" vs "ख") are hard to tell apart by ear, so the
         // example word can follow the letter without revealing its shape.
-        speechText: ([letter, word]) =>
-          withWordEl.checked ? `${letter}, ${letter} से ${word}` : letter,
+        speechText: (entry) => withWordEl.checked ? recitation(entry) : entry[0],
         onKey(e) {
           if (e.key === "ArrowRight") nextCard();
           if (e.key.toLowerCase() === "s") reshuffle();
@@ -1627,21 +1626,27 @@
       backLetterEl.classList.toggle("speaking", !!on);
     }
 
+    // A bare अक्षर on its own is the hardest thing for the voice to say, and
+    // the hardest thing for a kid to catch, so recitation is always
+    // "झ, झ से झरना" — the letter, then the word it starts.
+    function recitation([letter, word]) {
+      const lead = SPEECH_FIX[letter] || letter;
+      return `${lead}, ${lead} से ${word}`;
+    }
+
     function speakLetter() {
       if (!deck[index]) return;          // reading / maths activities have no deck
       const a = activity();
-      const raw = a.speechText ? a.speechText(deck[index]) : deck[index][0];
+      // Dictation overrides this: it must not give the word away unless the
+      // kid has asked for it.
+      const raw = a.speechText ? a.speechText(deck[index]) : recitation(deck[index]);
       const text = SPEECH_FIX[raw] || raw;
       speak(text, { onstart: () => markSpeaking(true), onend: () => markSpeaking(false) });
     }
 
     function speakWord() {
       if (!deck[index]) return;
-      const [letter, word] = deck[index];
-      // Recite the letter, then the word it belongs to, so the kid hears the
-      // link while the letter stays visible on the back of the card.
-      const lead = SPEECH_FIX[letter] || letter;
-      speak(`${lead}, ${lead} से ${word}`, {
+      speak(recitation(deck[index]), {
         onstart: () => markSpeaking(true),
         onend: () => markSpeaking(false)
       });
