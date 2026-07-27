@@ -464,6 +464,143 @@
     .readFig img { width: 100%; border-radius: 12px; display: block; }
     .readFig .cap { font-weight: 700; color: var(--muted); font-size: .9rem; margin-top: 8px; }
 
+    /* --- SST practice worksheet --- */
+    .worksheet {
+      width: 100%;
+      height: 100%;
+      border-radius: 28px;
+      background:
+        radial-gradient(circle at 12% 10%, rgba(16,185,129,.10), transparent 30%),
+        radial-gradient(circle at 90% 90%, rgba(255,138,61,.10), transparent 30%),
+        #fff;
+      box-shadow: 0 18px 45px rgba(31, 41, 55, .18);
+      border: 5px solid rgba(255,255,255,.85);
+      padding: 22px clamp(16px, 4vw, 34px);
+      overflow-y: auto;
+      text-align: left;
+    }
+
+    .wsSection { margin-bottom: 26px; }
+    .wsSection:last-child { margin-bottom: 4px; }
+    .wsSection h3 {
+      font-size: 1.05rem;
+      font-weight: 800;
+      color: var(--accent2);
+      margin: 0 0 12px;
+    }
+
+    .wsQ {
+      background: rgba(59,130,246,.05);
+      border: 2px solid rgba(59,130,246,.14);
+      border-radius: 16px;
+      padding: 14px 16px;
+      margin-bottom: 10px;
+    }
+    .wsQ p.stem { margin: 0 0 8px; font-weight: 700; line-height: 1.5; }
+    .wsQ p.stem .n { color: var(--accent2); margin-right: 4px; }
+
+    .wsOpts { display: grid; gap: 6px; }
+    .wsOpt {
+      display: flex;
+      align-items: flex-start;
+      gap: 8px;
+      padding: 6px 8px;
+      border-radius: 10px;
+      cursor: pointer;
+      font-weight: 600;
+    }
+    .wsOpt:hover { background: rgba(59,130,246,.08); }
+    .wsOpt input { margin-top: 3px; accent-color: var(--accent2); }
+    .wsOpt.picked { background: rgba(16,185,129,.14); }
+
+    .wsBank {
+      display: flex; flex-wrap: wrap; gap: 8px;
+      margin-bottom: 14px;
+    }
+    .wsBank span {
+      background: rgba(16,185,129,.12);
+      color: #0f766e;
+      padding: 5px 12px;
+      border-radius: 999px;
+      font-size: .85rem;
+      font-weight: 800;
+    }
+
+    .wsBlank {
+      border: none;
+      border-bottom: 2px dotted rgba(100,116,139,.5);
+      background: transparent;
+      color: #0f766e;
+      font-weight: 800;
+      font: inherit;
+      padding: 2px 4px;
+      min-width: 130px;
+    }
+    .wsBlank:focus { outline: none; border-bottom-color: var(--accent2); }
+
+    .wsQ textarea {
+      width: 100%;
+      resize: vertical;
+      min-height: 4.2rem;
+      border: 2px solid rgba(59,130,246,.14);
+      border-radius: 10px;
+      background: #fff;
+      color: var(--ink);
+      font: inherit;
+      padding: 10px 12px;
+      margin-top: 4px;
+    }
+    .wsQ textarea:focus { outline: none; border-color: var(--accent2); }
+
+    .wsTF {
+      display: grid;
+      grid-template-columns: 1fr auto;
+      gap: 8px 12px;
+      align-items: center;
+    }
+    .wsTF .stem { font-weight: 700; margin: 0; }
+    .wsTFBtns { display: flex; gap: 6px; }
+    .wsTFBtns button {
+      border: 2px solid rgba(100,116,139,.3);
+      background: #fff;
+      color: var(--muted);
+      padding: 6px 14px;
+      border-radius: 999px;
+      font-size: .8rem;
+      font-weight: 800;
+      box-shadow: none;
+    }
+    .wsTFBtns button.true.active { background: #0f766e; border-color: #0f766e; color: #fff; }
+    .wsTFBtns button.false.active { background: #be123c; border-color: #be123c; color: #fff; }
+    .wsTF .wsCorrect {
+      grid-column: 1 / -1;
+      border: none;
+      border-bottom: 1px dotted rgba(100,116,139,.5);
+      background: transparent;
+      color: var(--ink);
+      font: inherit;
+      font-style: italic;
+      padding: 4px 2px;
+      width: 100%;
+    }
+    .wsTF .wsCorrect:focus { outline: none; border-bottom-color: var(--accent2); }
+
+    .wsOddItems { display: flex; flex-wrap: wrap; gap: 8px; margin-top: 8px; }
+    .wsOddItems button {
+      border: 2px solid rgba(100,116,139,.25);
+      background: #fff;
+      color: var(--ink);
+      padding: 8px 14px;
+      border-radius: 12px;
+      font-size: .9rem;
+      font-weight: 700;
+      box-shadow: none;
+    }
+    .wsOddItems button.picked {
+      background: #be123c; border-color: #be123c; color: #fff;
+      text-decoration: line-through wavy;
+    }
+
     .navGroup {
       margin: 14px 0 4px;
       font-size: .78rem;
@@ -658,6 +795,15 @@
     <div class="controls hidden" id="readerControls">
       <button class="primary" id="readAloudBtn">🔊 Read aloud</button>
       <button class="secondary" id="stopReadBtn">⏹ Stop</button>
+    </div>
+
+    <section class="scene hidden" id="worksheetScene">
+      <div class="worksheet" id="worksheetBody"></div>
+    </section>
+
+    <div class="controls hidden" id="worksheetControls">
+      <button class="secondary" id="wsClearBtn">🔄 Clear answers</button>
+      <button class="primary" id="wsPrintBtn">🖨️ Print</button>
     </div>
 
     <div class="controls" id="readControls">
@@ -1408,6 +1554,18 @@
         onKey(e) { if (e.key === "Enter") { e.preventDefault(); checkAnswer(); } }
       },
       {
+        id: "sstWorksheet",
+        group: "Social Studies",
+        icon: "📝",
+        label: "Adapting to changes — worksheet",
+        subtitle: "Fill in the practice worksheet — MCQs, blanks, short answers & more",
+        footer: "Fill in your answers · 🖨️ Print to save as PDF",
+        scene: "worksheetScene",
+        controls: "worksheetControls",
+        usesDeck: false,
+        onEnter: () => renderWorksheet()
+      },
+      {
         id: "mathPractice",
         group: "Math",
         icon: "🔢",
@@ -1475,6 +1633,7 @@
     const readMetaEl = document.getElementById("readMeta");
     const readBodyEl = document.getElementById("readBody");
     const readerControlsEl = document.getElementById("readerControls");
+    const worksheetBodyEl = document.getElementById("worksheetBody");
 
     let hindiVoice = null;
     function pickVoice() {
@@ -2044,6 +2203,182 @@
       readBodyEl.querySelectorAll("p.speaking").forEach(p => p.classList.remove("speaking"));
     }
 
+    // ---------------- SST worksheet ----------------
+    // A fillable, printable practice worksheet (multiple question types, not
+    // just multiple-choice) rendered straight into the DOM. Answers live only
+    // in the page, never saved — Print / Clear are the only actions.
+    const WORKSHEET = {
+      title: "Adapting to Changes",
+      wordBank: ["raincoat", "umbrella", "climate", "habits", "respect"],
+      mcq: [
+        { q: "Neha's mother started working in an office. Which change is most likely to happen at home?",
+          opts: ["Neha will stop going to school.", "Family members may help with household work.",
+                 "The family will move to another country.", "They will stop celebrating birthdays."] },
+        { q: "Which of these is the BEST example of adapting to a seasonal change?",
+          opts: ["Wearing a raincoat during the rainy season.", "Wearing a sweater in summer.",
+                 "Drinking hot soup on a hot afternoon.", "Sleeping with a blanket in May."] },
+        { q: "Why do farmers in different states grow different crops?",
+          opts: ["They all use the same soil.", "Different places have different climates and soil.",
+                 "Every farmer grows rice only.", "Schools decide which crops to grow."] },
+        { q: "Which of these is a good habit when visiting a new place?",
+          opts: ["Making fun of local customs.", "Respecting the people and their traditions.",
+                 "Refusing to try anything new.", "Comparing everyone with your hometown."] },
+        { q: "Which change takes place during the rainy season?",
+          opts: ["People use umbrellas and raincoats.", "People wear woollen caps.",
+                 "Trees lose all their leaves.", "People celebrate every festival."] }
+      ],
+      blanks: [
+        "We should ____ the customs and traditions of every place.",
+        "During the rainy season, we carry an ____.",
+        "Food and clothing depend on the ____ of a place.",
+        "Good ____ help us stay healthy.",
+        "A ____ keeps us dry when it rains."
+      ],
+      longAnswers: [
+        "Your school has started online classes because of heavy rain. Write any two changes you will make in your daily routine.",
+        "Your cousin is visiting your city for the first time. Write any two things you would tell your cousin about your city.",
+        "A farmer grows rice, while another farmer grows wheat. Why do you think they grow different crops? Write any two reasons.",
+        "Priya's family visited Ladakh during winter. Before leaving, they packed jackets, gloves and woollen caps. Why do you think they packed these things?"
+      ],
+      trueFalse: [
+        "People in every state eat exactly the same food.",
+        "Climate affects the clothes people wear.",
+        "We should respect the customs of every place.",
+        "Crops grown in a region affect food habits."
+      ],
+      oddOne: [
+        ["Sweater", "Jacket", "Woollen Cap", "Mango"],
+        ["Rice", "Wheat", "Maize", "Television"],
+        ["Umbrella", "Raincoat", "Gumboots", "Story Book"],
+        ["Ganesh Chaturthi", "Durga Puja", "Bihu", "Notebook"]
+      ]
+    };
+
+    function renderWorksheet() {
+      const el = (tag, cls, html) => {
+        const n = document.createElement(tag);
+        if (cls) n.className = cls;
+        if (html !== undefined) n.innerHTML = html;
+        return n;
+      };
+      worksheetBodyEl.innerHTML = "";
+
+      // A. multiple choice
+      const secA = el("div", "wsSection");
+      secA.appendChild(el("h3", null, "A. Tick the correct answer"));
+      WORKSHEET.mcq.forEach((item, qi) => {
+        const q = el("div", "wsQ");
+        q.appendChild(el("p", "stem", `<span class="n">${qi + 1}.</span> ${item.q}`));
+        const opts = el("div", "wsOpts");
+        item.opts.forEach((opt, oi) => {
+          const label = el("label", "wsOpt", `<span>${String.fromCharCode(65 + oi)}. ${opt}</span>`);
+          const input = document.createElement("input");
+          input.type = "radio";
+          input.name = `wsMcq${qi}`;
+          label.prepend(input);
+          label.addEventListener("change", () => {
+            opts.querySelectorAll(".wsOpt").forEach(o => o.classList.remove("picked"));
+            label.classList.add("picked");
+          });
+          opts.appendChild(label);
+        });
+        q.appendChild(opts);
+        secA.appendChild(q);
+      });
+      worksheetBodyEl.appendChild(secA);
+
+      // B. fill in the blanks
+      const secB = el("div", "wsSection");
+      secB.appendChild(el("h3", null, "B. Fill in the blanks"));
+      const bank = el("div", "wsBank");
+      WORKSHEET.wordBank.forEach(w => bank.appendChild(el("span", null, w)));
+      secB.appendChild(bank);
+      WORKSHEET.blanks.forEach((line, i) => {
+        const [before, after] = line.split("____");
+        const q = el("div", "wsQ");
+        const p = el("p", "stem");
+        p.appendChild(el("span", "n", `${i + 1}.`));
+        p.append(" " + before);
+        const input = document.createElement("input");
+        input.className = "wsBlank";
+        input.type = "text";
+        input.placeholder = "____________";
+        p.appendChild(input);
+        p.append(after);
+        q.appendChild(p);
+        secB.appendChild(q);
+      });
+      worksheetBodyEl.appendChild(secB);
+
+      // C. short/long answers
+      const secC = el("div", "wsSection");
+      secC.appendChild(el("h3", null, "C. Answer the following questions"));
+      WORKSHEET.longAnswers.forEach((stem, i) => {
+        const q = el("div", "wsQ");
+        q.appendChild(el("p", "stem", `${i + 1}. ${stem}`));
+        q.appendChild(document.createElement("textarea"));
+        secC.appendChild(q);
+      });
+      worksheetBodyEl.appendChild(secC);
+
+      // D. true / false
+      const secD = el("div", "wsSection");
+      secD.appendChild(el("h3", null, "D. Write True or False. Correct the false statements"));
+      WORKSHEET.trueFalse.forEach((stem, i) => {
+        const letter = String.fromCharCode(97 + i);
+        const q = el("div", "wsQ wsTF");
+        q.appendChild(el("p", "stem", `${letter}. ${stem}`));
+        const btns = el("div", "wsTFBtns");
+        const tBtn = el("button", "true", "True");
+        const fBtn = el("button", "false", "False");
+        tBtn.type = fBtn.type = "button";
+        tBtn.addEventListener("click", () => { tBtn.classList.add("active"); fBtn.classList.remove("active"); });
+        fBtn.addEventListener("click", () => { fBtn.classList.add("active"); tBtn.classList.remove("active"); });
+        btns.append(tBtn, fBtn);
+        q.appendChild(btns);
+        const correct = document.createElement("input");
+        correct.className = "wsCorrect";
+        correct.type = "text";
+        correct.placeholder = "If false, write the correct statement here…";
+        q.appendChild(correct);
+        secD.appendChild(q);
+      });
+      worksheetBodyEl.appendChild(secD);
+
+      // E. odd one out
+      const secE = el("div", "wsSection");
+      secE.appendChild(el("h3", null, "E. Circle (tap) the one that does NOT belong"));
+      WORKSHEET.oddOne.forEach((group, i) => {
+        const q = el("div", "wsQ");
+        q.appendChild(el("p", "stem", `${i + 1}. ${group.join(" · ")}`));
+        const items = el("div", "wsOddItems");
+        group.forEach(word => {
+          const b = document.createElement("button");
+          b.type = "button";
+          b.textContent = word;
+          b.addEventListener("click", () => {
+            items.querySelectorAll("button").forEach(o => o.classList.remove("picked"));
+            b.classList.add("picked");
+          });
+          items.appendChild(b);
+        });
+        q.appendChild(items);
+        secE.appendChild(q);
+      });
+      worksheetBodyEl.appendChild(secE);
+
+      worksheetBodyEl.scrollTop = 0;
+      counterEl.textContent = "";
+      setNameEl.textContent = WORKSHEET.title;
+    }
+
+    function clearWorksheet() {
+      worksheetBodyEl.querySelectorAll("input[type=text], input[type=radio], textarea").forEach(el => {
+        if (el.type === "radio") el.checked = false; else el.value = "";
+      });
+      worksheetBodyEl.querySelectorAll(".picked, .active").forEach(el => el.classList.remove("picked", "active"));
+    }
+
     function openDrawer() {
       sidebarEl.classList.add("open");
       overlayEl.classList.add("show");
@@ -2135,6 +2470,8 @@
 
     document.getElementById("readAloudBtn").addEventListener("click", readChapterAloud);
     document.getElementById("stopReadBtn").addEventListener("click", stopReading);
+    document.getElementById("wsClearBtn").addEventListener("click", clearWorksheet);
+    document.getElementById("wsPrintBtn").addEventListener("click", () => window.print());
     checkBtn.addEventListener("click", checkAnswer);
     document.getElementById("nextQBtn").addEventListener("click", nextQuestion);
     document.getElementById("restartBtn").addEventListener("click", () =>
