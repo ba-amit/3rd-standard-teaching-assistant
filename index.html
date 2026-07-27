@@ -601,6 +601,59 @@
       text-decoration: line-through wavy;
     }
 
+    .wsNote { color: var(--muted); font-weight: 600; font-size: .85rem; margin: -4px 0 12px; font-style: italic; }
+
+    .wsFieldLabel { font-weight: 700; line-height: 1.5; }
+    .wsInline { border: none; border-bottom: 2px dotted rgba(100,116,139,.5); background: transparent;
+      color: #0f766e; font-weight: 800; font: inherit; padding: 2px 6px; min-width: 110px; margin: 0 2px; }
+    .wsInline:focus { outline: none; border-bottom-color: var(--accent2); }
+    .wsInline.narrow { width: 70px; min-width: 0; flex: none; text-align: center; }
+
+    .wsSub { display: grid; gap: 8px; margin-top: 8px; padding-left: 14px; border-left: 3px solid rgba(59,130,246,.18); }
+    .wsSub .wsFieldLabel { font-weight: 600; }
+
+    .wsBetween { display: flex; align-items: baseline; gap: 8px; font-weight: 800; font-size: 1.05rem; }
+
+    .wsTableWrap { overflow-x: auto; }
+    .wsTable { width: 100%; border-collapse: collapse; }
+    .wsTable th, .wsTable td { border: 1px solid rgba(100,116,139,.25); padding: 8px 10px; text-align: center; font-weight: 700; }
+    .wsTable th { background: rgba(59,130,246,.08); color: var(--accent2); font-size: .85rem; text-transform: uppercase; letter-spacing: .03em; }
+    .wsTable td u { color: var(--accent2); }
+
+    .wsPlaceRow { display: flex; align-items: center; gap: 18px; flex-wrap: wrap; }
+    .wsPlaceRow .num { font-weight: 800; font-size: 1.2rem; color: #0f766e; min-width: 70px; }
+    .wsPlaceCols { display: flex; gap: 10px; }
+    .wsPlaceCol { display: flex; flex-direction: column; align-items: center; gap: 4px; }
+    .wsPlaceCol span { font-size: .75rem; font-weight: 800; color: var(--muted); text-transform: uppercase; }
+    .wsPlaceCol input {
+      width: 40px; height: 40px; text-align: center; font-weight: 800; font-size: 1.1rem;
+      border: 2px solid rgba(59,130,246,.25); border-radius: 8px; background: #fff; color: var(--ink); font-family: inherit;
+    }
+    .wsPlaceCol input:focus { outline: none; border-color: var(--accent2); }
+
+    .wsSkipRow { display: flex; align-items: center; gap: 8px; flex-wrap: wrap; font-weight: 800; }
+    .wsSkipRow .given { color: #0f766e; }
+    .wsSkipRow input { width: 62px; }
+
+    .wsQuote {
+      font-style: italic; color: var(--ink); background: rgba(255,214,102,.16);
+      border-left: 4px solid var(--accent); border-radius: 8px; padding: 10px 14px; margin-bottom: 10px; line-height: 1.6;
+    }
+    .wsSubQ { display: grid; gap: 4px; margin-bottom: 10px; }
+    .wsSubQ label { font-weight: 700; }
+    .wsSubQ textarea { width: 100%; resize: vertical; min-height: 3rem;
+      border: 2px solid rgba(59,130,246,.14); border-radius: 10px; background: #fff; color: var(--ink);
+      font: inherit; padding: 8px 10px; }
+    .wsSubQ textarea:focus { outline: none; border-color: var(--accent2); }
+
+    .wsClueLine { font-weight: 700; margin-bottom: 6px; }
+    .wsClue textarea { width: 100%; resize: vertical; min-height: 2.6rem;
+      border: 2px solid rgba(59,130,246,.14); border-radius: 10px; background: #fff; color: var(--ink);
+      font: inherit; padding: 8px 10px; margin-top: 4px; }
+    .wsClue textarea:focus { outline: none; border-color: var(--accent2); }
+
+    .wsStory { line-height: 2.1; font-size: 1.05rem; }
+
     .navGroup {
       margin: 14px 0 4px;
       font-size: .78rem;
@@ -1527,6 +1580,42 @@
         onKey(e) { if (e.key === "Enter") { e.preventDefault(); checkAnswer(); } }
       },
       {
+        id: "safeAgainWorksheet",
+        group: "English",
+        icon: "📝",
+        label: "Safe Again — worksheet",
+        subtitle: "Fill in the practice worksheet — MCQs and extract questions",
+        footer: "Fill in your answers · 🖨️ Print to save as PDF",
+        scene: "worksheetScene",
+        controls: "worksheetControls",
+        usesDeck: false,
+        onEnter: () => renderWorksheet("safeAgain")
+      },
+      {
+        id: "materialNounWorksheet",
+        group: "English",
+        icon: "📝",
+        label: "Material Noun — worksheet",
+        subtitle: "Fill in the practice worksheet — clues, blanks & short writing",
+        footer: "Fill in your answers · 🖨️ Print to save as PDF",
+        scene: "worksheetScene",
+        controls: "worksheetControls",
+        usesDeck: false,
+        onEnter: () => renderWorksheet("materialNoun")
+      },
+      {
+        id: "spellingsWorksheet",
+        group: "English",
+        icon: "📝",
+        label: "Spellings & Vocabulary — worksheet",
+        subtitle: "Fill in the practice worksheet — spelling fixes & MCQs",
+        footer: "Fill in your answers · 🖨️ Print to save as PDF",
+        scene: "worksheetScene",
+        controls: "worksheetControls",
+        usesDeck: false,
+        onEnter: () => renderWorksheet("spellings")
+      },
+      {
         id: "sstPractice",
         group: "Social Studies",
         icon: "🌍",
@@ -1563,7 +1652,7 @@
         scene: "worksheetScene",
         controls: "worksheetControls",
         usesDeck: false,
-        onEnter: () => renderWorksheet()
+        onEnter: () => renderWorksheet("adapting")
       },
       {
         id: "mathPractice",
@@ -1591,6 +1680,18 @@
         usesDeck: false,
         onEnter: () => startQuiz({ bank: MATH_SKILLS, bankId: "math", test: true, length: 10 }),
         onKey(e) { if (e.key === "Enter") { e.preventDefault(); checkAnswer(); } }
+      },
+      {
+        id: "mathNumbersWorksheet",
+        group: "Math",
+        icon: "🧮",
+        label: "Numbers (4-digit) — worksheet",
+        subtitle: "Fill in the practice worksheet — place value, ordering & more",
+        footer: "Fill in your answers · 🖨️ Print to save as PDF",
+        scene: "worksheetScene",
+        controls: "worksheetControls",
+        usesDeck: false,
+        onEnter: () => renderWorksheet("mathsNumbers")
       }
     ];
 
@@ -2203,173 +2304,589 @@
       readBodyEl.querySelectorAll("p.speaking").forEach(p => p.classList.remove("speaking"));
     }
 
-    // ---------------- SST worksheet ----------------
-    // A fillable, printable practice worksheet (multiple question types, not
-    // just multiple-choice) rendered straight into the DOM. Answers live only
-    // in the page, never saved — Print / Clear are the only actions.
-    const WORKSHEET = {
-      title: "Adapting to Changes",
-      wordBank: ["raincoat", "umbrella", "climate", "habits", "respect"],
-      mcq: [
-        { q: "Neha's mother started working in an office. Which change is most likely to happen at home?",
-          opts: ["Neha will stop going to school.", "Family members may help with household work.",
-                 "The family will move to another country.", "They will stop celebrating birthdays."] },
-        { q: "Which of these is the BEST example of adapting to a seasonal change?",
-          opts: ["Wearing a raincoat during the rainy season.", "Wearing a sweater in summer.",
-                 "Drinking hot soup on a hot afternoon.", "Sleeping with a blanket in May."] },
-        { q: "Why do farmers in different states grow different crops?",
-          opts: ["They all use the same soil.", "Different places have different climates and soil.",
-                 "Every farmer grows rice only.", "Schools decide which crops to grow."] },
-        { q: "Which of these is a good habit when visiting a new place?",
-          opts: ["Making fun of local customs.", "Respecting the people and their traditions.",
-                 "Refusing to try anything new.", "Comparing everyone with your hometown."] },
-        { q: "Which change takes place during the rainy season?",
-          opts: ["People use umbrellas and raincoats.", "People wear woollen caps.",
-                 "Trees lose all their leaves.", "People celebrate every festival."] }
-      ],
-      blanks: [
-        "We should ____ the customs and traditions of every place.",
-        "During the rainy season, we carry an ____.",
-        "Food and clothing depend on the ____ of a place.",
-        "Good ____ help us stay healthy.",
-        "A ____ keeps us dry when it rains."
-      ],
-      longAnswers: [
-        "Your school has started online classes because of heavy rain. Write any two changes you will make in your daily routine.",
-        "Your cousin is visiting your city for the first time. Write any two things you would tell your cousin about your city.",
-        "A farmer grows rice, while another farmer grows wheat. Why do you think they grow different crops? Write any two reasons.",
-        "Priya's family visited Ladakh during winter. Before leaving, they packed jackets, gloves and woollen caps. Why do you think they packed these things?"
-      ],
-      trueFalse: [
-        "People in every state eat exactly the same food.",
-        "Climate affects the clothes people wear.",
-        "We should respect the customs of every place.",
-        "Crops grown in a region affect food habits."
-      ],
-      oddOne: [
-        ["Sweater", "Jacket", "Woollen Cap", "Mango"],
-        ["Rice", "Wheat", "Maize", "Television"],
-        ["Umbrella", "Raincoat", "Gumboots", "Story Book"],
-        ["Ganesh Chaturthi", "Durga Puja", "Bihu", "Notebook"]
-      ]
+    // ---------------- practice worksheets ----------------
+    // Fillable, printable worksheets (many question types, not just
+    // multiple-choice) rendered straight into the DOM from a plain data
+    // object. Answers live only in the page, never saved — Print / Clear are
+    // the only actions. Each ACTIVITIES entry with usesDeck:false and an
+    // onEnter: () => renderWorksheet(WORKSHEETS.id) reuses the same
+    // worksheetScene/worksheetControls markup; adding a worksheet is just a
+    // new WORKSHEETS entry (built from `sections`, one per question type
+    // below) plus one ACTIVITIES entry — no new markup or render code.
+    const el = (tag, cls, html) => {
+      const n = document.createElement(tag);
+      if (cls) n.className = cls;
+      if (html !== undefined) n.innerHTML = html;
+      return n;
+    };
+    const inp = (cls, placeholder) => {
+      const i = document.createElement("input");
+      i.type = "text";
+      i.className = cls;
+      if (placeholder) i.placeholder = placeholder;
+      return i;
     };
 
-    function renderWorksheet() {
-      const el = (tag, cls, html) => {
-        const n = document.createElement(tag);
-        if (cls) n.className = cls;
-        if (html !== undefined) n.innerHTML = html;
-        return n;
-      };
-      worksheetBodyEl.innerHTML = "";
-
-      // A. multiple choice
-      const secA = el("div", "wsSection");
-      secA.appendChild(el("h3", null, "A. Tick the correct answer"));
-      WORKSHEET.mcq.forEach((item, qi) => {
-        const q = el("div", "wsQ");
-        q.appendChild(el("p", "stem", `<span class="n">${qi + 1}.</span> ${item.q}`));
-        const opts = el("div", "wsOpts");
-        item.opts.forEach((opt, oi) => {
-          const label = el("label", "wsOpt", `<span>${String.fromCharCode(65 + oi)}. ${opt}</span>`);
-          const input = document.createElement("input");
-          input.type = "radio";
-          input.name = `wsMcq${qi}`;
-          label.prepend(input);
-          label.addEventListener("change", () => {
-            opts.querySelectorAll(".wsOpt").forEach(o => o.classList.remove("picked"));
-            label.classList.add("picked");
-          });
-          opts.appendChild(label);
-        });
-        q.appendChild(opts);
-        secA.appendChild(q);
+    // Splits "before ____ after" into an array of text/blank-input pieces
+    // and appends them to `p`, so a sentence can hold one or more blanks.
+    function appendBlankLine(p, line, cls = "wsBlank") {
+      line.split("____").forEach((part, i, arr) => {
+        if (part) p.append(part);
+        if (i < arr.length - 1) p.appendChild(inp(cls, "____________"));
       });
-      worksheetBodyEl.appendChild(secA);
+    }
 
-      // B. fill in the blanks
-      const secB = el("div", "wsSection");
-      secB.appendChild(el("h3", null, "B. Fill in the blanks"));
-      const bank = el("div", "wsBank");
-      WORKSHEET.wordBank.forEach(w => bank.appendChild(el("span", null, w)));
-      secB.appendChild(bank);
-      WORKSHEET.blanks.forEach((line, i) => {
-        const [before, after] = line.split("____");
+    const SECTION_RENDERERS = {
+      mcq(sec) {
+        const wrap = el("div", "wsSection");
+        wrap.appendChild(el("h3", null, sec.heading));
+        sec.items.forEach((item, qi) => {
+          const q = el("div", "wsQ");
+          q.appendChild(el("p", "stem", `<span class="n">${qi + 1}.</span> ${item.q}`));
+          const opts = el("div", "wsOpts");
+          item.opts.forEach((opt, oi) => {
+            const label = el("label", "wsOpt", `<span>${String.fromCharCode(65 + oi)}. ${opt}</span>`);
+            const input = document.createElement("input");
+            input.type = "radio";
+            input.name = `wsMcq${sec.key}${qi}`;
+            label.prepend(input);
+            label.addEventListener("change", () => {
+              opts.querySelectorAll(".wsOpt").forEach(o => o.classList.remove("picked"));
+              label.classList.add("picked");
+            });
+            opts.appendChild(label);
+          });
+          q.appendChild(opts);
+          wrap.appendChild(q);
+        });
+        return wrap;
+      },
+
+      blanks(sec) {
+        const wrap = el("div", "wsSection");
+        wrap.appendChild(el("h3", null, sec.heading));
+        if (sec.wordBank) {
+          const bank = el("div", "wsBank");
+          sec.wordBank.forEach(w => bank.appendChild(el("span", null, w)));
+          wrap.appendChild(bank);
+        }
+        sec.items.forEach((line, i) => {
+          const q = el("div", "wsQ");
+          const p = el("p", "stem");
+          p.appendChild(el("span", "n", `${i + 1}.`));
+          p.append(" ");
+          appendBlankLine(p, line);
+          q.appendChild(p);
+          wrap.appendChild(q);
+        });
+        return wrap;
+      },
+
+      long(sec) {
+        const wrap = el("div", "wsSection");
+        wrap.appendChild(el("h3", null, sec.heading));
+        sec.items.forEach((item, i) => {
+          const stem = typeof item === "string" ? item : item.stem;
+          const rows = typeof item === "string" ? 3 : (item.rows || 3);
+          const q = el("div", "wsQ");
+          q.appendChild(el("p", "stem", sec.items.length > 1 ? `${i + 1}. ${stem}` : stem));
+          const ta = document.createElement("textarea");
+          ta.rows = rows;
+          q.appendChild(ta);
+          wrap.appendChild(q);
+        });
+        return wrap;
+      },
+
+      tf(sec) {
+        const wrap = el("div", "wsSection");
+        wrap.appendChild(el("h3", null, sec.heading));
+        sec.items.forEach((stem, i) => {
+          const letter = String.fromCharCode(97 + i);
+          const q = el("div", "wsQ wsTF");
+          q.appendChild(el("p", "stem", `${letter}. ${stem}`));
+          const btns = el("div", "wsTFBtns");
+          const tBtn = el("button", "true", "True");
+          const fBtn = el("button", "false", "False");
+          tBtn.type = fBtn.type = "button";
+          tBtn.addEventListener("click", () => { tBtn.classList.add("active"); fBtn.classList.remove("active"); });
+          fBtn.addEventListener("click", () => { fBtn.classList.add("active"); tBtn.classList.remove("active"); });
+          btns.append(tBtn, fBtn);
+          q.appendChild(btns);
+          q.appendChild(inp("wsCorrect", "If false, write the correct statement here…"));
+          wrap.appendChild(q);
+        });
+        return wrap;
+      },
+
+      odd(sec) {
+        const wrap = el("div", "wsSection");
+        wrap.appendChild(el("h3", null, sec.heading));
+        sec.groups.forEach((group, i) => {
+          const q = el("div", "wsQ");
+          q.appendChild(el("p", "stem", `${i + 1}. ${group.join(" · ")}`));
+          const items = el("div", "wsOddItems");
+          group.forEach(word => {
+            const b = document.createElement("button");
+            b.type = "button";
+            b.textContent = word;
+            b.addEventListener("click", () => {
+              items.querySelectorAll("button").forEach(o => o.classList.remove("picked"));
+              b.classList.add("picked");
+            });
+            items.appendChild(b);
+          });
+          q.appendChild(items);
+          wrap.appendChild(q);
+        });
+        return wrap;
+      },
+
+      // Label + one or more inline blanks. item.sub, if present, nests
+      // further label+blank rows under item.label (grouped sub-answers like
+      // "Largest =" / "Smallest ="  under one prompt).
+      fields(sec) {
+        const wrap = el("div", "wsSection");
+        wrap.appendChild(el("h3", null, sec.heading));
+        if (sec.note) wrap.appendChild(el("p", "wsNote", sec.note));
+        sec.items.forEach(item => {
+          const q = el("div", "wsQ");
+          const p = el("p", "wsFieldLabel");
+          if (item.sub) {
+            p.textContent = item.label;
+            q.appendChild(p);
+            const sub = el("div", "wsSub");
+            item.sub.forEach(s => {
+              const row = el("p", "wsFieldLabel");
+              row.append(s.label + " ");
+              for (let i = 0; i < (s.blanks || 1); i++) row.appendChild(inp("wsInline"));
+              sub.appendChild(row);
+            });
+            q.appendChild(sub);
+          } else {
+            p.append(item.label + " ");
+            for (let i = 0; i < (item.blanks || 1); i++) p.appendChild(inp("wsInline"));
+            q.appendChild(p);
+          }
+          wrap.appendChild(q);
+        });
+        return wrap;
+      },
+
+      // A left value, a small free-text input, a right value — for
+      // >/</= comparisons and "write the number between" questions.
+      between(sec) {
+        const wrap = el("div", "wsSection");
+        wrap.appendChild(el("h3", null, sec.heading));
+        sec.items.forEach(item => {
+          const q = el("div", "wsQ wsBetween");
+          q.append(item.left);
+          q.appendChild(inp("wsInline narrow"));
+          q.append(item.right);
+          wrap.appendChild(q);
+        });
+        return wrap;
+      },
+
+      table(sec) {
+        const wrap = el("div", "wsSection");
+        wrap.appendChild(el("h3", null, sec.heading));
+        const tableWrap = el("div", "wsTableWrap");
+        const table = el("table", "wsTable");
+        const thead = el("tr");
+        sec.headers.forEach(h => thead.appendChild(el("th", null, h)));
+        table.appendChild(thead);
+        sec.rows.forEach(row => {
+          const tr = el("tr");
+          row.forEach(cell => {
+            const td = document.createElement("td");
+            if (cell && cell.input) td.appendChild(inp("wsInline narrow"));
+            else td.innerHTML = cell;
+            tr.appendChild(td);
+          });
+          table.appendChild(tr);
+        });
+        tableWrap.appendChild(table);
+        wrap.appendChild(tableWrap);
+        return wrap;
+      },
+
+      // One labeled input per place-value column (Th/H/T/O) — the digit
+      // equivalent of "draw beads on the abacus" for a given number.
+      placeColumns(sec) {
+        const wrap = el("div", "wsSection");
+        wrap.appendChild(el("h3", null, sec.heading));
+        if (sec.note) wrap.appendChild(el("p", "wsNote", sec.note));
+        sec.items.forEach(item => {
+          const q = el("div", "wsQ wsPlaceRow");
+          q.appendChild(el("span", "num", item.number));
+          const cols = el("div", "wsPlaceCols");
+          (item.cols || ["Th", "H", "T", "O"]).forEach(c => {
+            const col = el("div", "wsPlaceCol");
+            col.appendChild(el("span", null, c));
+            col.appendChild(inp(""));
+            cols.appendChild(col);
+          });
+          q.appendChild(cols);
+          wrap.appendChild(q);
+        });
+        return wrap;
+      },
+
+      skipCount(sec) {
+        const wrap = el("div", "wsSection");
+        wrap.appendChild(el("h3", null, sec.heading));
+        sec.items.forEach(item => {
+          const q = el("div", "wsQ");
+          q.appendChild(el("p", "stem", item.label));
+          const row = el("div", "wsSkipRow");
+          item.given.forEach(v => row.appendChild(el("span", "given", String(v))));
+          for (let i = 0; i < item.blanks; i++) row.appendChild(inp(""));
+          q.appendChild(row);
+          wrap.appendChild(q);
+        });
+        return wrap;
+      },
+
+      // Clue → single blank ("I am ____.") → a free sentence using the word.
+      clue(sec) {
+        const wrap = el("div", "wsSection");
+        wrap.appendChild(el("h3", null, sec.heading));
+        sec.items.forEach((item, i) => {
+          const q = el("div", "wsQ wsClue");
+          const p = el("p", "wsClueLine");
+          p.appendChild(el("span", "n", `${i + 1}.`));
+          p.append(" ");
+          appendBlankLine(p, item);
+          q.appendChild(p);
+          const ta = document.createElement("textarea");
+          ta.rows = 2;
+          ta.placeholder = "Sentence: …";
+          q.appendChild(ta);
+          wrap.appendChild(q);
+        });
+        return wrap;
+      },
+
+      // A short cloze paragraph — one flowing block of text with several
+      // ____ blanks, plus an optional word bank above it.
+      story(sec) {
+        const wrap = el("div", "wsSection");
+        wrap.appendChild(el("h3", null, sec.heading));
+        if (sec.wordBank) {
+          const bank = el("div", "wsBank");
+          sec.wordBank.forEach(w => bank.appendChild(el("span", null, w)));
+          wrap.appendChild(bank);
+        }
         const q = el("div", "wsQ");
-        const p = el("p", "stem");
-        p.appendChild(el("span", "n", `${i + 1}.`));
-        p.append(" " + before);
-        const input = document.createElement("input");
-        input.className = "wsBlank";
-        input.type = "text";
-        input.placeholder = "____________";
-        p.appendChild(input);
-        p.append(after);
+        const p = el("p", "wsStory");
+        appendBlankLine(p, sec.text);
         q.appendChild(p);
-        secB.appendChild(q);
-      });
-      worksheetBodyEl.appendChild(secB);
+        wrap.appendChild(q);
+        return wrap;
+      },
 
-      // C. short/long answers
-      const secC = el("div", "wsSection");
-      secC.appendChild(el("h3", null, "C. Answer the following questions"));
-      WORKSHEET.longAnswers.forEach((stem, i) => {
-        const q = el("div", "wsQ");
-        q.appendChild(el("p", "stem", `${i + 1}. ${stem}`));
-        q.appendChild(document.createElement("textarea"));
-        secC.appendChild(q);
-      });
-      worksheetBodyEl.appendChild(secC);
-
-      // D. true / false
-      const secD = el("div", "wsSection");
-      secD.appendChild(el("h3", null, "D. Write True or False. Correct the false statements"));
-      WORKSHEET.trueFalse.forEach((stem, i) => {
-        const letter = String.fromCharCode(97 + i);
-        const q = el("div", "wsQ wsTF");
-        q.appendChild(el("p", "stem", `${letter}. ${stem}`));
-        const btns = el("div", "wsTFBtns");
-        const tBtn = el("button", "true", "True");
-        const fBtn = el("button", "false", "False");
-        tBtn.type = fBtn.type = "button";
-        tBtn.addEventListener("click", () => { tBtn.classList.add("active"); fBtn.classList.remove("active"); });
-        fBtn.addEventListener("click", () => { fBtn.classList.add("active"); tBtn.classList.remove("active"); });
-        btns.append(tBtn, fBtn);
-        q.appendChild(btns);
-        const correct = document.createElement("input");
-        correct.className = "wsCorrect";
-        correct.type = "text";
-        correct.placeholder = "If false, write the correct statement here…";
-        q.appendChild(correct);
-        secD.appendChild(q);
-      });
-      worksheetBodyEl.appendChild(secD);
-
-      // E. odd one out
-      const secE = el("div", "wsSection");
-      secE.appendChild(el("h3", null, "E. Circle (tap) the one that does NOT belong"));
-      WORKSHEET.oddOne.forEach((group, i) => {
-        const q = el("div", "wsQ");
-        q.appendChild(el("p", "stem", `${i + 1}. ${group.join(" · ")}`));
-        const items = el("div", "wsOddItems");
-        group.forEach(word => {
-          const b = document.createElement("button");
-          b.type = "button";
-          b.textContent = word;
-          b.addEventListener("click", () => {
-            items.querySelectorAll("button").forEach(o => o.classList.remove("picked"));
-            b.classList.add("picked");
+      // A quoted passage followed by lettered sub-questions, each with its
+      // own answer box (reading-comprehension extracts).
+      extract(sec) {
+        const wrap = el("div", "wsSection");
+        wrap.appendChild(el("h3", null, sec.heading));
+        sec.items.forEach((item, i) => {
+          const q = el("div", "wsQ");
+          q.appendChild(el("p", "stem", `${i + 1}.`));
+          q.appendChild(el("div", "wsQuote", item.quote));
+          item.subs.forEach((sub, si) => {
+            const letter = String.fromCharCode(97 + si);
+            const block = el("div", "wsSubQ");
+            block.appendChild(el("label", null, `${letter}. ${sub}`));
+            const ta = document.createElement("textarea");
+            ta.rows = 2;
+            block.appendChild(ta);
+            q.appendChild(block);
           });
-          items.appendChild(b);
+          wrap.appendChild(q);
         });
-        q.appendChild(items);
-        secE.appendChild(q);
-      });
-      worksheetBodyEl.appendChild(secE);
+        return wrap;
+      }
+    };
 
+    const WORKSHEETS = {
+      adapting: {
+        title: "Adapting to Changes",
+        sections: [
+          { type: "mcq", key: "adapting", heading: "A. Tick the correct answer", items: [
+            { q: "Neha's mother started working in an office. Which change is most likely to happen at home?",
+              opts: ["Neha will stop going to school.", "Family members may help with household work.",
+                     "The family will move to another country.", "They will stop celebrating birthdays."] },
+            { q: "Which of these is the BEST example of adapting to a seasonal change?",
+              opts: ["Wearing a raincoat during the rainy season.", "Wearing a sweater in summer.",
+                     "Drinking hot soup on a hot afternoon.", "Sleeping with a blanket in May."] },
+            { q: "Why do farmers in different states grow different crops?",
+              opts: ["They all use the same soil.", "Different places have different climates and soil.",
+                     "Every farmer grows rice only.", "Schools decide which crops to grow."] },
+            { q: "Which of these is a good habit when visiting a new place?",
+              opts: ["Making fun of local customs.", "Respecting the people and their traditions.",
+                     "Refusing to try anything new.", "Comparing everyone with your hometown."] },
+            { q: "Which change takes place during the rainy season?",
+              opts: ["People use umbrellas and raincoats.", "People wear woollen caps.",
+                     "Trees lose all their leaves.", "People celebrate every festival."] }
+          ] },
+          { type: "blanks", heading: "B. Fill in the blanks",
+            wordBank: ["raincoat", "umbrella", "climate", "habits", "respect"],
+            items: [
+              "We should ____ the customs and traditions of every place.",
+              "During the rainy season, we carry an ____.",
+              "Food and clothing depend on the ____ of a place.",
+              "Good ____ help us stay healthy.",
+              "A ____ keeps us dry when it rains."
+            ] },
+          { type: "long", heading: "C. Answer the following questions", items: [
+            "Your school has started online classes because of heavy rain. Write any two changes you will make in your daily routine.",
+            "Your cousin is visiting your city for the first time. Write any two things you would tell your cousin about your city.",
+            "A farmer grows rice, while another farmer grows wheat. Why do you think they grow different crops? Write any two reasons.",
+            "Priya's family visited Ladakh during winter. Before leaving, they packed jackets, gloves and woollen caps. Why do you think they packed these things?"
+          ] },
+          { type: "tf", heading: "D. Write True or False. Correct the false statements", items: [
+            "People in every state eat exactly the same food.",
+            "Climate affects the clothes people wear.",
+            "We should respect the customs of every place.",
+            "Crops grown in a region affect food habits."
+          ] },
+          { type: "odd", heading: "E. Circle (tap) the one that does NOT belong", groups: [
+            ["Sweater", "Jacket", "Woollen Cap", "Mango"],
+            ["Rice", "Wheat", "Maize", "Television"],
+            ["Umbrella", "Raincoat", "Gumboots", "Story Book"],
+            ["Ganesh Chaturthi", "Durga Puja", "Bihu", "Notebook"]
+          ] }
+        ]
+      },
+
+      safeAgain: {
+        title: "Safe Again — Comprehension",
+        sections: [
+          { type: "mcq", key: "safe", heading: "Q1. Choose the correct answers to the questions from the given options", items: [
+            { q: "What do the parent birds bring for their chicks?", opts: ["seeds", "worms", "mice", "fruits"] },
+            { q: "Who takes the baby windhover away?", opts: ["A teacher", "A boy", "A girl", "A cat"] },
+            { q: "How does the boy's voice change after hearing the girl?", opts: ["angry", "loud", "soft and kind", "scared"] },
+            { q: "In this lesson, windhovers shuffled to the back of the roost. What does “shuffle” mean?",
+              opts: ["walk slowly without lifting the feet", "run fast", "jump high", "fly quickly"] },
+            { q: "Which quality does the girl show in the story?", opts: ["greed", "kindness and responsibility", "carelessness", "laziness"] },
+            { q: "Why did the bird keep throwing itself against the bars?",
+              opts: ["It wanted food.", "It wanted to play.", "It wanted to escape and go home.", "It wanted to sleep."] },
+            { q: "In the sentence, “A pointed beak bursts through,” what does “pointed” mean?",
+              opts: ["curved", "sharp-tipped", "long", "broken"] },
+            { q: "Which quality did the boy show at the end of the story?", opts: ["kindness", "laziness", "pride", "carelessness"] },
+            { q: "In the sentence “There is more chipping and I see a tiny, pale head”, what does the word “pale” mean?",
+              opts: ["dark in colour", "bright in colour", "light in colour", "colourful"] },
+            { q: "In the sentence “I peck at it and strike with my claws”, what does the word “strike” mean?",
+              opts: ["hit", "hide", "sleep", "catch"] },
+            { q: "Why did the baby windhover hear chipping from another egg?",
+              opts: ["Another bird was visiting the nest.", "Its brother or sister was hatching.", "The egg was falling.", "The parents were feeding the chicks."] },
+            { q: "Which character helps solve the problem in the story?",
+              opts: ["The windhover's father", "The teacher", "The children in the playground", "The girl"] },
+            { q: "What is the first thing the baby windhover sees when it opens its eyes?",
+              opts: ["Its mother", "The sky", "A tree", "The playground"] }
+          ] },
+          { type: "extract", heading: "Q2. Read the extract and answer the following questions", items: [
+            { quote: "“Then I hear a boy's voice say, ‘I want you just for myself, my friend.’ I remember this boy from the playground. When he brings me food, he does not tear it into small pieces, and so I cannot eat it.”",
+              subs: [
+                "Why is the windhover unable to eat the food the boy brings?",
+                "What do these lines tell you about the boy's knowledge of caring for wild birds?",
+                "What should you do before trying to care for an injured bird?"
+              ] },
+            { quote: "“After a while, someone lets me out of the darkness. I am dazzled by the light. I try to fly, but crash into strong bars and fall in a cloud of feathers.”",
+              subs: [
+                "Give two things that happen after the windhover is let out of the darkness.",
+                "Which two events in the extract make it clear that the windhover is trapped?",
+                "Why is freedom important for birds?"
+              ] },
+            { quote: "“‘But I don't want him to die!’ The boy's voice becomes soft and kind. ‘If you put him back, I promise not to tell anybody,’ says the girl.”",
+              subs: [
+                "Who says, “But I don't want him to die!”?",
+                "What promise does the girl make to the boy?",
+                "What change takes place in the boy after hearing the girl?",
+                "Why is it important to listen to good advice?"
+              ] },
+            { quote: "“Soon I can hear the noise of the playground. I am finally home! My brother and sister hiss at me.”",
+              subs: [
+                "Who says these words?",
+                "What does the windhover hear before it reaches home?",
+                "Why does hearing the playground make the windhover feel happy?"
+              ] }
+          ] }
+        ]
+      },
+
+      materialNoun: {
+        title: "Material Noun",
+        sections: [
+          { type: "long", heading: "Q I. Describe an enchanted castle", items: [
+            { stem: "Imagine you have entered an enchanted castle. Describe the rooms, furniture, and treasures you see in a paragraph (6–7 sentences). Your writing should include at least five material nouns.", rows: 7 }
+          ] },
+          { type: "fields", heading: "Q II. Read each clue. Which word is the material noun?", items: [
+            { label: "1. Mia built a tiny castle using sand at the beach. Material noun:" },
+            { label: "2. Grandpa polished his silver watch until it shone brightly. Material noun:" },
+            { label: "3. The little bird made a cosy nest with cotton. Material noun:" },
+            { label: "4. The artist shaped a beautiful elephant from clay. Material noun:" },
+            { label: "5. The magician pulled a colourful silk scarf out of his hat. Material noun:" }
+          ] },
+          { type: "blanks", heading: "Q III. Complete each sentence with a suitable material noun",
+            wordBank: ["wood", "glass", "leather", "wool", "paper"],
+            items: [
+              "The puppet danced happily because it was carved from ____.",
+              "The little lamb gave us soft ____ to make warm clothes.",
+              "The kite flew high because it was made of colourful ____.",
+              "The shiny shoes were made of ____.",
+              "The window sparkled because it was made of ____."
+            ] },
+          { type: "clue", heading: "Q IV. Read each clue, write the material noun, then write a sentence of your own", items: [
+            "I come from sheep and keep you warm in winter. I am ____.",
+            "I come from trees and help make tables, chairs, and doors. I am ____.",
+            "I am clear, smooth, and used to make windows and mirrors. I am ____.",
+            "I am soft, white, and used to make many clothes. I am ____.",
+            "I am moulded into pots, cups, and toys before being baked. I am ____.",
+            "I am shiny, yellow, and used to make beautiful jewellery. I am ____.",
+            "I am bright, white, and often used to make spoons and medals. I am ____.",
+            "I come from the skin of animals and am used to make shoes, belts, and bags. I am ____.",
+            "I am thin, light, and people write or draw on me. I am ____.",
+            "I am stretchy and used to make tyres, balloons, and erasers. I am ____.",
+            "I am strong, shiny, and used to build bridges and railway tracks. I am ____.",
+            "I am waterproof and used to make raincoats, bottles, and toys. I am ____.",
+            "I am smooth and often used to make cups, plates, and flower vases. I am ____.",
+            "I am used to make ropes, mats, and baskets. I come from coconut husks. I am ____.",
+            "I am woven by tiny silkworms and used to make beautiful scarves and dresses. I am ____."
+          ] },
+          { type: "story", heading: "Q V. Complete the Material Story",
+            wordBank: ["wood", "cotton", "glass", "gold", "paper"],
+            text: "Riya went shopping with her mother. She bought a beautiful ____ necklace. Her mother chose a soft ____ dress. They also bought a ____ table and a ____ vase. Riya bought a colourful ____ notebook." },
+          { type: "long", heading: "Q VI. Design your dream room", items: [
+            { stem: "Choose any three material nouns. Imagine you are designing your dream room. Write 3–4 sentences describing the things in your room and what they are made of. (Material nouns: wood, glass, cotton, leather, plastic, metal)", rows: 4 }
+          ] }
+        ]
+      },
+
+      spellings: {
+        title: "Spellings and Vocabulary",
+        sections: [
+          { type: "fields", heading: "Q1. Rewrite the following words with the correct spellings",
+            note: "Each word below is misspelt — write the correct spelling in the blank.",
+            items: [
+              "straking", "fotsteps", "bundeld", "rost", "rubed", "becawse", "diferently", "natuer", "strech",
+              "sudenly", "peices", "carreid", "familair", "unusaul", "hunderds", "kindom", "leding", "vioce",
+              "brusts", "borken", "finaly"
+            ].map((w, i) => ({ label: `${i + 1}. ${w} —` })) },
+          { type: "mcq", key: "spell", heading: "Q2. Choose the word that best fits the context", items: [
+            { q: "As it became dark, the villagers carried ____ to light their way home.", opts: ["baskets", "lanterns", "pillows", "blankets"] },
+            { q: "After hearing the frightening news, Riya's face turned ____ with fear.", opts: ["bright", "pale", "red", "cheerful"] },
+            { q: "The old door began to ____ loudly whenever someone opened it.", opts: ["roar", "squeak", "whistle", "shout"] },
+            { q: "Meera felt ____ when her friends surprised her with a birthday party.", opts: ["angry", "sad", "happy", "worried"] },
+            { q: "The tired old man began to ____ slowly across the room without lifting his feet properly.", opts: ["jump", "shuffle", "run", "skip"] },
+            { q: "The birds began to sing as the first light appeared at ____.", opts: ["midnight", "noon", "dawn", "evening"] },
+            { q: "Rohan looked ____ when he saw a strange object on his desk and could not understand what it was.", opts: ["excited", "puzzled", "cheerful", "sleepy"] },
+            { q: "The little kitten had soft, ____ fur that felt lovely to touch.", opts: ["rough", "fluffy", "sharp", "wet"] },
+            { q: "During a storm, lightning can ____ a tall tree and damage it.", opts: ["strike", "float", "whisper", "crawl"] },
+            { q: "We watched the moon slowly cover the sun during a solar ____.", opts: ["rainbow", "eclipse", "sunrise", "storm"] },
+            { q: "The bright headlights of the car ____ the driver for a few moments, making it difficult for him to see.", opts: ["pleased", "dazzled", "frightened", "amused"] },
+            { q: "The girl smiled when she heard a ____ voice among the crowd because it belonged to her best friend.", opts: ["strange", "familiar", "noisy", "weak"] }
+          ] }
+        ]
+      },
+
+      mathsNumbers: {
+        title: "Numbers (4-Digit Numbers)",
+        sections: [
+          { type: "fields", heading: "1. Write the Number Names", items:
+            ["3482", "7019", "5640", "8925"].map(n => ({ label: `${n} =` })) },
+          { type: "fields", heading: "2. Write the Numerals (Figures)", items: [
+            "Four thousand three hundred twenty-one =", "Nine thousand eight =",
+            "Six thousand five hundred forty =", "Seven thousand one hundred ninety-three ="
+          ].map(l => ({ label: l })) },
+          { type: "fields", heading: "3. Count the Blocks and Write the Number",
+            note: "Use the base-ten block picture from your printed worksheet for each part.",
+            items: ["a)", "b)", "c)", "d)"].map(l => ({ label: l })) },
+          { type: "placeColumns", heading: "4. Draw Beads on the Abacus",
+            note: "Write each number's digits into its place-value column.",
+            items: ["4237", "6501", "8940", "2165"].map(n => ({ number: n })) },
+          { type: "skipCount", heading: "5. Skip Counting", items: [
+            { label: "a) By twos", given: [3426, 3428], blanks: 5 },
+            { label: "b) By tens", given: [5586, 5596], blanks: 5 },
+            { label: "c) By hundreds", given: [1493, 1593], blanks: 5 },
+            { label: "d) By thousands", given: [2310, 3310], blanks: 5 }
+          ] },
+          { type: "table", heading: "6. Write the Place Value and Face Value of the underlined digit",
+            headers: ["Number", "Place Value", "Face Value"],
+            rows: [
+              ["4 8 <u>9</u> 0", { input: true }, { input: true }],
+              ["6 <u>2</u> 4 6", { input: true }, { input: true }],
+              ["3 9 9 <u>8</u>", { input: true }, { input: true }],
+              ["<u>7</u> 5 0 3", { input: true }, { input: true }]
+            ] },
+          { type: "fields", heading: "7. Write in Expanded Form", items:
+            ["4386", "7025", "8541", "9109"].map(n => ({ label: `${n} =` })) },
+          { type: "fields", heading: "8. Write in Standard Form", items: [
+            "5000 + 700 + 60 + 2 =", "3000 + 900 + 40 + 8 =", "6000 + 200 + 10 + 5 =", "8000 + 400 + 3 ="
+          ].map(l => ({ label: l })) },
+          { type: "between", heading: "9. Put the Correct Sign (&gt;, &lt; or =)", items: [
+            { left: "5231", right: "5213" }, { left: "7450", right: "7450" }, { left: "9100", right: "8999" },
+            { left: "6205", right: "6520" }, { left: "4888", right: "4898" }, { left: "3925", right: "5293" }
+          ] },
+          { type: "fields", heading: "10. Arrange in Ascending Order and Descending Order", items: [
+            { label: "a) 5623, 2109, 8401, 4580", sub: [{ label: "Ascending Order:" }, { label: "Descending Order:" }] },
+            { label: "b) 7200, 6980, 8103, 4567", sub: [{ label: "Ascending Order:" }, { label: "Descending Order:" }] }
+          ] },
+          { type: "between", heading: "11. Write the Number Between", items: [
+            { left: "4589", right: "4591" }, { left: "7999", right: "8001" },
+            { left: "5249", right: "5251" }, { left: "3680", right: "3682" }
+          ] },
+          { type: "table", heading: "12. Write the Predecessor and Successor",
+            headers: ["Predecessor", "Number", "Successor"],
+            rows: [
+              [{ input: true }, "5648", { input: true }],
+              [{ input: true }, "7999", { input: true }],
+              [{ input: true }, "8304", { input: true }]
+            ] },
+          { type: "fields", heading: "13. Form 4-Digit Numbers Using the Digits Given", items: [
+            { label: "a) Digits: 2, 0, 6, 8", sub: [{ label: "Largest Number =" }, { label: "Smallest Number =" }] },
+            { label: "b) Digits: 9, 1, 6, 3", sub: [{ label: "Largest Number =" }, { label: "Smallest Number =" }] }
+          ] },
+          { type: "fields", heading: "14. Write the Largest and Smallest Number (Without Repeating Any Digit)", items: [
+            { label: "a) 5, 2, 8, 1", sub: [{ label: "Largest =" }, { label: "Smallest =" }] },
+            { label: "b) 9, 4, 6, 3", sub: [{ label: "Largest =" }, { label: "Smallest =" }] }
+          ] },
+          { type: "fields", heading: "15. Write the Largest and Smallest Number (By Repeating the Smallest Digit Twice)", items: [
+            { label: "1) Digits: 2, 0, 6", sub: [{ label: "Largest =" }, { label: "Smallest =" }] },
+            { label: "2) Digits: 9, 1, 6", sub: [{ label: "Largest =" }, { label: "Smallest =" }] }
+          ] },
+          { type: "fields", heading: "16A. Round Off the Numbers — Nearest 10", items:
+            ["94", "126", "783"].map(n => ({ label: `${n} =` })) },
+          { type: "fields", heading: "16B. Round Off the Numbers — Nearest 100", items:
+            ["753", "1245", "2964"].map(n => ({ label: `${n} =` })) },
+          { type: "fields", heading: "16C. Round Off the Numbers — Nearest 1000", items:
+            ["5600", "4389", "8109"].map(n => ({ label: `${n} =` })) },
+          { type: "long", heading: "17. Word Problem", items: [
+            { stem: "Write all the possible 4-digit numbers that can be formed using the digits 8, 2, 0 and 6 with 0 at the hundreds place.", rows: 2 }
+          ] },
+          { type: "fields", heading: "18. Word Problem", items: [
+            { label: "There were 2386 visitors at a science exhibition. Estimate the number of visitors by rounding it off to the nearest 10. Answer:" }
+          ] },
+          { type: "fields", heading: "19. Word Problem", items: [
+            { label: "Rohan picked up four slips from a box with the digits 7, 1, 0 and 4 written on them. What are the smallest and the largest 4-digit numbers he can make using these digits?",
+              sub: [{ label: "Smallest Number =" }, { label: "Largest Number =" }] }
+          ] },
+          { type: "fields", heading: "20. Word Problem", items: [
+            { label: "A total of 3764 people visited a zoo on Sunday. Estimate the number of visitors by rounding it off to the nearest 100. Answer:" }
+          ] }
+        ]
+      }
+    };
+
+    function renderWorksheet(id) {
+      const ws = WORKSHEETS[id];
+      worksheetBodyEl.innerHTML = "";
+      ws.sections.forEach(sec => worksheetBodyEl.appendChild(SECTION_RENDERERS[sec.type](sec)));
       worksheetBodyEl.scrollTop = 0;
       counterEl.textContent = "";
-      setNameEl.textContent = WORKSHEET.title;
+      setNameEl.textContent = ws.title;
     }
 
     function clearWorksheet() {
