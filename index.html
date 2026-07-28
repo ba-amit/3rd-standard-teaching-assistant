@@ -1423,6 +1423,165 @@
       }
     }));
 
+    // ---------------- Science fact bank ----------------
+    // Class-3 science book, chapter 1 (Living and Non-living Things) and
+    // chapter 5 (Plants in the Surroundings). Like SST, the book is factual,
+    // so each topic is a fixed list of hand-checked question / answer /
+    // wrong-option sets reusing the same quiz engine.
+    const SCI_TOPICS = [
+      { id: "livingNonLiving", label: "Living & non-living", facts: [
+        ["Things that have life in them are called __.", "Living things",
+          ["Non-living things", "Useless things", "Heavy things"]],
+        ["Which of these is a living thing?", "A mango tree",
+          ["A stone", "A wooden chair", "A plastic bottle"]],
+        ["Which of these is a non-living thing?", "A car",
+          ["A dog", "A lotus", "A cat"]],
+        ["A robot can move and make sounds. Is it a living thing?", "No, because it cannot grow or reproduce",
+          ["Yes, because it moves", "Yes, because it makes sounds", "Yes, because it needs electricity"]],
+        ["A seed placed in soil becomes a plant after a few weeks. This shows that living things __.", "Grow and change over time",
+          ["Can fly", "Are always green", "Do not need water"]],
+        ["Is a seed a living thing?", "Yes — it can grow into a new plant",
+          ["No — it does not move", "No — it is hard", "Only after it is cooked"]]
+      ]},
+      { id: "featuresLiving", label: "Features of living things", facts: [
+        ["Why do living things need food?", "It gives them energy to live, grow and do work",
+          ["To make them heavier", "To change their colour", "Only to taste good"]],
+        ["Plants breathe through tiny openings called __.", "Stomata",
+          ["Gills", "Lungs", "Roots"]],
+        ["Fish breathe through their __.", "Gills",
+          ["Lungs", "Stomata", "Nose"]],
+        ["Insects like ants and butterflies breathe through __.", "Air holes in their body",
+          ["Gills", "Lungs", "Stomata"]],
+        ["A seed first grows into a __, which then becomes a big plant.", "Sapling",
+          ["Fruit", "Flower", "Stone"]],
+        ["Giving out harmful wastes like urine, faeces and sweat is called __.", "Excretion",
+          ["Reproduction", "Germination", "Respiration"]],
+        ["Producing living beings of their own kind is called __.", "Reproduction",
+          ["Excretion", "Migration", "Adaptation"]],
+        ["The fixed period of time for which a living thing lives is its __.", "Lifespan",
+          ["Lifetime cost", "Habitat", "Generation"]]
+      ]},
+      { id: "movement", label: "How living things move", facts: [
+        ["How do plants show movement?", "Their parts bend and turn towards light, water or touch",
+          ["They walk slowly at night", "They fly with the wind", "They do not move at all"]],
+        ["Which plant closes its leaves when it is touched?", "Touch-me-not (Mimosa)",
+          ["Sunflower", "Mango tree", "Rose"]],
+        ["Which flower always faces towards the sun?", "Sunflower",
+          ["Lotus", "Touch-me-not", "Marigold"]],
+        ["In which direction do the roots of a plant grow?", "Downwards, into the soil",
+          ["Upwards, towards the sky", "Sideways only", "They do not grow"]],
+        ["Why do animals move from place to place?", "To find food and shelter and to escape enemies",
+          ["To make their skin darker", "Because the soil pushes them", "Only when it rains"]]
+      ]},
+      { id: "featuresNonLiving", label: "Non-living things & comparison", facts: [
+        ["How do non-living things move?", "Only when they are pushed or pulled",
+          ["On their own", "By flying", "By growing legs"]],
+        ["Why do non-living things not respond to changes around them?", "They have no sense organs",
+          ["They are always sleeping", "They are too heavy", "They are made of wood"]],
+        ["Which of these do non-living things NOT do?", "Grow and reproduce",
+          ["Occupy space", "Have weight", "Be made of some material"]],
+        ["Which feature do BOTH living and non-living things share?", "They both occupy space and have weight",
+          ["They both breathe", "They both grow", "They both reproduce"]],
+        ["How are a mango tree and a wooden table similar?", "Both have weight and take up space",
+          ["Both breathe", "Both grow taller", "Both give fruit"]],
+        ["Will a doll grow if you give it food and water?", "No, because it is a non-living thing",
+          ["Yes, slowly", "Yes, if kept in sunlight", "Yes, after many years"]]
+      ]},
+      { id: "plantParts", label: "Parts of a plant", facts: [
+        ["The part of the plant that grows below the ground forms the __.", "Root system",
+          ["Shoot system", "Leaf system", "Flower system"]],
+        ["The stem, branches, leaves, flowers and fruits together form the __.", "Shoot system",
+          ["Root system", "Seed system", "Soil system"]],
+        ["Which part of the plant absorbs water and minerals from the soil?", "Root",
+          ["Stem", "Leaf", "Flower"]],
+        ["Which part of the plant makes food?", "Leaf",
+          ["Root", "Flower", "Fruit"]],
+        ["The stem helps the plant by __.", "Holding the plant upright and carrying water and food",
+          ["Making food", "Producing seeds", "Absorbing water from the soil"]],
+        ["Why do we say plants are important for us?", "They give us food, oxygen, medicine, wood and clothing",
+          ["They make the soil hard", "They keep the air warm", "They give us plastic"]]
+      ]},
+      { id: "roots", label: "Roots & stems", facts: [
+        ["What are the two types of roots?", "Taproot and fibrous root",
+          ["Long root and short root", "Wet root and dry root", "Green root and brown root"]],
+        ["Which of these plants has a taproot?", "Carrot",
+          ["Grass", "Rice", "Wheat"]],
+        ["Which of these plants has fibrous roots?", "Grass",
+          ["Carrot", "Bean", "Mustard"]],
+        ["Why are roots called the anchor of the plant?", "They fix the plant firmly in the soil",
+          ["They make food for the plant", "They give the plant its colour", "They carry seeds"]],
+        ["Which roots store food that we eat?", "Carrot, radish and turnip",
+          ["Potato, ginger and sugar cane", "Cabbage and spinach", "Apple and mango"]],
+        ["Which stems store food that we eat?", "Potato, ginger and sugar cane",
+          ["Carrot and radish", "Lettuce and cabbage", "Rose and marigold"]],
+        ["The hard, strong, woody stem of a tree is called a __.", "Trunk",
+          ["Petiole", "Midrib", "Sepal"]]
+      ]},
+      { id: "leaves", label: "Leaves", facts: [
+        ["The flat and broad part of a leaf is called the __.", "Lamina",
+          ["Petiole", "Midrib", "Sepal"]],
+        ["The stalk that joins a leaf to the stem is called the __.", "Petiole",
+          ["Lamina", "Vein", "Margin"]],
+        ["The line running down the middle of a leaf is called the __.", "Midrib or main vein",
+          ["Petiole", "Margin", "Stomata"]],
+        ["Why are green leaves called the food factories of the plant?", "They make food using sunlight, air, water and chlorophyll",
+          ["They store water for the plant", "They hold the plant upright", "They protect the seeds"]],
+        ["The process by which leaves make food is called __.", "Photosynthesis",
+          ["Germination", "Excretion", "Reproduction"]],
+        ["What makes leaves green in colour?", "A pigment called chlorophyll",
+          ["Water in the veins", "Soil sticking to them", "Sunlight falling on them"]],
+        ["Which plants store food in their leaves?", "Cabbage, lettuce and spinach",
+          ["Carrot and radish", "Potato and ginger", "Mango and apple"]],
+        ["During photosynthesis, leaves take in __ and give out oxygen.", "Carbon dioxide",
+          ["Nitrogen", "Smoke", "Water vapour only"]]
+      ]},
+      { id: "flowerFruitSeed", label: "Flower, fruit & seed", facts: [
+        ["The soft, brightly-coloured part of a flower is called the __.", "Petal",
+          ["Sepal", "Petiole", "Lamina"]],
+        ["The green part under the petal that protects the bud is called the __.", "Sepal",
+          ["Petal", "Midrib", "Stomata"]],
+        ["What is the main function of a fruit?", "To store and protect the seeds",
+          ["To make food", "To absorb water", "To hold the plant upright"]],
+        ["Which fruit has a single large seed?", "Mango",
+          ["Pomegranate", "Apple", "Papaya"]],
+        ["The tough outer covering of a seed is called the __.", "Seed coat",
+          ["Embryo", "Cotyledon", "Petal"]],
+        ["The baby plant inside a seed is called the __.", "Embryo",
+          ["Seed coat", "Petal", "Sepal"]],
+        ["Which of these is a monocot seed (one cotyledon)?", "Maize",
+          ["Bean", "Pea", "Gram"]],
+        ["How many cotyledons does a bean seed have?", "Two",
+          ["One", "Three", "None"]]
+      ]},
+      { id: "germination", label: "Germination & care of plants", facts: [
+        ["The process by which a seed grows into a new plant is called __.", "Germination",
+          ["Photosynthesis", "Excretion", "Reproduction"]],
+        ["Which of these is NOT needed for germination?", "Chocolate",
+          ["Air", "Water", "Warmth"]],
+        ["What happens first during germination?", "The seed takes in water and the seed coat splits",
+          ["A flower opens", "A fruit forms", "The leaves turn yellow"]],
+        ["During germination, which part grows downwards first?", "The tiny root",
+          ["The shoot", "The flower", "The fruit"]],
+        ["What will happen to a plant kept in a dark cupboard for many days?", "It will turn pale and weak because it cannot make food",
+          ["It will grow faster", "It will grow more flowers", "Nothing will change"]],
+        ["Which of these is the best way to care for plants?", "Water them regularly",
+          ["Pluck flowers every day", "Break their branches", "Carve names on trees"]],
+        ["What should we add to the soil to make it good for plants?", "Manure or fertiliser",
+          ["Plastic pieces", "Hot water", "Sand only"]],
+        ["Why should we plant more trees around us?", "They give us oxygen, shade, food and clean air",
+          ["They make the roads narrow", "They stop the wind completely", "They make the soil dry"]]
+      ]}
+    ];
+
+    const SCI_SKILLS = SCI_TOPICS.map(topic => ({
+      id: topic.id,
+      label: topic.label,
+      gen() {
+        const [q, a, distractors] = pick(topic.facts);
+        return choiceQ(q, a, distractors);
+      }
+    }));
+
     // ---------------- English reading comprehension ----------------
     // Questions are reworded from the two class-3 reader chapters and are
     // answerable from the stories. The chapter TEXT itself is not bundled in
@@ -1653,6 +1812,57 @@
         controls: "worksheetControls",
         usesDeck: false,
         onEnter: () => renderWorksheet("adapting")
+      },
+      {
+        id: "sciencePractice",
+        group: "Science",
+        icon: "🔬",
+        label: "Science practice",
+        subtitle: "Pick a topic and answer as many questions as you like",
+        footer: "Keyboard: Enter · Check / Next question",
+        scene: "mathScene",
+        controls: "mathControls",
+        extras: ["skillFilter"],
+        usesDeck: false,
+        onEnter: () => startQuiz({ bank: SCI_SKILLS, bankId: "science", test: false }),
+        onKey(e) { if (e.key === "Enter") { e.preventDefault(); checkAnswer(); } }
+      },
+      {
+        id: "scienceTest",
+        group: "Science",
+        icon: "🧪",
+        label: "Science test (10 questions)",
+        subtitle: "Ten mixed questions — you get a score at the end",
+        footer: "Keyboard: Enter · Check / Next question",
+        scene: "mathScene",
+        controls: "mathControls",
+        usesDeck: false,
+        onEnter: () => startQuiz({ bank: SCI_SKILLS, bankId: "science", test: true, length: 10 }),
+        onKey(e) { if (e.key === "Enter") { e.preventDefault(); checkAnswer(); } }
+      },
+      {
+        id: "livingWorksheet",
+        group: "Science",
+        icon: "📝",
+        label: "Living & Non-living — worksheet",
+        subtitle: "Fill in the revision worksheet — MCQs, reasons, comprehension",
+        footer: "Fill in your answers · 🖨️ Print to save as PDF",
+        scene: "worksheetScene",
+        controls: "worksheetControls",
+        usesDeck: false,
+        onEnter: () => renderWorksheet("livingThings")
+      },
+      {
+        id: "plantsWorksheet",
+        group: "Science",
+        icon: "🌱",
+        label: "Plants in Our Surroundings — worksheet",
+        subtitle: "Fill in the revision worksheet — MCQs, reasons, match & comprehension",
+        footer: "Fill in your answers · 🖨️ Print to save as PDF",
+        scene: "worksheetScene",
+        controls: "worksheetControls",
+        usesDeck: false,
+        onEnter: () => renderWorksheet("plants")
       },
       {
         id: "mathPractice",
@@ -2788,6 +2998,177 @@
             { q: "We watched the moon slowly cover the sun during a solar ____.", opts: ["rainbow", "eclipse", "sunrise", "storm"] },
             { q: "The bright headlights of the car ____ the driver for a few moments, making it difficult for him to see.", opts: ["pleased", "dazzled", "frightened", "amused"] },
             { q: "The girl smiled when she heard a ____ voice among the crowd because it belonged to her best friend.", opts: ["strange", "familiar", "noisy", "weak"] }
+          ] }
+        ]
+      },
+
+      // Science revision worksheets. Question sets follow the school revision
+      // worksheets and the notebook classwork; the comprehension passages are
+      // reworded here (this repo is public) but ask the same questions.
+      livingThings: {
+        title: "Living and Non-living Things",
+        sections: [
+          { type: "mcq", key: "livA", heading: "A. Multiple Choice Questions — tick the correct answer", items: [
+            { q: "Which of these is a living thing?",
+              opts: ["A stone", "A wooden chair", "A mango tree", "A plastic bottle"] },
+            { q: "A dog is a living thing because it can",
+              opts: ["Be painted a different colour", "Grow, breathe and reproduce", "Fit into a box", "Stay still all day"] },
+            { q: "Which feature do BOTH living and non-living things share?",
+              opts: ["They both breathe", "They both grow", "They both occupy space", "They both reproduce"] },
+            { q: "Riya's grandmother waters her Tulsi plant every day. Why does she do this?",
+              opts: ["To make it smell better", "Because plants need water to stay alive", "To make the plant heavier", "Because all non-living things need water"] },
+            { q: "A robot can move and make sounds. Is a robot a living thing?",
+              opts: ["Yes, because it moves", "Yes, because it makes sounds", "No, because it cannot grow or reproduce", "No, because it is made of wood"] },
+            { q: "A seed is placed in soil and, after a few weeks, it becomes a plant. This shows that living things",
+              opts: ["Can fly", "Need sunlight to make noise", "Grow and change over time", "Are always green"] }
+          ] },
+          { type: "long", heading: "B. Give reasons", items: [
+            { stem: "A fish is a living thing.", rows: 3 },
+            { stem: "A spider moves from one place to another on its own.", rows: 3 },
+            { stem: "A seed is called a living thing.", rows: 3 },
+            { stem: "Plants help us in breathing.", rows: 3 },
+            { stem: "Non-living things do not respond to any change in the surroundings.", rows: 3 },
+            { stem: "We should not hurt plants or animals.", rows: 3 }
+          ] },
+          { type: "long", heading: "C. Answer in complete sentences", items: [
+            { stem: "You go to a park and see a pigeon, a bench, a butterfly, a water fountain and a rose bush. Write two living things and two non-living things from the park.", rows: 4 },
+            { stem: "Your pet cat eats food, drinks water, sleeps and has kittens. Name three features of living things that your cat shows.", rows: 4 },
+            { stem: "How are a mango tree and a wooden table similar? How are they different? Write one similarity and one difference.", rows: 4 }
+          ] },
+          { type: "fields", heading: "D. Sort and describe",
+            note: "Write the name of a thing you can see around you, say whether it is living or non-living, and write one feature of it.",
+            items: [
+              { label: "1.", sub: [
+                { label: "Thing —" }, { label: "Living / non-living —" }, { label: "One feature —" }
+              ] },
+              { label: "2.", sub: [
+                { label: "Thing —" }, { label: "Living / non-living —" }, { label: "One feature —" }
+              ] },
+              { label: "3.", sub: [
+                { label: "Thing —" }, { label: "Living / non-living —" }, { label: "One feature —" }
+              ] },
+              { label: "4.", sub: [
+                { label: "Thing —" }, { label: "Living / non-living —" }, { label: "One feature —" }
+              ] }
+            ] },
+          { type: "blanks", heading: "E. Fill in the blanks",
+            wordBank: ["stomata", "gills", "saplings", "excretion", "lifespan", "sense organs"],
+            items: [
+              "____ help a fish to breathe in water.",
+              "The tiny openings on the under surface of a leaf are called ____.",
+              "Seeds grow into ____ and then into big plants.",
+              "Living things give out harmful wastes through the process called ____.",
+              "The fixed period of time for which a living thing lives is called its ____.",
+              "Non-living things cannot feel changes because they have no ____."
+            ] },
+          { type: "long", heading: "F. Answer the following questions (from your notebook)", items: [
+            { stem: "How do plants show movement? Give any three examples.", rows: 5 },
+            { stem: "Why is excretion an important part in the lives of living things?", rows: 4 },
+            { stem: "How do living things reproduce?", rows: 4 },
+            { stem: "How do living things breathe? Explain with the help of two examples.", rows: 5 },
+            { stem: "Differentiate between living and non-living things with the help of examples. Write any five differences.", rows: 8 }
+          ] },
+          { type: "extract", heading: "G. Comprehension — read and answer", items: [
+            { quote: "A walk in the park — One morning Riya went for a walk in the park with her grandfather. The park was full of tall green trees, colourful flowers and chirping birds. Butterflies flew from flower to flower and a small squirrel climbed up a tree. Riya also saw a big brown rock near the pond and a wooden bench under a tree. \"Grandfather,\" she asked, \"are all these things alive?\" Her grandfather smiled. \"No, Riya. Some are living and some are non-living. Living things like trees, birds and squirrels need food, water and air. They grow, breathe and have young ones. But the rock and the bench do not eat, breathe or grow.\" Riya looked around again and smiled, \"So the park has both living and non-living things!\" \"Exactly,\" said her grandfather, \"and both are important in their own way.\"",
+              subs: [
+                "Where did Riya go one morning?",
+                "Name the living things mentioned in the passage.",
+                "What did Riya's grandfather say living things need to survive?",
+                "Why is the rock considered a non-living thing?",
+                "What conclusion did Riya reach at the end of the passage?"
+              ] }
+          ] }
+        ]
+      },
+
+      plants: {
+        title: "Plants in Our Surroundings",
+        sections: [
+          { type: "mcq", key: "plaA", heading: "A. Multiple Choice Questions — tick the correct answer", items: [
+            { q: "Which part of the plant absorbs water and minerals from the soil?",
+              opts: ["Stem", "Root", "Leaf", "Flower"] },
+            { q: "Which plant has a tap root?",
+              opts: ["Grass", "Rice", "Carrot", "Wheat"] },
+            { q: "The stem helps the plant by:",
+              opts: ["Making food", "Holding the plant upright", "Producing seeds", "Absorbing water"] },
+            { q: "Which part of the plant makes food?",
+              opts: ["Fruit", "Leaf", "Flower", "Root"] },
+            { q: "Which of these is a monocot seed?",
+              opts: ["Bean", "Pea", "Maize", "Gram"] },
+            { q: "Which of the following is NOT needed for germination?",
+              opts: ["Air", "Water", "Warmth", "Chocolate"] },
+            { q: "The main function of a fruit is to:",
+              opts: ["Make food", "Protect seeds", "Absorb water", "Hold the plant"] },
+            { q: "Which of these is the best way to care for plants?",
+              opts: ["Pluck flowers every day", "Water them regularly", "Break branches", "Carve names on trees"] }
+          ] },
+          { type: "long", heading: "B. Give reasons", items: [
+            { stem: "Roots are called the \"anchor\" of the plant.", rows: 3 },
+            { stem: "Leaves are known as the \"food factories of the plant.\"", rows: 3 },
+            { stem: "Fruits protect seeds.", rows: 3 },
+            { stem: "Why do seeds need water, air and warmth for germination?", rows: 3 },
+            { stem: "We should not pluck flowers from public gardens. Give one reason.", rows: 3 }
+          ] },
+          { type: "long", heading: "C. Question answers", items: [
+            { stem: "You forgot to water your home plant for one week. What changes will you notice? Why?", rows: 4 },
+            { stem: "A strong wind blows in your garden, but the mango tree does not fall. Which part of the plant helps it stay fixed in the soil?", rows: 3 },
+            { stem: "Why should we plant more trees in our neighbourhood?", rows: 4 }
+          ] },
+          { type: "fields", heading: "D. Which part of the plant are you eating?",
+            note: "Your mother buys these from the market. Write which part of the plant it is.",
+            items: [
+              { label: "Carrot —" },
+              { label: "Spinach —" },
+              { label: "Potato —" },
+              { label: "Cabbage —" }
+            ] },
+          { type: "long", heading: "E. Answer the following", items: [
+            { stem: "A plant is kept inside a dark cupboard for many days. What do you think will happen? Explain your answer.", rows: 5 },
+            { stem: "Why do you think some plants store food in their roots or stems?", rows: 4 },
+            { stem: "Imagine you are a gardener in your school. List any four things you will do every day to keep the plants healthy.", rows: 5 }
+          ] },
+          { type: "blanks", heading: "F. Complete the flow chart — stages of germination", items: [
+            "Seed → ____ → ____ → Mature Plant"
+          ] },
+          { type: "fields", heading: "G. Match the following",
+            note: "Column B:  a. Protects seeds   b. Makes food   c. Absorbs water   d. Carries water",
+            items: [
+              { label: "1. Root —" },
+              { label: "2. Stem —" },
+              { label: "3. Leaf —" },
+              { label: "4. Fruit —" }
+            ] },
+          { type: "blanks", heading: "H. Fill in the blanks",
+            wordBank: ["chlorophyll", "embryo", "petal", "sepal", "germination", "photosynthesis"],
+            items: [
+              "The ____ is the baby plant present inside the seed.",
+              "The soft and brightly-coloured part of a flower is called the ____.",
+              "The green part that lies under the petal and supports it is called the ____.",
+              "The process by which a seed grows into a new plant is called ____.",
+              "The green pigment ____ makes a leaf look green.",
+              "Leaves make food by a process called ____."
+            ] },
+          { type: "long", heading: "I. Answer the following questions (from your notebook)", items: [
+            { stem: "What are the two types of roots? Explain each with one example.", rows: 6 },
+            { stem: "Explain the process of germination of a seed in four steps.", rows: 6 },
+            { stem: "What is an embryo? Name its two parts.", rows: 4 },
+            { stem: "What are the functions of a flower?", rows: 4 },
+            { stem: "Write down any five ways in which we can take care of plants.", rows: 6 }
+          ] },
+          { type: "extract", heading: "J. Comprehension — read and answer", items: [
+            { quote: "Tommy the Talkative Tomato Plant — One sunny morning Riya went into her garden with a small watering can. \"Good morning, plants!\" she smiled. Suddenly she heard a tiny voice. \"Good morning, Riya! Thank you for watering us,\" said a little tomato plant. \"My roots were very thirsty. They drink water from the soil and send it to the whole plant.\" Just then the leaves began to dance. \"We are the chefs of the plant! We make food using sunlight, air and water.\" The strong stem stood proudly and said, \"Without me everyone would fall down. I carry water and food to every part of the plant.\" A bright yellow flower whispered, \"One day I will become a juicy tomato!\" The tiny seeds inside the tomato shouted, \"When someone plants us and gives us water, air and warmth, we will grow into new tomato plants!\" Riya laughed happily. \"Now I know that every part of the plant has an important job.\" From that day she watered the plants regularly, never plucked flowers without reason and planted more trees. Soon her garden became greener and full of butterflies and birds.",
+              subs: [
+                "Which plant spoke to Riya?",
+                "What do the roots do?",
+                "Why did the leaves call themselves \"chefs\"?",
+                "What does the stem do?",
+                "What will the flower become one day?"
+              ] }
+          ] },
+          { type: "long", heading: "K. Draw and label", items: [
+            { stem: "Draw the diagram and explain the process of germination. (Use the space below or your notebook.)", rows: 8 },
+            { stem: "Draw the structure of a seed and label its main parts — seed coat, embryo (baby plant) and cotyledons.", rows: 8 },
+            { stem: "Draw the structure of a leaf and label it — lamina, petiole, midrib, vein, margin, tip.", rows: 8 }
           ] }
         ]
       },
