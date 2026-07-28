@@ -36,23 +36,12 @@
       display: flex;
       align-items: center;
       justify-content: center;
-      padding: 20px;
+      padding: 12px 20px;
     }
 
     .app {
       width: min(920px, 100%);
       text-align: center;
-    }
-
-    h1 {
-      margin: 0 0 8px;
-      font-size: clamp(1.6rem, 4vw, 2.6rem);
-    }
-
-    .subtitle {
-      margin: 0 0 18px;
-      color: var(--muted);
-      font-size: 1rem;
     }
 
     .status {
@@ -76,6 +65,13 @@
       width: 100%;
       height: min(58vh, 430px);
       min-height: 330px;
+      /* The page title/subtitle are gone, so the long scrolling scenes
+         (reading, worksheets) take the freed vertical space. Flashcards and
+         the quiz keep the smaller height — they'd just get empty space. */
+    }
+
+    #readScene, #worksheetScene {
+      height: min(76vh, 640px);
       margin: 0 auto 18px;
       cursor: pointer;
     }
@@ -761,9 +757,6 @@
   </aside>
 
   <main class="app">
-    <h1 id="pageTitle">3rd Standard Teaching Assistant</h1>
-    <p class="subtitle" id="subtitle">अक्षर पहचानो, फिर कार्ड पलटकर उत्तर देखो</p>
-
     <div class="tabs sets hidden" id="skillFilter"></div>
     <div class="tabs sets hidden" id="chapterFilter"></div>
 
@@ -1926,7 +1919,6 @@
     const setNameEl = document.getElementById("setName");
     const autoSpeakEl = document.getElementById("autoSpeak");
     const withWordEl = document.getElementById("withWord");
-    const subtitleEl = document.getElementById("subtitle");
     const footerEl = document.getElementById("footer");
     const navEl = document.getElementById("activityNav");
     const sidebarEl = document.getElementById("sidebar");
@@ -2192,11 +2184,19 @@
       navEl.querySelectorAll(".navItem").forEach(b =>
         b.classList.toggle("active", b.dataset.id === a.id));
       setFilterEl.classList.toggle("hidden", !a.usesSetFilter);
-      subtitleEl.textContent = a.subtitle;
+      // The on-page title/subtitle were dropped to save vertical space —
+      // the activity's own name lives in the sidebar, so the subtitle is
+      // now only the browser tab / PWA title.
+      document.title = `${a.label} · ${a.subtitle}`;
       footerEl.textContent = a.footer;
       localStorage.setItem("varnamalaMode", a.id);
       if (a.onEnter) a.onEnter();
-      if (a.usesDeck !== false) reshuffle();
+      // Quiz/reading/worksheet activities repurpose the right-hand pill for a
+      // score or title, so the flashcard decks have to claim it back.
+      if (a.usesDeck !== false) {
+        setNameEl.textContent = setLabels[currentSet];
+        reshuffle();
+      }
     }
 
     // ---------------- maths quiz engine ----------------
