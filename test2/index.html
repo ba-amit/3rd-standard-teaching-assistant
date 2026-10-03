@@ -1704,6 +1704,44 @@
         TF("Gender does not prevent a person from achieving any goal.", true),
         TF("Girls and boys are equally capable and efficient in doing any type of work.", true)
       ]},
+      { id: "eAction", label: "Ch 4 · Equality in action", facts: [
+        ["Which of the following shows a similarity between two people?", "They both enjoy playing games",
+          ["They have different hobbies", "They have different food choices", "They have different talents"]],
+        ["Gender should not decide whether a person can —", "Choose a career",
+          ["Have a name", "Belong to a family", "Have a birthday"]],
+        ["Which situation shows equal opportunity?", "All children who are interested can participate in the competition",
+          ["Only boys can join the football team", "Only girls can take part in dancing", "Only the highest scorers can participate"]],
+        ["Which of these is an example of a change in gender roles?", "Fathers and mothers share household responsibilities",
+          ["Only mothers cook at home", "Only boys can become doctors", "Only girls should help with younger children"]],
+        ["A child chooses painting because she enjoys it. What should others do?", "Encourage her to follow her interest",
+          ["Tell her to choose a different hobby", "Tell her painting is only for girls", "Ask her to copy her friends' hobby"]],
+        ["Which quality should we value when deciding what a person can do?", "Ability and interest",
+          ["Gender", "Appearance", "Age only"]],
+        ["Which statement shows equality?", "Everyone should get a chance to learn and participate",
+          ["Boys and girls should have different opportunities", "Some careers are only for boys", "Household work should be done by only one person"]],
+        ["A boy enjoys helping his mother cook. What does this show?", "Cooking can be enjoyed and learned by anyone",
+          ["Boys should not help in the kitchen", "Cooking is only a girl's activity", "He should choose another activity"]],
+        ["Neha and Rohan both want to join the school art club. What is fairest?", "Give both a chance to join",
+          ["Allow only Neha to join", "Allow only Rohan to join", "Ask their friends to decide"]],
+        ["Which action shows that we respect people's differences?", "Listening to and respecting different choices",
+          ["Making fun of someone's choice", "Telling everyone to like the same things", "Stopping someone from participating"]],
+        ["Meera is good at fixing things; her brother is good at drawing. What do we learn?", "People can have different abilities and interests",
+          ["Only boys can fix things", "Only girls can draw", "Siblings must have the same talents"]],
+        ["Aarav loves dancing and his sister enjoys repairing bicycles. What should we tell them?", "Keep doing what you love — no activity is only for boys or girls",
+          ["Swap your hobbies", "Stop both activities", "Dancing is only for girls"]],
+        ["Rohan says, “My idea is better because I am older.” Is he right?", "No — everyone's ideas should be listened to",
+          ["Yes, older people are always right", "Yes, only the eldest should speak", "No, only the youngest should speak"]],
+        ["Two interested children practised for a competition. What should the teacher look at?", "Their ability and the effort they put in",
+          ["Whether they are a boy or a girl", "Who is taller", "Who is the teacher's favourite"]],
+        ["As class monitor, the same children always lead. What should you do?", "Give every child a turn to lead",
+          ["Let the same children lead always", "Lead everything yourself", "Stop all activities"]],
+        ["Men and women can ___ household responsibilities.", "Share",
+          ["Avoid", "Ignore", "Sell"]],
+        ["We should never ___ someone because of their gender, appearance or abilities.", "Make fun of",
+          ["Respect", "Help", "Listen to"]],
+        TF("A new child who finds instructions hard should be left out of the group activity.", false),
+        TF("It is okay for people to be good at different things.", true)
+      ]},
       { id: "sSequence", label: "Ch 5 · Sequence", facts: [
         ["What does sequence mean?", "Arrangement of events or ideas in a particular order",
           ["A kind of clock", "A holiday", "A family event"]],
@@ -2150,6 +2188,18 @@
         controls: "worksheetControls",
         usesDeck: false,
         onEnter: () => renderWorksheet("historyTransport")
+      },
+      {
+        id: "weAreEqualWorksheet",
+        group: "Social Studies",
+        icon: "📝",
+        label: "We Are Equal — worksheet",
+        subtitle: "The school practice worksheet — MCQs, blanks & think-and-answer",
+        footer: "Fill in your answers · 🖨️ Print to save as PDF",
+        scene: "worksheetScene",
+        controls: "worksheetControls",
+        usesDeck: false,
+        onEnter: () => renderWorksheet("weAreEqualWorksheet")
       },
       {
         id: "wsTransport",
@@ -3394,6 +3444,58 @@
             { q: "B. Match", a: "1 – c · 2 – a · 3 – d · 4 – b · 5 – e" },
             { q: "C. Blanks", a: "1 wheel · 2 walking (on foot) · 3 rail · 4 water · 5 Wright · 6 air" },
             { q: "D. Application questions", a: "See the model answers at the end of <b>Ch 3 revision notes</b>." }
+          ] }
+        ]
+      },
+
+      weAreEqualWorksheet: {
+        title: "Practice Worksheet – We Are Equal",
+        sections: [
+          { type: "mcq", key: "wae", heading: "A. Choose the correct answer", items: [
+            { q: "Which of the following shows a similarity between two people?", opts: ["They have different hobbies", "They both enjoy playing games", "They have different food choices", "They have different talents"] },
+            { q: "Gender should not decide whether a person can ____.", opts: ["choose a career", "have a name", "belong to a family", "have a birthday"] },
+            { q: "Which situation shows equal opportunity?", opts: ["Only boys are allowed to join the football team.", "Only girls are allowed to take part in dancing.", "All children who are interested can participate in the competition.", "Only children who score the highest marks can participate."] },
+            { q: "Which of these is an example of a change in gender roles?", opts: ["Only mothers cook at home.", "Fathers and mothers share household responsibilities.", "Only boys can become doctors.", "Only girls should help with younger children."] },
+            { q: "A child chooses painting because she enjoys it. What should others do?", opts: ["Tell her to choose a different hobby", "Encourage her to follow her interest", "Tell her that painting is only for girls", "Ask her to choose the same hobby as her friends"] },
+            { q: "Which quality should we value when deciding what a person can do?", opts: ["Gender", "Ability and interest", "Appearance", "Age only"] },
+            { q: "Which statement shows equality?", opts: ["Boys and girls should have different opportunities.", "Everyone should get a chance to learn and participate.", "Some careers are only for boys.", "Household work should be done by only one person."] },
+            { q: "A boy enjoys helping his mother cook. What does this show?", opts: ["Cooking can be enjoyed and learned by anyone.", "Boys should not help in the kitchen.", "Cooking is only a girl's activity.", "He should choose another activity."] },
+            { q: "Neha and Rohan both want to join the school art club. What would be the fairest thing to do?", opts: ["Allow only Neha to join", "Allow only Rohan to join", "Give both a chance to join", "Ask their friends to decide"] },
+            { q: "Which action shows that we respect people's differences?", opts: ["Making fun of someone's choice", "Telling everyone to like the same things", "Listening to and respecting different choices", "Stopping someone from participating"] },
+            { q: "Meera is good at fixing things, while her brother is good at drawing. What can we learn from this?", opts: ["Only boys can fix things.", "Only girls can draw.", "People can have different abilities and interests.", "Brothers and sisters should have the same talents."] }
+          ] },
+          { type: "blanks", heading: "B. Fill in the blanks", items: [
+            "People may be different in their interests, abilities and ____.",
+            "Boys and girls should get ____ opportunities to learn and grow.",
+            "A person's ____ should not stop them from choosing a career they like.",
+            "We should respect everyone's choices, interests and ____.",
+            "Men and women can ____ household responsibilities.",
+            "We should judge people by their ____ and abilities, not by their gender.",
+            "Every child deserves a fair chance to learn, play and ____.",
+            "We should never ____ someone because of their gender, appearance or abilities.",
+            "Different people may have different ____ and interests."
+          ] },
+          { type: "long", heading: "C. Think and Answer", items: [
+            { stem: "Aarav loves dancing, while his sister enjoys repairing bicycles. Some children tell them that these activities are “not meant for them.” What would you say to Aarav and his sister? Why?", rows: 4 },
+            { stem: "During a group activity, Rohan says, “My idea is better because I am older.” Do you think Rohan is right? Why should the group listen to everyone's ideas?", rows: 4 },
+            { stem: "A new child joins your class but finds it difficult to understand the instructions for a group activity. What can you and your classmates do to help the child take part? Give two ideas.", rows: 4 },
+            { stem: "Anaya is very good at drawing, while Kabir is very good at fixing things. Why is it okay for people to be good at different things? Give one example from your own life.", rows: 3 },
+            { stem: "Two children want to participate in a school competition. Both are interested and have practised for it. What should the teacher look at before choosing a child? Give two points.", rows: 4 },
+            { stem: "You are the class monitor for a day. You notice that the same children always get to lead classroom activities. What would you do to give other children a chance?", rows: 4 }
+          ] },
+          { type: "long", heading: "D. Complete the sentence in your own words", items: [
+            { stem: "“We can make our classroom more equal by …", rows: 4 }
+          ] },
+          { type: "qa", heading: "🔑 Answer key (tap to open — try first!)", items: [
+            { q: "A. MCQs", a: "1 (b) They both enjoy playing games · 2 (a) choose a career · 3 (c) All interested children can participate · 4 (b) Fathers and mothers share household responsibilities · 5 (b) Encourage her to follow her interest · 6 (b) Ability and interest · 7 (b) Everyone should get a chance to learn and participate · 8 (a) Cooking can be enjoyed and learned by anyone · 9 (c) Give both a chance to join · 10 (c) Listening to and respecting different choices · 11 (c) People can have different abilities and interests" },
+            { q: "B. Blanks (other sensible words are also fine)", a: "1 talents (or looks) · 2 equal · 3 gender · 4 differences (or abilities) · 5 share · 6 qualities (or skills) · 7 participate (or grow) · 8 make fun of / tease (or treat unfairly) · 9 abilities (or talents / hobbies)" },
+            { q: "C1. Aarav (dancing) and his sister (repairing bicycles)", a: "I would tell them to keep doing what they love. No activity is only for boys or only for girls — what matters is our interest, ability and hard work, not our gender. Like Sanjeev Kapoor became a famous chef and Mary Kom a boxing champion." },
+            { q: "C2. Rohan: “My idea is better because I am older.”", a: "No, Rohan is not right. An idea is good because of what it says, not because of a person's age. Everyone is equal, so the group should listen to every idea — a younger child may have a very good idea, and listening shows respect." },
+            { q: "C3. Helping a new child take part", a: "1. Explain the instructions slowly in simple words, or show them by doing it.<br>2. Make the child a partner in our group and help at every step, so the child feels welcome." },
+            { q: "C4. Anaya draws, Kabir fixes things", a: "Every person has different abilities and interests, and each one is useful — no one is superior or inferior. Example: I am good at maths and my friend is good at singing; we help each other." },
+            { q: "C5. Teacher choosing one of two children", a: "1. Their ability/skill — who performs better in the practice or a trial round.<br>2. Their interest and effort — how much they have practised. (The teacher must not choose by gender.)" },
+            { q: "C6. Class monitor — same children always lead", a: "I would give everyone a turn, for example by making a rota (list) so a different child leads each day, and encourage quiet children to try. This gives equal opportunity to all." },
+            { q: "D. We can make our classroom more equal by …", a: "… giving everyone an equal chance to speak, lead and play, respecting everyone's choices and abilities, sharing work and helping each other, and never making fun of anyone because of their gender, looks or abilities." }
           ] }
         ]
       },
