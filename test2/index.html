@@ -1894,6 +1894,512 @@
       }
     }));
 
+    // ---------------- English grammar fact bank (Test 2) ----------------
+    // Everyday English Grammar ch 4 (Pronouns) and ch 6 (Adjectives), the
+    // class-notebook exercises and the two Vidya Valley practice worksheets.
+    // Same [question, answer, [wrong…]] shape as the SST bank.
+    const ENG_TOPICS = [
+      { id: "pBasics", label: "Pronouns · What is a pronoun", facts: [
+        ["A pronoun is a word used in place of a —", "Noun",
+          ["Verb", "Adjective", "Sentence"]],
+        ["Samuel bought a new bicycle. He rides it to school. Which words are pronouns?", "He, it",
+          ["Samuel, bicycle", "bought, rides", "new, school"]],
+        ["Which of these is a pronoun?", "They",
+          ["Table", "Happy", "Run"]],
+        ["Which of these is NOT a pronoun?", "Garden",
+          ["She", "It", "We"]],
+        ["Which of these are singular pronouns?", "I, me, she, he, it",
+          ["We, us, they", "They, them, theirs", "Ours, we, us"]],
+        ["Which of these are plural pronouns?", "We, us, they, them",
+          ["I, me, he", "She, her, it", "He, him, his"]],
+        ["‘You’ can be used for —", "One person or more than one person",
+          ["Only one person", "Only things", "Only animals"]],
+        ["Which pronoun do we use for a thing or an animal?", "It",
+          ["He", "She", "We"]],
+        ["Mother, Nikki and Granny can be replaced by —", "She",
+          ["He", "It", "They"]],
+        ["Father, Rohan and Grandpa can be replaced by —", "He",
+          ["She", "It", "We"]],
+        ["A tree, a book, a cake and a dog can be replaced by —", "It",
+          ["He", "She", "Them"]],
+        ["Arnav's cousin has several pets. She takes good care of them. ‘Them’ stands for —", "The pets",
+          ["Arnav's cousin", "Arnav", "Care"]],
+        ["The monkeys found a loaf of bread. They ran to grab it. ‘It’ stands for —", "The loaf of bread",
+          ["The monkeys", "The tree", "The road"]],
+        ["Meher wrote a poem. She showed it to her mother. ‘She’ stands for —", "Meher",
+          ["The mother", "The poem", "The teacher"]],
+        ["My father has gifted me a piano. He wants me to learn how to play it. ‘He’ stands for —", "My father",
+          ["Me", "The piano", "The teacher"]],
+        ["Amira had a sandwich in her bag. She ate it in the bus. ‘It’ stands for —", "The sandwich",
+          ["Amira", "The bag", "The bus"]]
+      ]},
+      { id: "pPersonal", label: "Pronouns · Personal pronouns", facts: [
+        ["Pronouns that replace the names of persons or things are called —", "Personal pronouns",
+          ["Possessive pronouns", "Adjectives", "Common nouns"]],
+        ["Which pronouns refer to the speaker?", "I, me, we, us",
+          ["He, she, it", "You", "They, them"]],
+        ["‘I’ and ‘me’ refer to —", "A single speaker",
+          ["More than one speaker", "The listener", "A thing"]],
+        ["‘We’ and ‘us’ refer to —", "More than one person, including the speaker",
+          ["Only the listener", "One thing", "One animal"]],
+        ["The pronoun ‘you’ refers to the —", "Listener",
+          ["Speaker", "Thing spoken about", "Place"]],
+        ["He, she, it, him, her, they and them replace the person(s) or thing(s) the speaker is —", "Talking about",
+          ["Talking to", "Writing with", "Sitting on"]],
+        ["The elephants came to the lake because ___ were thirsty.", "they",
+          ["it", "he", "we"]],
+        ["As Animesh was bored, ___ picked up a book and began reading it.", "he",
+          ["she", "they", "it"]],
+        ["Sherlock found the man suspicious, so he decided to follow ___.", "him",
+          ["he", "her", "it"]],
+        ["I could not understand the problem the first time, so the teacher explained it to ___ again.", "me",
+          ["I", "us", "they"]],
+        ["I haven't read the book. Did you like ___?", "it",
+          ["him", "them", "her"]],
+        ["I don't think I know you. Do you know ___?", "me",
+          ["I", "it", "them"]],
+        ["Can ___ please put this shirt in the wardrobe? I don't need it now.", "you",
+          ["me", "him", "it"]],
+        ["Do you know ___? He is Anshu's brother.", "him",
+          ["he", "her", "it"]],
+        ["My friend Kirti will collect these books. Please give them to ___.", "her",
+          ["him", "it", "she"]],
+        ["Zoya and Kate are going to the playground. ___ are carrying their football.", "They",
+          ["She", "It", "We"]],
+        ["My kitten is very small. ___ likes to play in the basket.", "It",
+          ["She", "They", "We"]],
+        ["Sita is absent today because ___ has a fever.", "she",
+          ["he", "it", "they"]],
+        ["The toys are scattered. Please put ___ in the basket.", "them",
+          ["it", "they", "us"]],
+        ["My brother and I are going to the market. ___ will buy some fruits.", "We",
+          ["They", "He", "I"]],
+        ["‘The doctor’ in ‘The doctor is checking the patients’ can be replaced by —", "He",
+          ["It", "They", "We"]],
+        ["‘Seema’ in ‘Seema saw the ducks near the pond’ can be replaced by —", "She",
+          ["He", "It", "They"]],
+        ["‘The ducks’ in ‘Seema saw the ducks’ can be replaced by —", "them",
+          ["they", "it", "her"]],
+        ["‘My father and I’ can be replaced by —", "We",
+          ["They", "He", "Us"]],
+        ["The moon is shining brightly. ___ looks beautiful.", "It",
+          ["He", "She", "They"]],
+        ["Mom called Rajan for dinner. → ___ called ___ for dinner.", "She, him",
+          ["He, her", "She, he", "Her, him"]],
+        ["Maya is drawing a picture. → ___ is drawing a picture.", "She",
+          ["He", "It", "They"]],
+        ["The boys are playing cricket. → ___ are playing cricket.", "They",
+          ["He", "We", "It"]],
+        ["The cat is sleeping on the mat. → ___ is sleeping on the mat.", "It",
+          ["She", "They", "He"]],
+        ["My sister and I are going to school. → ___ are going to school.", "We",
+          ["They", "She", "I"]],
+        ["Aarav and Kabir are good friends. → ___ are good friends.", "They",
+          ["We", "He", "Them"]],
+        ["Charlie is tired because Charlie ran a race. Replace the repeated noun.", "Charlie is tired because he ran a race.",
+          ["He is tired because Charlie ran a race.", "Charlie is tired because it ran a race.", "Charlie is tired because they ran a race."]],
+        ["The puppy is hungry because the puppy has not eaten. Replace the repeated noun.", "The puppy is hungry because it has not eaten.",
+          ["The puppy is hungry because he has not eaten them.", "The puppy is hungry because they has not eaten.", "It is hungry because the puppy has not eaten."]],
+        ["My brother and I are happy because my brother and I won the game. Replace the repeated words.", "My brother and I are happy because we won the game.",
+          ["My brother and I are happy because they won the game.", "My brother and I are happy because us won the game.", "My brother and I are happy because I won the game."]],
+        ["Emma gave a pencil to Sophie. She thanked her. Which pronouns are singular?", "She, her",
+          ["They", "Emma, Sophie", "Pencil"]],
+        ["Harry found a puppy. He called his friends, and they came to help him. Which is the plural pronoun?", "they",
+          ["He", "him", "his"]]
+      ]},
+      { id: "pPossessive", label: "Pronouns · Possessive pronouns", facts: [
+        ["Pronouns that show belonging or possession are called —", "Possessive pronouns",
+          ["Personal pronouns", "Adjectives", "Proper nouns"]],
+        ["We use mine and ours to talk about things that belong to —", "Us",
+          ["Others", "Animals only", "Nobody"]],
+        ["We use yours, hers, his and theirs to talk about things that belong to —", "Others",
+          ["Us", "Me only", "Nobody"]],
+        ["Which of these is a possessive pronoun?", "Mine",
+          ["Me", "I", "We"]],
+        ["The scooter belongs to me. The scooter is ___.", "mine",
+          ["me", "my", "I"]],
+        ["This house belongs to us. This house is ___.", "ours",
+          ["us", "we", "our"]],
+        ["That bag belongs to Zubeida. It is ___.", "hers",
+          ["her", "his", "she"]],
+        ["Ajay asked Sonia, ‘Is this racket ___?’", "yours",
+          ["mine", "theirs", "his"]],
+        ["This is Katha. The pup she is holding is ___.", "hers",
+          ["his", "theirs", "mine"]],
+        ["The children live in the house with their parents. The house is ___.", "theirs",
+          ["hers", "his", "ours"]],
+        ["Adil said, ‘This bat is ___.’", "mine",
+          ["yours", "hers", "theirs"]],
+        ["This is Mr Verma's house. The car that is parked here is ___.", "his",
+          ["hers", "mine", "ours"]],
+        ["This is my pencil. It is ___.", "mine",
+          ["yours", "his", "theirs"]],
+        ["That red bag belongs to Riya. It is ___.", "hers",
+          ["his", "mine", "theirs"]],
+        ["This football belongs to Rahul. It is ___.", "his",
+          ["hers", "ours", "theirs"]],
+        ["These books belong to my friends. They are ___.", "theirs",
+          ["there", "ours", "his"]],
+        ["This classroom belongs to our class. It is ___.", "ours",
+          ["theirs", "mine", "hers"]],
+        ["This is my book. → This book is ___.", "mine",
+          ["my", "yours", "me"]],
+        ["That is Rohan's bicycle. → That bicycle is ___.", "his",
+          ["hers", "him", "theirs"]],
+        ["These are our toys. → These toys are ___.", "ours",
+          ["our", "theirs", "us"]],
+        ["This is Maya's umbrella. → This umbrella is ___.", "hers",
+          ["his", "her", "mine"]],
+        ["Those are their shoes. → Those shoes are ___.", "theirs",
+          ["their", "there", "ours"]],
+        ["Riya has a new pencil box. Whose pencil box is it? It is ___.", "hers",
+          ["his", "theirs", "ours"]],
+        ["Aarav and Kabir have two cricket bats. Whose bats are they? They are ___.", "theirs",
+          ["his", "ours", "hers"]],
+        ["We have a classroom garden. The garden is ___.", "ours",
+          ["theirs", "mine", "yours"]],
+        ["Rahul says, “This is my football.” Sam says, “No, it belongs to me.” Sam can say: “The football is ___.”", "mine",
+          ["his", "yours", "hers"]],
+        ["The blue umbrella belongs to Neha; the red one belongs to me. The blue umbrella is ___, and the red umbrella is ___.", "hers, mine",
+          ["his, yours", "mine, hers", "theirs, ours"]],
+        ["A group of students made a model for their class. The model is ___.", "theirs",
+          ["his", "hers", "mine"]],
+        ["Your friend asks, “Does this notebook belong to you?” You say: “Yes, it is ___.”", "mine",
+          ["yours", "his", "theirs"]],
+        ["If something belongs to you, which possessive pronoun will you use?", "Mine",
+          ["Yours", "Theirs", "Hers"]],
+        ["Anaya sees a water bottle that belongs to her friend Siya. She says: “The water bottle is ___.”", "hers",
+          ["mine", "his", "theirs"]],
+        ["Find the mistake: “This lunchbox is her.”", "Incorrect — it should be ‘This lunchbox is hers.’",
+          ["Correct", "Incorrect — it should be ‘This lunchbox is she.’", "Incorrect — it should be ‘This lunchbox is his her.’"]],
+        ["Is this sentence correct? “That house is theirs.”", "Correct",
+          ["Incorrect — ‘their’", "Incorrect — ‘there’", "Incorrect — ‘them’"]],
+        ["That bicycle belongs to Rohan. It is (his / hers).", "his",
+          ["hers", "theirs", "mine"]],
+        ["The red bag belongs to Priya. It is (hers / his).", "hers",
+          ["his", "ours", "yours"]]
+      ]},
+      { id: "aBasics", label: "Adjectives · Describing words", facts: [
+        ["An adjective is a word used to describe a —", "Noun or a pronoun",
+          ["Verb only", "Sentence", "Full stop"]],
+        ["In ‘a cheerful man’, the adjective is —", "cheerful",
+          ["a", "man", "is"]],
+        ["In ‘It is cool.’, the adjective describes a —", "Pronoun",
+          ["Noun", "Verb", "Place"]],
+        ["Which word is an adjective? ‘a narrow road’", "narrow",
+          ["a", "road", "none"]],
+        ["Which of these is an adjective?", "Helpful",
+          ["Run", "She", "Table"]],
+        ["Find the adjective: ‘This yellow dress looks very cute on you.’", "yellow, cute",
+          ["dress, looks", "this, you", "very, on"]],
+        ["Find the adjective: ‘Let's have some fresh air. It's too stuffy inside.’", "fresh, stuffy",
+          ["air, inside", "let's, have", "some, too"]],
+        ["Find the adjectives: ‘You see that old, crumbling house.’", "old, crumbling",
+          ["see, house", "you, that", "house, see"]],
+        ["Find the adjectives: ‘The teachers are kind and helpful.’", "kind, helpful",
+          ["teachers, are", "the, and", "are, and"]],
+        ["Find the adjectives: ‘You are a sweet little kid.’", "sweet, little",
+          ["you, kid", "are, a", "kid, are"]],
+        ["Which adjective CANNOT describe a bridge?", "sad",
+          ["old", "wooden", "long"]],
+        ["Which adjective CANNOT describe a boy?", "long",
+          ["short", "tall", "smart"]],
+        ["Which adjective CANNOT describe a baby?", "old",
+          ["cute", "small", "playful"]],
+        ["Which adjective CANNOT describe a dress?", "ill",
+          ["lovely", "loose", "colourful"]],
+        ["Which adjective CANNOT describe a lake?", "fast",
+          ["beautiful", "large", "deep"]],
+        ["In ‘Mia opened a small wooden gate’, the adjectives are —", "small, wooden",
+          ["Mia, gate", "opened, a", "gate, opened"]],
+        ["Which word in ‘A little brown rabbit hopped along the narrow path’ is NOT an adjective?", "hopped",
+          ["little", "brown", "narrow"]],
+        ["Pick the sentence with two adjectives describing a bird.", "I saw a tiny, colourful bird.",
+          ["I saw a bird.", "I saw the bird flying.", "The bird sang."]]
+      ]},
+      { id: "aChoose", label: "Adjectives · Choose the right one", facts: [
+        ["The earth is ___. (round/oval)", "round",
+          ["oval", "square", "flat"]],
+        ["The soil is ___ because of the rainfall. (dry/moist)", "moist",
+          ["dry", "hot", "sandy"]],
+        ["It is a ___ day. Shall we go out for a walk? (dull/pleasant)", "pleasant",
+          ["dull", "stormy", "boring"]],
+        ["Don't pluck the mangoes. They are still ___. (ripe/raw)", "raw",
+          ["ripe", "sweet", "rotten"]],
+        ["I loved the chocolate shake. It was ___. (delicious/tasteless)", "delicious",
+          ["tasteless", "bitter", "stale"]],
+        ["The story was very nice, but it had a ___ ending. (sad/happy)", "sad",
+          ["happy", "funny", "long"]],
+        ["A ___ breeze was blowing outside. We found it very pleasant. (warm/cool)", "cool",
+          ["warm", "hot", "dusty"]],
+        ["Be ___. The pool is quite deep. (careless/careful)", "careful",
+          ["careless", "noisy", "lazy"]],
+        ["It is hot in summer but ___ in winter.", "cold",
+          ["sunny", "coldest", "sloping"]],
+        ["The house has a ___ roof.", "sloping",
+          ["sunny", "cold", "coldest"]],
+        ["January is the ___ month of the year.", "coldest",
+          ["cold", "colder", "sunny"]],
+        ["The little ant easily carried a ___ crumb of cake. (light/heavy)", "light",
+          ["heavy", "huge", "wet"]],
+        ["Tara wrapped a ___ blanket around herself because the night was chilly. (warm/cold)", "warm",
+          ["cold", "wet", "thin"]],
+        ["The puppy squeezed through the ___ gap under the gate. (narrow/wide)", "narrow",
+          ["wide", "huge", "tall"]],
+        ["We could not see the stars because the sky was ___ with dark clouds. (bright/cloudy)", "cloudy",
+          ["bright", "sunny", "clear"]],
+        ["The magician pulled a ___ rabbit out of a very small hat. (huge/tiny)", "tiny",
+          ["huge", "giant", "enormous"]],
+        ["After the rain, the children jumped over the ___ puddles. (muddy/clean)", "muddy",
+          ["clean", "dry", "sunny"]],
+        ["The baby fell asleep as soon as she touched the ___ pillow. (soft/rough)", "soft",
+          ["rough", "hard", "loud"]],
+        ["The children covered their ears when the ___ drum began to play. (loud/quiet)", "loud",
+          ["quiet", "soft", "silent"]],
+        ["The tiny bird built its nest on a ___ branch. (thin/strong)", "strong",
+          ["thin", "weak", "broken"]],
+        ["The baker took out a ___ loaf of bread from the oven. (fresh/stale)", "fresh",
+          ["stale", "rotten", "cold"]],
+        ["The moon looked ___ in the clear night sky. (bright/dull)", "bright",
+          ["dull", "dark", "cloudy"]],
+        ["The pillow is ___, so the baby can sleep comfortably on it. (soft/hard)", "soft",
+          ["hard", "rough", "heavy"]],
+        ["The water in the swimming pool is ___; we can swim in it safely. (shallow/deep)", "shallow",
+          ["deep", "dirty", "cold"]],
+        ["The bag is ___, so I cannot lift it nicely. (heavy/light)", "heavy",
+          ["light", "small", "empty"]],
+        ["The road is ___, so the cars can move easily. (wide/narrow)", "wide",
+          ["narrow", "muddy", "broken"]],
+        ["I found a box → I found a ___ box. Which fits best?", "mysterious",
+          ["quickly", "run", "she"]],
+        ["I opened ___ book. Which fits? (‘an’ needs a vowel sound)", "an old",
+          ["an new", "an big", "an small"]]
+      ]},
+      { id: "aOpposite", label: "Adjectives · Opposites & clues", facts: [
+        ["Opposite of ‘soft’:", "hard",
+          ["simple", "cruel", "deep"]],
+        ["Opposite of ‘difficult’:", "simple (easy)",
+          ["hard", "huge", "dark"]],
+        ["Opposite of ‘kind’:", "cruel (unkind)",
+          ["sweet", "soft", "simple"]],
+        ["Opposite of ‘shallow’:", "deep",
+          ["dark", "hard", "huge"]],
+        ["Opposite of ‘tiny’:", "huge",
+          ["little", "dark", "bitter"]],
+        ["Opposite of ‘light’ (in the crossword):", "dark",
+          ["deep", "huge", "cruel"]],
+        ["Opposite of ‘sweet’:", "bitter",
+          ["sour", "soft", "kind"]],
+        ["Opposite of ‘dirty’:", "clean",
+          ["dark", "old", "wide"]],
+        ["Opposite of ‘narrow’:", "wide",
+          ["thin", "short", "tiny"]],
+        ["Opposite of ‘young’:", "old",
+          ["new", "small", "tall"]],
+        ["Opposite of ‘bright’:", "dark (dull)",
+          ["light", "shiny", "sunny"]],
+        ["Opposite of ‘strong’:", "weak",
+          ["heavy", "tall", "kind"]],
+        ["Opposite of ‘hot’:", "cold",
+          ["warm", "sunny", "dry"]],
+        ["Opposite of ‘heavy’:", "light",
+          ["dark", "big", "deep"]],
+        ["Opposite of ‘unkind’:", "kind",
+          ["cruel", "rude", "angry"]],
+        ["I describe a giraffe. I am the opposite of short. What am I?", "tall",
+          ["big", "fat", "tiny"]],
+        ["I describe an elephant, but not an ant. I am the opposite of small. What am I?", "big",
+          ["light", "tall", "tiny"]],
+        ["I describe a feather. I am the opposite of heavy. What am I?", "light",
+          ["dark", "soft", "small"]],
+        ["I describe ice. I am the opposite of hot. What am I?", "cold",
+          ["warm", "wet", "hard"]],
+        ["I describe a freshly washed shirt. I am the opposite of dirty. What am I?", "clean",
+          ["new", "white", "dry"]],
+        ["Two buses can travel side by side with me. I am the opposite of narrow. Who am I?", "wide",
+          ["long", "big", "short"]],
+        ["A pillow feels comfortable against your head. I am the opposite of hard. Who am I?", "soft",
+          ["light", "small", "smooth"]],
+        ["I describe a child who shares toys and helps friends. I am the opposite of unkind.", "kind",
+          ["clever", "naughty", "strong"]],
+        ["You need me when you cannot see anything in a room. I am the opposite of bright.", "dark",
+          ["light", "dull", "black"]],
+        ["I describe someone who has lived for many years. I am the opposite of young.", "old",
+          ["new", "tall", "big"]],
+        ["A feather is light but a stone is ___.", "heavy",
+          ["light", "soft", "small"]],
+        ["A lion is strong but a rabbit is ___.", "weak",
+          ["strong", "fast", "kind"]],
+        ["A swimming pool can be deep but a plate is ___.", "shallow",
+          ["deep", "round", "heavy"]],
+        ["A helpful child is kind but a child who hurts others is ___.", "unkind",
+          ["kind", "helpful", "sweet"]]
+      ]},
+      { id: "aCompare", label: "Adjectives · Comparison (-er / -est)", facts: [
+        ["We add ___ to compare two things or people.", "-er",
+          ["-est", "-ing", "-ed"]],
+        ["We add ___ to compare more than two things or people.", "-est",
+          ["-er", "-ly", "-s"]],
+        ["A bus is longer than a car, but a train is the ___ of the three.", "longest",
+          ["longer", "long", "most long"]],
+        ["small → smaller → ___", "smallest",
+          ["smallerest", "most small", "smaler"]],
+        ["smart → ___ → smartest", "smarter",
+          ["smartest", "more smart", "smartter"]],
+        ["deep → deeper → ___", "deepest",
+          ["deepst", "deeppest", "most deep"]],
+        ["dry → ___ → driest", "drier",
+          ["dryer", "dryest", "more dry"]],
+        ["slow → slower → ___", "slowest",
+          ["slowst", "slowerest", "most slow"]],
+        ["bright → ___ → brightest", "brighter",
+          ["brightter", "more bright", "brightest"]],
+        ["A shark is (small/smaller/smallest) than a whale.", "smaller",
+          ["small", "smallest", "more small"]],
+        ["The cheetah is the (fast/faster/fastest) land animal.", "fastest",
+          ["fast", "faster", "more fast"]],
+        ["This soup is (tasty/tastier/tastiest) than the one I had yesterday.", "tastier",
+          ["tasty", "tastiest", "more tasty"]],
+        ["Wool is very (light/lighter/lightest).", "light",
+          ["lighter", "lightest", "more light"]],
+        ["My brother is (old/older/oldest) than me.", "older",
+          ["old", "oldest", "more old"]],
+        ["The elephant is the (big/bigger/biggest) land animal.", "biggest",
+          ["big", "bigger", "most big"]],
+        ["The (strong/stronger/strongest) of the two teams won the contest.", "stronger",
+          ["strong", "strongest", "most strong"]],
+        ["The story is very (short/shorter/shortest) but delightful.", "short",
+          ["shorter", "shortest", "more short"]],
+        ["A giraffe is ___ (tall) than a zebra.", "taller",
+          ["tallest", "tall", "more tall"]],
+        ["The blue whale is one of the ___ (large) animals in the world.", "largest",
+          ["larger", "large", "most large"]],
+        ["My new water bottle is ___ (light) than my old one.", "lighter",
+          ["lightest", "light", "more light"]],
+        ["Of all the puppies, Bruno is the ___ (small).", "smallest",
+          ["smaller", "small", "most small"]],
+        ["A cheetah is ___ (fast) than a horse.", "faster",
+          ["fastest", "fast", "more fast"]],
+        ["This is the ___ (bright) star I have ever seen.", "brightest",
+          ["brighter", "bright", "most bright"]],
+        ["A whale is ___ (heavy) than a shark.", "heavier",
+          ["heaviest", "heavyer", "more heavy"]],
+        ["This is the ___ (tall) tree in the garden.", "tallest",
+          ["taller", "tall", "most tall"]],
+        ["My sister is ___ (young) than me.", "younger",
+          ["youngest", "young", "more young"]],
+        ["That classroom is ___ (clean) than the hallway.", "cleaner",
+          ["cleanest", "clean", "more clean"]],
+        ["‘Than’ in a sentence usually needs which form?", "The -er form (comparing two)",
+          ["The -est form", "The plain adjective", "No adjective"]]
+      ]},
+      { id: "aSpecial", label: "Adjectives · good–better–best", facts: [
+        ["good → better → ___", "best",
+          ["goodest", "most good", "gooder"]],
+        ["bad → ___ → worst", "worse",
+          ["badder", "worst", "more bad"]],
+        ["little → less → ___", "least",
+          ["littlest", "lesser", "most little"]],
+        ["many → ___ → most", "more",
+          ["manier", "much", "most"]],
+        ["Our team lost because the other team played ___ cricket. (good/better)", "better",
+          ["good", "best", "gooder"]],
+        ["This is the ___ film that I have ever seen. (best/better)", "best",
+          ["better", "good", "goodest"]],
+        ["He is one of the ___ talented batsmen of this generation. (most/more)", "most",
+          ["more", "many", "much"]],
+        ["This year ___ people turned up for the event than last year. (most/more)", "more",
+          ["most", "many", "much"]],
+        ["This is one of the ___ interesting stories that I have ever read. (less/least)", "least",
+          ["less", "little", "lesser"]],
+        ["This year we had ___ rainfall than the previous year. (less/little)", "less",
+          ["little", "least", "lesser"]],
+        ["We performed ___ than we had expected. (worst/worse)", "worse",
+          ["worst", "bad", "badder"]],
+        ["Which adjectives change in special ways (no -er/-est)?", "good, bad, little, many",
+          ["tall, short, fast, slow", "big, small, old, young", "deep, dry, bright, smart"]]
+      ]},
+      { id: "mixChallenge", label: "Mixed · Spot the mistake", facts: [
+        ["Which sentence is correct?", "Rani and I went to the park.",
+          ["Rani and me went to the park.", "Me and Rani went to the park.", "Rani and us went to the park."]],
+        ["Which sentence is correct?", "The teacher gave us a gift.",
+          ["The teacher gave we a gift.", "The teacher gave our a gift.", "The teacher gave ours a gift."]],
+        ["Which sentence is correct?", "This pencil is mine.",
+          ["This pencil is my.", "This pencil is me.", "This pencil is I."]],
+        ["Which sentence is correct?", "The dog wagged its tail.",
+          ["The dog wagged it's tail.", "The dog wagged his's tail.", "The dog wagged their tail."]],
+        ["Which sentence is correct?", "They are playing with their kite.",
+          ["Them are playing with their kite.", "They are playing with there kite.", "They are playing with theirs kite."]],
+        ["Which sentence is correct?", "Ravi is taller than Amit.",
+          ["Ravi is tallest than Amit.", "Ravi is more tall than Amit.", "Ravi is tall than Amit."]],
+        ["Which sentence is correct?", "Mount Everest is the highest mountain.",
+          ["Mount Everest is the higher mountain.", "Mount Everest is the most high mountain.", "Mount Everest is the highest than mountain."]],
+        ["Which sentence is correct?", "This is the best day of my life!",
+          ["This is the goodest day of my life!", "This is the better day of my life!", "This is the most good day of my life!"]],
+        ["Which sentence is correct?", "I ate an apple and a banana.",
+          ["I ate a apple and an banana.", "I ate an apple and an banana.", "I ate a apple and a banana."]],
+        ["Choose the right article: I saw ___ elephant.", "an",
+          ["a", "the an", "two"]],
+        ["Choose the right article: She has ___ umbrella.", "an",
+          ["a", "some a", "these"]],
+        ["Choose the right article: It is ___ useful book.", "a (‘useful’ starts with a ‘yoo’ sound)",
+          ["an", "two", "these"]],
+        ["Which word is NOT an adjective?", "quickly",
+          ["quick", "brave", "silent"]],
+        ["Which word describes a feeling?", "happy",
+          ["round", "tall", "wooden"]],
+        ["Which word describes taste?", "sour",
+          ["loud", "square", "tall"]],
+        ["Which word describes shape?", "round",
+          ["sweet", "noisy", "angry"]],
+        ["Which word describes sound?", "noisy",
+          ["salty", "square", "green"]],
+        ["Which word describes number?", "five",
+          ["five-star", "fifth floor", "fine"]],
+        ["Which word describes colour?", "golden",
+          ["gentle", "giant", "gloomy"]],
+        ["‘The sun is hot.’ The word ‘hot’ describes —", "the sun",
+          ["is", "the", "nothing"]],
+        ["‘She is clever.’ The adjective ‘clever’ describes a —", "Pronoun (she)",
+          ["Noun", "Verb", "Article"]],
+        ["Replace the noun: ‘Grandma tells Grandma's stories every night.’", "Grandma tells her stories every night.",
+          ["Grandma tells hers stories every night.", "Grandma tells she stories every night.", "Grandma tells their stories every night."]],
+        ["Neha said to Raj, “Is this pen ___?” (asking if it belongs to Raj)", "yours",
+          ["mine", "hers", "ours"]],
+        ["Choose: Between the two sisters, Riya is the ___.", "taller",
+          ["tallest", "tall", "most tall"]],
+        ["Choose: Of all the children in class, Sam is the ___.", "tallest",
+          ["taller", "tall", "more tall"]],
+        ["hot → ___ → hottest", "hotter",
+          ["hoter", "more hot", "hottest"]],
+        ["happy → happier → ___", "happiest",
+          ["happyest", "most happy", "happier"]],
+        ["thin → ___ → thinnest", "thinner",
+          ["thiner", "thinnest", "more thin"]],
+        ["nice → nicer → ___", "nicest",
+          ["niceest", "most nice", "nicer"]],
+        ["Opposite of ‘rough’:", "smooth",
+          ["hard", "rocky", "heavy"]],
+        ["Opposite of ‘empty’:", "full",
+          ["light", "open", "hollow"]],
+        ["Opposite of ‘brave’:", "afraid (cowardly)",
+          ["bold", "strong", "proud"]],
+        ["Opposite of ‘early’:", "late",
+          ["soon", "first", "quick"]],
+        ["Opposite of ‘rich’:", "poor",
+          ["happy", "kind", "big"]]
+      ]}
+    ];
+
+    const ENG_SKILLS = ENG_TOPICS.map(topic => ({
+      id: topic.id,
+      label: topic.label,
+      gen() {
+        const [q, a, distractors] = pick(topic.facts);
+        return choiceQ(q, a, distractors);
+      }
+    }));
+
     // ---------------- Science fact bank ----------------
     // Class-3 science book, chapter 1 (Living and Non-living Things) and
     // chapter 5 (Plants in the Surroundings). Like SST, the book is factual,
@@ -2248,6 +2754,117 @@
         controls: "worksheetControls",
         usesDeck: false,
         onEnter: () => renderWorksheet("samplePaper")
+      },
+      {
+        id: "revPronouns",
+        group: "English Grammar",
+        icon: "🙋",
+        label: "Pronouns — revision notes",
+        subtitle: "Rules, tables and every book & notebook answer",
+        footer: "Tap a question to see its answer · 🖨️ Print includes all answers",
+        scene: "worksheetScene",
+        controls: "worksheetControls",
+        usesDeck: false,
+        onEnter: () => renderWorksheet("revPronouns")
+      },
+      {
+        id: "revAdjectives",
+        group: "English Grammar",
+        icon: "🎨",
+        label: "Adjectives — revision notes",
+        subtitle: "Rules, opposites, comparison and every book & notebook answer",
+        footer: "Tap a question to see its answer · 🖨️ Print includes all answers",
+        scene: "worksheetScene",
+        controls: "worksheetControls",
+        usesDeck: false,
+        onEnter: () => renderWorksheet("revAdjectives")
+      },
+      {
+        id: "grammarPractice",
+        group: "English Grammar",
+        icon: "🔤",
+        label: "Grammar practice quiz",
+        subtitle: "Pick a topic and answer as many questions as you like",
+        footer: "Keyboard: Enter · Check / Next question",
+        scene: "mathScene",
+        controls: "mathControls",
+        extras: ["skillFilter"],
+        usesDeck: false,
+        onEnter: () => startQuiz({ bank: ENG_SKILLS, bankId: "eng", test: false }),
+        onKey(e) { if (e.key === "Enter") { e.preventDefault(); checkAnswer(); } }
+      },
+      {
+        id: "grammarTest",
+        group: "English Grammar",
+        icon: "🧾",
+        label: "Grammar test (20 questions)",
+        subtitle: "Twenty mixed pronoun & adjective questions — score at the end",
+        footer: "Keyboard: Enter · Check / Next question",
+        scene: "mathScene",
+        controls: "mathControls",
+        usesDeck: false,
+        onEnter: () => startQuiz({ bank: ENG_SKILLS, bankId: "eng", test: true, length: 20 }),
+        onKey(e) { if (e.key === "Enter") { e.preventDefault(); checkAnswer(); } }
+      },
+      {
+        id: "pronounsWorksheet",
+        group: "English Grammar",
+        icon: "📝",
+        label: "Pronouns — school worksheet",
+        subtitle: "The school practice worksheet, fillable, with answer key",
+        footer: "Fill in your answers · 🖨️ Print to save as PDF",
+        scene: "worksheetScene",
+        controls: "worksheetControls",
+        usesDeck: false,
+        onEnter: () => renderWorksheet("pronounsWorksheet")
+      },
+      {
+        id: "adjectivesWorksheet",
+        group: "English Grammar",
+        icon: "📝",
+        label: "Adjectives — school worksheet",
+        subtitle: "The school practice worksheet, fillable, with answer key",
+        footer: "Fill in your answers · 🖨️ Print to save as PDF",
+        scene: "worksheetScene",
+        controls: "worksheetControls",
+        usesDeck: false,
+        onEnter: () => renderWorksheet("adjectivesWorksheet")
+      },
+      {
+        id: "wsPronounsBook",
+        group: "English Grammar",
+        icon: "📝",
+        label: "Pronouns — book & notebook exercises",
+        subtitle: "All textbook and notebook pronoun exercises",
+        footer: "Fill in your answers · 🖨️ Print to save as PDF",
+        scene: "worksheetScene",
+        controls: "worksheetControls",
+        usesDeck: false,
+        onEnter: () => renderWorksheet("wsPronounsBook")
+      },
+      {
+        id: "wsAdjectivesBook",
+        group: "English Grammar",
+        icon: "📝",
+        label: "Adjectives — book & notebook exercises",
+        subtitle: "All textbook and notebook adjective exercises",
+        footer: "Fill in your answers · 🖨️ Print to save as PDF",
+        scene: "worksheetScene",
+        controls: "worksheetControls",
+        usesDeck: false,
+        onEnter: () => renderWorksheet("wsAdjectivesBook")
+      },
+      {
+        id: "grammarChallenge",
+        group: "English Grammar",
+        icon: "⭐",
+        label: "Grammar challenge (extra)",
+        subtitle: "New mixed questions beyond the book — spot mistakes, compare, describe",
+        footer: "Fill in your answers · 🖨️ Print to save as PDF",
+        scene: "worksheetScene",
+        controls: "worksheetControls",
+        usesDeck: false,
+        onEnter: () => renderWorksheet("grammarChallenge")
       }
     ];
 
@@ -2986,10 +3603,12 @@
         const wrap = el("div", "wsSection");
         wrap.appendChild(el("h3", null, sec.heading));
         sec.groups.forEach((group, i) => {
+          const words = Array.isArray(group) ? group : group.words;
+          const prefix = Array.isArray(group) ? "" : `${group.label} — `;
           const q = el("div", "wsQ");
-          q.appendChild(el("p", "stem", `${i + 1}. ${group.join(" · ")}`));
+          q.appendChild(el("p", "stem", `${i + 1}. ${prefix}${words.join(" · ")}`));
           const items = el("div", "wsOddItems");
-          group.forEach(word => {
+          words.forEach(word => {
             const b = document.createElement("button");
             b.type = "button";
             b.textContent = word;
@@ -3444,6 +4063,456 @@
             { q: "B. Match", a: "1 – c · 2 – a · 3 – d · 4 – b · 5 – e" },
             { q: "C. Blanks", a: "1 wheel · 2 walking (on foot) · 3 rail · 4 water · 5 Wright · 6 air" },
             { q: "D. Application questions", a: "See the model answers at the end of <b>Ch 3 revision notes</b>." }
+          ] }
+        ]
+      },
+
+      revPronouns: {
+        title: "Grammar · Pronouns",
+        sections: [
+          { type: "notes", heading: "📌 Key points", items: [
+            "A <b>pronoun</b> is a word used <b>in place of a noun</b>. <i>Samuel bought a new bicycle. <b>He</b> rides <b>it</b> to school.</i>",
+            "<b>She</b> — mother, Nikki, Granny (girls/women) · <b>He</b> — father, Rohan, Grandpa (boys/men) · <b>It</b> — tree, book, cake, dog (things/animals).",
+            "<b>Singular</b>: I, me, mine, you, yours, she, her, he, him, it, his, hers · <b>Plural</b>: we, us, ours, you, yours, they, them, theirs.",
+            "‘<b>You</b>’ can be used for one person or more than one person."
+          ] },
+          { type: "notes", heading: "🙋 Personal pronouns", items: [
+            "Pronouns that replace the names of persons or things are called <b>personal pronouns</b>.",
+            "<b>Speaker</b>: I, me (singular) · we, us (plural — more than one person, including the speaker).",
+            "<b>Listener</b>: you (singular or plural). <i>Prabhu, do you want some coffee?</i> (singular) · <i>Children, you must read this story.</i> (plural)",
+            "<b>Spoken about</b>: he, she, it, him, her (singular) · they, them (plural).",
+            "Before the verb (doer) use <b>I, we, he, she, they</b>; after the verb or after ‘to/with’ use <b>me, us, him, her, them</b>. <i>He was not well, so I advised him to rest.</i>",
+            "Don't repeat the noun: <i>Daisy is happy because <b>she</b> got a gift.</i>"
+          ] },
+          { type: "notes", heading: "👜 Possessive pronouns (belonging)", items: [
+            "Some pronouns show <b>belonging or possession</b>.",
+            "<b>mine, ours</b> — things that belong to <b>us</b>. <i>The scooter is mine. This house is ours.</i>",
+            "<b>yours, hers, his, theirs</b> — things that belong to <b>others</b>. <i>That bag belongs to Zubeida. It is hers. Is this bicycle yours?</i>",
+            "my → <b>mine</b> · your → <b>yours</b> · her → <b>hers</b> · his → <b>his</b> · our → <b>ours</b> · their → <b>theirs</b>",
+            "⚠️ Common mistakes: ‘This lunchbox is <s>her</s>’ → <b>hers</b> · ‘They are <s>there</s>’ → <b>theirs</b> · no apostrophe: <b>its, hers, theirs</b>."
+          ] },
+          { type: "qa", heading: "✅ Book exercises — answers", items: [
+            { q: "A. Which nouns do the underlined pronouns replace?", a: "1. She → Arnav's cousin, them → the pets · 2. They → the monkeys, it → the loaf of bread · 3. She → Meher, it → the poem · 4. He → my father, it → the piano · 5. She → Amira, it → the sandwich" },
+            { q: "B. Fill in personal pronouns", a: "1. they · 2. he, it · 3. he, him · 4. me · 5. he (or she — the principal)" },
+            { q: "C. Complete with me, him, her, you, it, them", a: "1. it · 2. me · 3. you · 4. him · 5. them, her" },
+            { q: "D. mine / theirs / hers / his / yours", a: "1. yours · 2. hers · 3. theirs · 4. mine · 5. his" },
+            { q: "E1. Hamid will soon leave for Mumbai. Hamid has got a new job there. Hamid has to join by next week.", a: "Hamid will soon leave for Mumbai. <b>He</b> has got a new job there. <b>He</b> has to join by next week." },
+            { q: "E2. Sajal bought a new camera. Sajal gave the camera to her father. Her father loved the camera.", a: "Sajal bought a new camera. <b>She</b> gave <b>it</b> to her father. <b>He</b> loved <b>it</b>." },
+            { q: "E3. Hema and I went on a trek in the hills. Hema and I liked the trek very much.", a: "Hema and I went on a trek in the hills. <b>We</b> liked <b>it</b> very much." },
+            { q: "E4. Gopi and Neil participated in the quiz. Gopi and Neil won the first prize.", a: "Gopi and Neil participated in the quiz. <b>They</b> won the first prize." },
+            { q: "E5. The children went to the botanical garden. The children learned about different trees. Visiting the botanical garden was a good learning experience.", a: "The children went to the botanical garden. <b>They</b> learned about different trees. <b>It</b> was a good learning experience." },
+            { q: "E6. Pami loves swimming. Pami goes swimming every day. Swimming makes Pami happy and helps Pami keep fit.", a: "Pami loves swimming. <b>She</b> goes swimming every day. <b>It</b> makes <b>her</b> happy and helps <b>her</b> keep fit." }
+          ] },
+          { type: "qa", heading: "📒 Class notebook — answers", items: [
+            { q: "Q1. Fill in (she, it, they, we, them)", a: "1. Zoya and Kate … <b>They</b> are carrying their football. · 2. My kitten … <b>It</b> likes to play in the basket. · 3. Sita is absent because <b>she</b> has a fever. · 4. The toys are scattered, please put <b>them</b> in the basket. · 5. My brother and I … <b>We</b> will buy some fruits." },
+            { q: "Q2. Replace the underlined words", a: "1. The doctor → <b>He</b>; the patients → <b>them</b> · 2. Seema → <b>She</b>; the ducks → <b>them</b> · 3. My father and I → <b>We</b> · 4. The moon → <b>It</b> · 5. Mom called Rajan → <b>She</b> called <b>him</b>" },
+            { q: "Q3. Rewrite using pronouns", a: "1. <b>She</b> is writing a story. · 2. <b>She</b> is watering plants. · 3. <b>It</b> is sitting near the door." },
+            { q: "Q4. Possessive pronouns", a: "1. mine · 2. hers · 3. his · 4. <b>theirs</b> (not ‘there’) · 5. ours" },
+            { q: "Q5. Replace with a possessive pronoun", a: "1. This book is mine. · 2. That bicycle is his. · 3. These toys are ours. · 4. This umbrella is hers. · 5. Those shoes are theirs." }
+          ] }
+        ]
+      },
+
+      revAdjectives: {
+        title: "Grammar · Adjectives",
+        sections: [
+          { type: "notes", heading: "📌 Key points", items: [
+            "An <b>adjective</b> is a word used to <b>describe a noun or a pronoun</b>.",
+            "Describing nouns: <i>a <b>cheerful</b> man, a <b>helpful</b> woman, a <b>narrow</b> road, a <b>blue</b> shirt</i>. Describing pronouns: <i>It is <b>cool</b>. He is <b>happy</b>.</i>",
+            "Adjectives tell us <b>what kind</b> (colour, size, shape, taste, feeling): yellow, cute, pretty, red, fresh, stuffy, humid, old, crumbling, haunted, serious, first, new, great, kind, helpful, nice, favourite, sweet, little, splendid, easy.",
+            "An adjective must <b>make sense</b> with its noun: a <i>sad</i> bridge ✗, a <i>long</i> boy ✗, an <i>old</i> baby ✗, an <i>ill</i> dress ✗, a <i>fast</i> lake ✗.",
+            "Use <b>an</b> before a vowel sound: <i>an old book, an interesting book, an enormous Ferris wheel</i>.",
+            "Two adjectives together are separated by a comma: <i>a tiny, colourful bird</i>."
+          ] },
+          { type: "notes", heading: "↔️ Opposites", items: [
+            "soft – <b>hard</b> · difficult – <b>simple/easy</b> · kind – <b>cruel/unkind</b> · shallow – <b>deep</b> · tiny – <b>huge</b> · light – <b>dark</b> · sweet – <b>bitter</b>",
+            "light – <b>heavy</b> · strong – <b>weak</b> · hot – <b>cold</b> · deep – <b>shallow</b> · clean – <b>dirty</b> · wide – <b>narrow</b> · old – <b>young</b> · bright – <b>dark/dull</b> · tall – <b>short</b> · big – <b>small</b>"
+          ] },
+          { type: "notes", heading: "📏 Comparison", items: [
+            "Add <b>-er</b> to compare <b>two</b> things or people; add <b>-est</b> to compare <b>more than two</b>. <i>A bus is <b>longer</b> than a car, but a train is the <b>longest</b> of the three.</i>",
+            "Use <b>than</b> with -er: <i>taller than</i>. Use <b>the</b> with -est: <i>the tallest</i>.",
+            "small – smaller – smallest · smart – smarter – smartest · deep – deeper – deepest · slow – slower – slowest · bright – brighter – brightest · tall – taller – tallest · fast – faster – fastest",
+            "Ending in <b>y</b> → change to <b>i</b>: dry – drier – driest · heavy – heavier – heaviest · tasty – tastier – tastiest",
+            "Ending in <b>e</b> → add r / st: large – larger – largest",
+            "Short vowel + consonant → double it: big – bigger – biggest · hot – hotter – hottest",
+            "Special (no pattern): <b>good – better – best · bad – worse – worst · little – less – least · many – more – most</b>"
+          ] },
+          { type: "qa", heading: "✅ Book exercises — answers", items: [
+            { q: "Take Off: What is common to all the highlighted words?", a: "They all <b>describe nouns</b> — they are adjectives." },
+            { q: "A. Choose from brackets", a: "1. round · 2. moist · 3. pleasant · 4. raw · 5. delicious · 6. sad · 7. cool · 8. careful" },
+            { q: "C. Crossword — opposites", a: "Across: 2 soft → <b>HARD</b> · 5 difficult → <b>SIMPLE</b> · 6 kind → <b>CRUEL</b><br>Down: 1 shallow → <b>DEEP</b> · 2 tiny → <b>HUGE</b> · 3 light → <b>DARK</b> · 4 sweet → <b>BITTER</b>" },
+            { q: "D. Cross out the adjective that cannot describe the noun", a: "1. bridge – <b>sad</b> · 2. boy – <b>long</b> · 3. baby – <b>old</b> · 4. dress – <b>ill</b> · 5. lake – <b>fast</b>" },
+            { q: "E. sloping / coldest / sunny / cold / beautiful", a: "1. cold · 2. sloping · 3. beautiful · 4. coldest · 5. sunny" },
+            { q: "F. Complete the table", a: "small – smaller – smallest · smart – smarter – <b>smartest</b> · deep – deeper – <b>deepest</b> · dry – drier – driest · slow – slower – slowest · bright – brighter – brightest" },
+            { q: "G. Select the correct adjective", a: "1. smaller · 2. fastest · 3. tastier · 4. light · 5. older · 6. biggest · 7. stronger · 8. short" },
+            { q: "H. Fill in from brackets", a: "1. better · 2. best · 3. most · 4. more · 5. least · 6. less · 7. worse" }
+          ] },
+          { type: "qa", heading: "📒 Class notebook — answers", items: [
+            { q: "Q1. Choose the most suitable adjective", a: "1. soft · 2. shallow · 3. old, young · 4. heavy · 5. wide · 6. difficult" },
+            { q: "Q2. Read the clues", a: "1. tall · 2. big · 3. light · 4. cold · 5. clean" },
+            { q: "Q3. Use words from the box", a: "1. light, heavy · 2. strong, weak · 3. hot, cold · 4. deep, shallow · 5. kind, unkind" },
+            { q: "Q4. Add -er or -est", a: "1. heavier · 2. tallest · 3. younger · 4. cleaner · 5. brightest" }
+          ] }
+        ]
+      },
+
+      pronounsWorksheet: {
+        title: "Practice Worksheet – Pronouns",
+        sections: [
+          { type: "blanks", heading: "Q1. Replace the underlined words with suitable pronouns", items: [
+            "Maya is drawing a picture. → ____ is drawing a picture.",
+            "The boys are playing cricket. → ____ are playing cricket.",
+            "The cat is sleeping on the mat. → ____ is sleeping on the mat.",
+            "My sister and I are going to school. → ____ are going to school.",
+            "Aarav and Kabir are good friends. → ____ are good friends."
+          ] },
+          { type: "fields", heading: "Q2. Write the singular pronouns and the plural pronouns", note: "Note: “You” can be used for one person or more than one person.", items: [
+            { label: "1. Emma and Sophie are friends. Emma gave a pencil to Sophie. She thanked her, and they smiled at each other.", sub: [{ label: "Singular:" }, { label: "Plural:" }] },
+            { label: "2. Jack and Oliver are brothers. Jack helped Oliver with his school bag. He thanked him, and they walked to school together.", sub: [{ label: "Singular:" }, { label: "Plural:" }] },
+            { label: "3. Emily gave a storybook to Grace. She thanked her, and they sat together and read it.", sub: [{ label: "Singular:" }, { label: "Plural:" }] },
+            { label: "4. Harry found a puppy near the gate. He called his friends, and they came to help him.", sub: [{ label: "Singular:" }, { label: "Plural:" }] },
+            { label: "5. Lily and Chloe went to the park. Lily brought a ball for Chloe. She gave it to her, and they played together.", sub: [{ label: "Singular:" }, { label: "Plural:" }] }
+          ] },
+          { type: "long", heading: "Q3. Rewrite the sentences by replacing the repeated nouns with pronouns", items: [
+            { stem: "Charlie is tired because Charlie ran a race.", rows: 1 },
+            { stem: "The girls are excited because the girls are going on a picnic.", rows: 1 },
+            { stem: "The puppy is hungry because the puppy has not eaten.", rows: 1 },
+            { stem: "My brother and I are happy because my brother and I won the game.", rows: 1 },
+            { stem: "The books are new because the books were bought yesterday.", rows: 1 },
+            { stem: "David and James are friends because David and James study together.", rows: 1 }
+          ] },
+          { type: "fields", heading: "Q4. Create your own sentences (at home, at school or with friends)", items: [
+            { label: "I –" }, { label: "We –" }, { label: "You –" }, { label: "He –" }, { label: "She –" }, { label: "It –" }, { label: "They –" }
+          ] },
+          { type: "long", heading: "Q5. Write a short paragraph about your favourite cartoon character", items: [
+            { stem: "Include: one pronoun for a boy/man, one for a girl/woman, one for more than one person, and one for a thing or animal.", rows: 6 }
+          ] },
+          { type: "blanks", heading: "Q6. Complete with the correct possessive pronoun", items: [
+            "Riya says, “The pink pencil is mine.” Arjun says, “The blue pencil is mine.” Who owns the pink pencil? ____ Who owns the blue pencil? ____",
+            "Riya has a new pencil box. The pencil box belongs to her. Whose pencil box is it? It is ____.",
+            "Aarav and Kabir have two cricket bats. The bats belong to them. They are ____.",
+            "This is my water bottle. That water bottle belongs to you. This water bottle is ____.",
+            "Meera has a beautiful dress. The beautiful dress is ____.",
+            "We have a classroom garden. The garden is ____.",
+            "Rahul says, “This is my football.” Sam says, “No, it belongs to me.” Sam: “The football is ____.”",
+            "One bag belongs to Anaya and the other belongs to you. “Is this bag ____?”",
+            "The blue umbrella belongs to Neha, while the red umbrella belongs to me. The blue umbrella is ____, and the red umbrella is ____.",
+            "A group of students made a model for their class. The model is ____.",
+            "“Does this notebook belong to you?” “Yes, it is ____.”"
+          ] },
+          { type: "mcq", key: "ppos", heading: "12. Choose the correct possessive pronoun", items: [
+            { q: "This pencil belongs to me. It is —", opts: ["mine", "yours"] },
+            { q: "That bicycle belongs to Rohan. It is —", opts: ["his", "hers"] },
+            { q: "These books belong to us. They are —", opts: ["ours", "theirs"] },
+            { q: "The red bag belongs to Priya. It is —", opts: ["hers", "his"] }
+          ] },
+          { type: "tf", heading: "13. Find the mistake — tap True if Correct, False if Incorrect, and correct it", items: [
+            "This lunchbox is her.",
+            "That house is theirs.",
+            "These toys are ours.",
+            "This pen is mine."
+          ] },
+          { type: "blanks", heading: "14. Rewrite using a possessive pronoun", items: [
+            "This is my notebook. → This notebook is ____.",
+            "That is your umbrella. → That umbrella is ____.",
+            "These are their shoes. → These shoes are ____.",
+            "This is her doll. → This doll is ____."
+          ] },
+          { type: "blanks", heading: "15. Read the situation and answer", items: [
+            "Anaya sees a pink water bottle. She knows it belongs to her friend Siya. “The water bottle is ____.”",
+            "Kabir finds a football. He knows it belongs to him. “The football is ____.”",
+            "A group of children made a science model together. “The model is ____.”",
+            "Correct the conversation — A: Is this pencil box ____? B: No, it is ____.",
+            "If something belongs to you, which possessive pronoun will you use? ____"
+          ] },
+          { type: "qa", heading: "🔑 Answer key (tap to open — try first!)", items: [
+            { q: "Q1", a: "She · They · It · We · They" },
+            { q: "Q2", a: "1. Singular: She, her · Plural: they<br>2. Singular: his, He, him · Plural: they<br>3. Singular: She, her, it · Plural: they<br>4. Singular: He, his, him · Plural: they<br>5. Singular: She, it, her · Plural: they" },
+            { q: "Q3", a: "1. Charlie is tired because <b>he</b> ran a race. · 2. The girls are excited because <b>they</b> are going on a picnic. · 3. The puppy is hungry because <b>it</b> has not eaten. · 4. My brother and I are happy because <b>we</b> won the game. · 5. The books are new because <b>they</b> were bought yesterday. · 6. David and James are friends because <b>they</b> study together." },
+            { q: "Q4 & Q5 (sample)", a: "I brush my teeth every morning. · We play cricket after school. · You are my best friend. · He is my class teacher. · She helps me with homework. · It is my pet dog. · They are my cousins.<br>Q5: My favourite cartoon is Chhota Bheem. <b>He</b> is very strong. Chutki is his friend; <b>she</b> is kind. Bheem and his friends live in Dholakpur — <b>they</b> help everyone. Bheem loves laddoos; <b>it</b> is his favourite sweet." },
+            { q: "Q6", a: "1. Riya – mine · Arjun – mine (Riya: “The pink pencil is mine”; Arjun: “The blue pencil is mine”) · 2. hers · 3. theirs · 4. mine · 5. hers · 6. ours · 7. mine · 8. yours · 9. hers, mine · 10. theirs · 11. mine" },
+            { q: "12–14", a: "12: mine · his · ours · hers<br>13: 1 Incorrect → This lunchbox is <b>hers</b>. · 2 Correct · 3 Correct · 4 Correct<br>14: mine · yours · theirs · hers" },
+            { q: "15", a: "1. hers · 2. mine · 3. ours · 4. A: Is this pencil box <b>yours</b>? B: No, it is <b>hers</b> (or <b>his</b>). · 5. mine" }
+          ] }
+        ]
+      },
+
+      adjectivesWorksheet: {
+        title: "Practice Worksheet – Adjectives",
+        sections: [
+          { type: "blanks", heading: "QI. Choose the adjective that makes the sentence meaningful", items: [
+            "The little ant easily carried a ____ crumb of cake across the table. (light / heavy)",
+            "Tara wrapped a ____ blanket around herself because the night was chilly. (warm / cold)",
+            "The puppy squeezed through the ____ gap under the gate. (narrow / wide)",
+            "We could not see the stars because the sky was ____ with dark clouds. (bright / cloudy)",
+            "The magician pulled a ____ rabbit out of a very small hat. (huge / tiny)",
+            "After the rain, the children jumped over the ____ puddles. (muddy / clean)"
+          ] },
+          { type: "fields", heading: "QII. Read the clues and write the adjective", items: [
+            { label: "1. You can wear me after I have been washed. I am the opposite of dirty. Who am I?" },
+            { label: "2. Two buses can travel side by side with me. I am the opposite of narrow. Who am I?" },
+            { label: "3. A soft pillow feels comfortable against your head. I am the opposite of hard. Who am I?" },
+            { label: "4. I describe a child who shares toys and helps friends. I am the opposite of unkind. Who am I?" },
+            { label: "5. You need me when you cannot see anything in a room. I am the opposite of bright. Who am I?" },
+            { label: "6. I describe someone who has lived for many years. I am the opposite of young. Who am I?" }
+          ] },
+          { type: "blanks", heading: "QIII. Choose the adjective that fits the situation", items: [
+            "The baby fell asleep as soon as she touched the ____ pillow. (soft / rough)",
+            "The children covered their ears when the ____ drum began to play. (loud / quiet)",
+            "The tiny bird built its nest on a ____ branch. (thin / strong)",
+            "The baker took out a ____ loaf of bread from the oven. (fresh / stale)",
+            "The moon looked ____ in the clear night sky. (bright / dull)"
+          ] },
+          { type: "story", heading: "QIV. Complete the story — An Exciting Day at the Fair",
+            wordBank: ["colourful", "crowded", "delicious", "enormous", "cheerful", "noisy", "bright", "little"],
+            text: "Last Sunday, my family visited a fair. There were ____ lights shining everywhere. I saw an ____ Ferris wheel and a ____ train for children. The fair was very ____ because many people had come. The ____ music made everyone excited. I bought a ____ toy and ate some ____ popcorn. It was a ____ evening!" },
+          { type: "blanks", heading: "QV. Add one suitable adjective (e.g. I found a mysterious box.)", items: [
+            "A bird sat on the window. → A ____ bird sat on the window.",
+            "We walked into a room. → We walked into a ____ room.",
+            "I opened a book. → I opened an ____ book.",
+            "The boy found a key under the table. → The boy found a ____ key under the table."
+          ] },
+          { type: "blanks", heading: "QVI. Use the correct form of the adjective", items: [
+            "A giraffe is ____ (tall) than a zebra.",
+            "The blue whale is one of the ____ (large) animals in the world.",
+            "My new water bottle is ____ (light) than my old one.",
+            "Of all the puppies, Bruno is the ____ (small).",
+            "A cheetah is ____ (fast) than a horse.",
+            "This is the ____ (bright) star I have ever seen."
+          ] },
+          { type: "long", heading: "QVII. Read the paragraph and write six adjectives", items: [
+            { stem: "The Secret Garden — Mia opened a small wooden gate and entered a beautiful garden. Tall trees stood around the garden, and colourful butterflies flew over the bright flowers. A little brown rabbit hopped along the narrow path. Mia sat under a shady tree and enjoyed the peaceful afternoon.", rows: 2 }
+          ] },
+          { type: "blanks", heading: "QVIII. Add two suitable adjectives (e.g. I saw a tiny, colourful bird.)", items: [
+            "We found a ____, ____ box.",
+            "A ____, ____ dog ran towards us.",
+            "I saw a ____, ____ castle.",
+            "She carried a ____, ____ bag.",
+            "We walked through a ____, ____ forest."
+          ] },
+          { type: "long", heading: "QIX. A magical zoo — write 5–6 sentences", items: [
+            { stem: "Include adjectives describing an animal, a place, an object, a person, and two more. Helping words: giant, tiny, colourful, playful, mysterious, noisy, quiet, beautiful, enormous, friendly, magical.", rows: 6 }
+          ] },
+          { type: "long", heading: "QX. Write one sentence using two adjectives", items: [
+            { stem: "You find a mysterious box in an old room.", rows: 1 },
+            { stem: "You see a beautiful rainbow after a rainy afternoon.", rows: 1 },
+            { stem: "You meet a tiny puppy wearing a red bow.", rows: 1 }
+          ] },
+          { type: "qa", heading: "🔑 Answer key (tap to open — try first!)", items: [
+            { q: "QI & QIII", a: "QI: light · warm · narrow · cloudy · tiny · muddy<br>QIII: soft · loud · strong · fresh · bright" },
+            { q: "QII", a: "clean · wide · soft · kind · dark · old" },
+            { q: "QIV", a: "<b>bright</b> lights · an <b>enormous</b> Ferris wheel · a <b>little</b> train · very <b>crowded</b> · the <b>noisy</b> music · a <b>colourful</b> toy · <b>delicious</b> popcorn · a <b>cheerful</b> evening" },
+            { q: "QV & QVIII (any sensible adjectives)", a: "QV: little/colourful bird · dark/big room · an <b>old/interesting</b> book (must start with a vowel sound) · shiny/golden key<br>QVIII: big, wooden box · small, fluffy dog · tall, old castle · heavy, red bag · dark, quiet forest" },
+            { q: "QVI", a: "taller · largest · lighter · smallest · faster · brightest" },
+            { q: "QVII (any six)", a: "small, wooden, beautiful, tall, colourful, bright, little, brown, narrow, shady, peaceful" },
+            { q: "QIX & QX (sample)", a: "QIX: I visited a <b>magical</b> zoo. A <b>giant</b> elephant was painting pictures. The zoo had a <b>colourful</b> garden. The zookeeper gave me a <b>shiny</b> ticket. He was a <b>friendly</b> man. A <b>playful</b> monkey waved at me!<br>QX: I found a <b>small, dusty</b> box in an old room. · I saw a <b>beautiful, bright</b> rainbow after the rain. · I met a <b>tiny, cute</b> puppy wearing a red bow." }
+          ] }
+        ]
+      },
+
+      wsPronounsBook: {
+        title: "Grammar · Pronouns — Exercises",
+        sections: [
+          { type: "fields", heading: "A. Which nouns do the underlined pronouns replace?", items: [
+            { label: "1. Arnav's cousin has several pets. She takes good care of them.", sub: [{ label: "She =" }, { label: "them =" }] },
+            { label: "2. The monkeys found a loaf of bread. They ran to grab it.", sub: [{ label: "They =" }, { label: "it =" }] },
+            { label: "3. Meher wrote a poem. She showed it to her mother.", sub: [{ label: "She =" }, { label: "it =" }] },
+            { label: "4. My father has gifted me a piano. He wants me to learn how to play it.", sub: [{ label: "He =" }, { label: "it =" }] },
+            { label: "5. Amira had a sandwich in her bag. She ate it in the bus.", sub: [{ label: "She =" }, { label: "it =" }] }
+          ] },
+          { type: "blanks", heading: "B. Fill in the correct personal pronouns", items: [
+            "The elephants came to the lake because ____ were thirsty.",
+            "As Animesh was bored, ____ picked up a book and began reading ____.",
+            "Sherlock found the man suspicious, so ____ decided to follow ____.",
+            "I could not understand the problem the first time, so the teacher explained it to ____ again.",
+            "We wanted to meet the principal, but ____ was busy in a meeting."
+          ] },
+          { type: "blanks", heading: "C. Complete with me, him, her, you, it or them",
+            wordBank: ["me", "him", "her", "you", "it", "them"],
+            items: [
+              "I haven't read the book. Did you like ____?",
+              "I don't think I know you. Do you know ____?",
+              "Can ____ please put this shirt in the wardrobe? I don't need it now.",
+              "Do you know ____? He is Anshu's brother.",
+              "My friend Kirti will come to collect these books. Please give ____ to ____."
+            ] },
+          { type: "blanks", heading: "D. Fill in the correct possessive pronouns",
+            wordBank: ["mine", "theirs", "hers", "his", "yours"],
+            items: [
+              "Ajay asked Sonia, ‘Is this racket ____?’",
+              "This is Katha. The pup she is holding is ____.",
+              "The children live in the house with their parents. The house is ____.",
+              "Adil said, ‘This bat is ____.’",
+              "This is Mr Verma's house. The car that is parked here is ____."
+            ] },
+          { type: "long", heading: "E. Rewrite after replacing the repeated words with pronouns", items: [
+            { stem: "Hamid will soon leave for Mumbai. Hamid has got a new job there. Hamid has to join by next week.", rows: 2 },
+            { stem: "Sajal bought a new camera. Sajal gave the camera to her father. Her father loved the camera.", rows: 2 },
+            { stem: "Hema and I went on a trek in the hills. Hema and I liked the trek very much.", rows: 2 },
+            { stem: "Gopi and Neil participated in the quiz. Gopi and Neil won the first prize.", rows: 2 },
+            { stem: "The children went to the botanical garden. The children learned about different trees. Visiting the botanical garden was a good learning experience.", rows: 2 },
+            { stem: "Pami loves swimming. Pami goes swimming every day. Swimming makes Pami happy and helps Pami keep fit.", rows: 2 }
+          ] },
+          { type: "blanks", heading: "F. Notebook — fill in (she, it, they, we, them)", items: [
+            "Zoya and Kate are going to the playground. ____ are carrying their football.",
+            "My kitten is very small. ____ likes to play in the basket.",
+            "Sita is absent today because ____ has a fever.",
+            "The toys are scattered. Please put ____ in the basket.",
+            "My brother and I are going to the market. ____ will buy some fruits."
+          ] },
+          { type: "blanks", heading: "G. Notebook — fill in the possessive pronoun (mine, yours, his, hers, ours, theirs)", items: [
+            "This is my pencil. It is ____.",
+            "That red bag belongs to Riya. It is ____.",
+            "This football belongs to Rahul. It is ____.",
+            "These books belong to my friends. They are ____.",
+            "This classroom belongs to our class. It is ____.",
+            "That is Rohan's bicycle. → That bicycle is ____.",
+            "Those are their shoes. → Those shoes are ____."
+          ] },
+          { type: "qa", heading: "🔑 Answer key (tap to open — try first!)", items: [
+            { q: "A–D", a: "See <b>Pronouns revision notes</b> → Book exercises. (A: cousin/pets · monkeys/loaf of bread · Meher/poem · father/piano · Amira/sandwich; B: they · he, it · he, him · me · he/she; C: it · me · you · him · them, her; D: yours · hers · theirs · mine · his)" },
+            { q: "E", a: "He … He · She gave it … He loved it · We liked it · They won · They learned … It was · She goes … It makes her … helps her" },
+            { q: "F & G", a: "F: They · It · she · them · We<br>G: mine · hers · his · theirs · ours · his · theirs" }
+          ] }
+        ]
+      },
+
+      wsAdjectivesBook: {
+        title: "Grammar · Adjectives — Exercises",
+        sections: [
+          { type: "blanks", heading: "A. Choose suitable adjectives from brackets", items: [
+            "The earth is ____. (round/oval)",
+            "The soil is ____ because of the rainfall. (dry/moist)",
+            "It is a ____ day. Shall we go out for a walk? (dull/pleasant)",
+            "Don't pluck the mangoes. They are still ____. (ripe/raw)",
+            "I loved the chocolate shake. It was ____. (delicious/tasteless)",
+            "The story was very nice, but it had a ____ ending. (sad/happy)",
+            "A ____ breeze was blowing outside. We found it very pleasant. (warm/cool)",
+            "Be ____. The pool is quite deep. (careless/careful)"
+          ] },
+          { type: "fields", heading: "C. Crossword — write the opposites", items: [
+            { label: "Across 2. soft →" }, { label: "Across 5. difficult →" }, { label: "Across 6. kind →" },
+            { label: "Down 1. shallow →" }, { label: "Down 2. tiny →" }, { label: "Down 3. light →" }, { label: "Down 4. sweet →" }
+          ] },
+          { type: "odd", heading: "D. Tap the adjective that CANNOT describe the noun", groups: [
+            { label: "bridge", words: ["old", "wooden", "sad", "long", "new"] },
+            { label: "boy", words: ["short", "long", "tall", "thin", "smart"] },
+            { label: "baby", words: ["cute", "small", "old", "playful", "naughty"] },
+            { label: "dress", words: ["lovely", "loose", "ill", "tight", "colourful"] },
+            { label: "lake", words: ["fast", "beautiful", "large", "deep", "small"] }
+          ] },
+          { type: "blanks", heading: "E. Fill in from the box",
+            wordBank: ["sloping", "coldest", "sunny", "cold", "beautiful"],
+            items: [
+              "It is hot in summer but ____ in winter.",
+              "The house has a ____ roof.",
+              "The rose looks ____.",
+              "January is the ____ month of the year.",
+              "It is a ____ day."
+            ] },
+          { type: "table", heading: "F. Complete the table", headers: ["Adjective", "-er", "-est"], rows: [
+            ["small", "smaller", "smallest"],
+            ["smart", { input: true }, { input: true }],
+            ["deep", { input: true }, { input: true }],
+            ["dry", { input: true }, { input: true }],
+            ["slow", { input: true }, { input: true }],
+            ["bright", { input: true }, { input: true }],
+            ["heavy", { input: true }, { input: true }],
+            ["big", { input: true }, { input: true }],
+            ["good", { input: true }, { input: true }],
+            ["bad", { input: true }, { input: true }]
+          ] },
+          { type: "mcq", key: "adjG", heading: "G. Select the correct adjective", items: [
+            { q: "A shark is ___ than a whale.", opts: ["small", "smaller", "smallest"] },
+            { q: "The cheetah is the ___ land animal.", opts: ["fast", "faster", "fastest"] },
+            { q: "This soup is ___ than the one I had yesterday.", opts: ["tasty", "tastier", "tastiest"] },
+            { q: "Wool is very ___.", opts: ["light", "lighter", "lightest"] },
+            { q: "My brother is ___ than me.", opts: ["old", "older", "oldest"] },
+            { q: "The elephant is the ___ land animal.", opts: ["big", "bigger", "biggest"] },
+            { q: "The ___ of the two teams won the contest.", opts: ["strong", "stronger", "strongest"] },
+            { q: "The story is very ___ but delightful.", opts: ["short", "shorter", "shortest"] }
+          ] },
+          { type: "blanks", heading: "H. Fill in from brackets", items: [
+            "Our team lost because the other team played ____ cricket. (good/better)",
+            "This is the ____ film that I have ever seen. (best/better)",
+            "He is one of the ____ talented batsmen of this generation. (most/more)",
+            "This year ____ people turned up for the event than the last year. (most/more)",
+            "This is one of the ____ interesting stories that I have ever read. (less/least)",
+            "This year we had ____ rainfall than the previous year. (less/little)",
+            "We performed ____ than we had expected. (worst/worse)"
+          ] },
+          { type: "blanks", heading: "I. Notebook — opposites", items: [
+            "A feather is ____ but a stone is ____.",
+            "A lion is ____ but a rabbit is ____.",
+            "A summer afternoon is ____ but a winter morning can be ____.",
+            "A swimming pool can be ____ but a plate is ____.",
+            "A helpful child is ____ but a child who hurts others is ____."
+          ] },
+          { type: "blanks", heading: "J. Notebook — add -er or -est", items: [
+            "A whale is ____ (heavy) than a shark.",
+            "This is the ____ (tall) tree in the garden.",
+            "My sister is ____ (young) than me.",
+            "That classroom is ____ (clean) than the hallway.",
+            "That is the ____ (bright) star in the sky."
+          ] },
+          { type: "qa", heading: "🔑 Answer key (tap to open — try first!)", items: [
+            { q: "A, C, D, E", a: "A: round · moist · pleasant · raw · delicious · sad · cool · careful<br>C: hard · simple · cruel · deep · huge · dark · bitter<br>D: sad · long · old · ill · fast<br>E: cold · sloping · beautiful · coldest · sunny" },
+            { q: "F", a: "smarter, smartest · deeper, deepest · drier, driest · slower, slowest · brighter, brightest · heavier, heaviest · bigger, biggest · better, best · worse, worst" },
+            { q: "G & H", a: "G: smaller · fastest · tastier · light · older · biggest · stronger · short<br>H: better · best · most · more · least · less · worse" },
+            { q: "I & J", a: "I: light, heavy · strong, weak · hot, cold · deep, shallow · kind, unkind<br>J: heavier · tallest · younger · cleaner · brightest" }
+          ] }
+        ]
+      },
+
+      grammarChallenge: {
+        title: "Grammar Challenge — Pronouns & Adjectives (extra practice)",
+        sections: [
+          { type: "mcq", key: "gc", heading: "A. Choose the correct word", items: [
+            { q: "Rohan and ___ are best friends.", opts: ["me", "I", "us", "mine"] },
+            { q: "Please give the book to ___.", opts: ["she", "her", "hers", "they"] },
+            { q: "The bird built ___ nest on the tree.", opts: ["it's", "its", "his", "their"] },
+            { q: "These crayons are not mine. They are ___.", opts: ["your", "yours", "you", "you're"] },
+            { q: "A tortoise is ___ than a rabbit.", opts: ["slow", "slower", "slowest", "most slow"] },
+            { q: "Sunday is the ___ day of the week for me!", opts: ["good", "better", "best", "goodest"] },
+            { q: "Grandpa told us ___ interesting story.", opts: ["a", "an", "two", "these"] },
+            { q: "Which word is an adjective? ‘The brave soldier marched quickly.’", opts: ["soldier", "brave", "marched", "quickly"] }
+          ] },
+          { type: "tf", heading: "B. Correct or not? Tap True if correct; if False, rewrite it correctly", items: [
+            "Me and my sister went shopping.",
+            "This is the most tallest building in the city.",
+            "The cat licked its paws.",
+            "The red car is theirs.",
+            "My bag is more heavier than yours.",
+            "She gave the chocolates to them."
+          ] },
+          { type: "table", heading: "C. Fill the comparison table", headers: ["Adjective", "Comparing two (-er)", "Comparing many (-est)"], rows: [
+            ["hot", { input: true }, { input: true }],
+            ["happy", { input: true }, { input: true }],
+            ["wide", { input: true }, { input: true }],
+            ["thin", { input: true }, { input: true }],
+            ["many", { input: true }, { input: true }],
+            ["little", { input: true }, { input: true }]
+          ] },
+          { type: "fields", heading: "D. Write two adjectives for each noun", items: [
+            { label: "a mango —", blanks: 2 }, { label: "the sea —", blanks: 2 }, { label: "my school —", blanks: 2 },
+            { label: "a kitten —", blanks: 2 }, { label: "a rainy day —", blanks: 2 }
+          ] },
+          { type: "fields", heading: "E. Write the opposite", items: [
+            { label: "rough →" }, { label: "empty →" }, { label: "brave →" }, { label: "early →" }, { label: "rich →" }, { label: "loud →" }
+          ] },
+          { type: "story", heading: "F. Fill in the pronouns — My Best Friend",
+            wordBank: ["She", "her", "We", "us", "It", "mine", "hers"],
+            text: "My best friend is Tara. ____ lives next door. I play with ____ every evening. ____ love to ride our bicycles. Tara's bicycle is pink and ____ is blue. Tara has a puppy. ____ follows us everywhere. Tara's mother calls ____ for milk and cookies. The cookies are mine and the milk is ____!" },
+          { type: "long", heading: "G. Describe your favourite toy in 4 sentences. Use at least three adjectives and two pronouns. Underline them.", items: [
+            { stem: "My favourite toy is …", rows: 5 }
+          ] },
+          { type: "qa", heading: "🔑 Answer key (tap to open — try first!)", items: [
+            { q: "A", a: "I · her · its · yours · slower · best · an · brave" },
+            { q: "B", a: "1 False → <b>My sister and I</b> went shopping. · 2 False → This is the <b>tallest</b> building in the city. · 3 True · 4 True · 5 False → My bag is <b>heavier</b> than yours. · 6 True" },
+            { q: "C", a: "hotter, hottest · happier, happiest · wider, widest · thinner, thinnest · more, most · less, least" },
+            { q: "D & E (sample)", a: "D: sweet, yellow mango · blue, deep sea · big, clean school · soft, playful kitten · wet, cloudy day<br>E: smooth · full · afraid/cowardly · late · poor · soft/quiet" },
+            { q: "F", a: "She · her · We · mine · It · us · hers" },
+            { q: "G (sample)", a: "My favourite toy is a <b>red</b> car. <b>It</b> has <b>shiny</b> wheels. My uncle gave <b>it</b> to <b>me</b>. <b>I</b> love its <b>loud</b> horn." }
           ] }
         ]
       },
