@@ -477,6 +477,8 @@
     }
 
     .wsSection { margin-bottom: 26px; }
+    .mr { font-size: 1.12em; }
+    .revealCard .dictWord { font-size: clamp(2rem, 9vw, 3.4rem); white-space: nowrap; }
     .wsNotes { margin: 0; padding: 12px 16px 12px 34px; line-height: 1.6;
       background: rgba(59,130,246,.05); border: 2px solid rgba(59,130,246,.14); border-radius: 16px; }
     .wsNotes li { margin-bottom: 6px; }
@@ -857,6 +859,31 @@
     <section class="scene hidden" id="worksheetScene">
       <div class="worksheet" id="worksheetBody"></div>
     </section>
+
+    <section class="scene hidden" id="dictScene">
+      <div class="listen">
+        <button class="earBtn" id="dictEar" title="शब्द ऐका">🔊</button>
+        <div class="hint">ऐका आणि वहीत लिहा</div>
+        <div class="note">पुन्हा ऐकण्यासाठी 🔊 दाबा</div>
+        <div class="revealScene" aria-label="Flip to see the word.">
+          <div class="revealCard" id="dictCard">
+            <div class="face front" id="dictFront"></div>
+            <div class="face back">
+              <div class="revealLetter dictWord" id="dictWord"></div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <div class="controls hidden" id="dictControls">
+      <button class="primary" id="dictRepeat">🔁 पुन्हा ऐका</button>
+      <button class="secondary" id="dictShow">👀 शब्द पाहा</button>
+      <button class="secondary" id="dictRight">✅ बरोबर</button>
+      <button class="secondary" id="dictWrong">❌ चूक</button>
+      <button class="secondary" id="dictNext">पुढचा →</button>
+      <button class="shuffle" id="dictRestart">🔀 पुन्हा सुरू</button>
+    </div>
 
     <div class="controls hidden" id="worksheetControls">
       <button class="secondary" id="wsClearBtn">🔄 Clear answers</button>
@@ -2400,6 +2427,214 @@
       }
     }));
 
+    // ---------------- Marathi (Test 2) ----------------
+    // Test 2 syllabus: ई (दुसरी वेलांटी), उ (पहिला उकार), ऊ (दुसरा उकार),
+    // ए (एक मात्रा), the teacher's dictation word pile and the Vidya Valley
+    // practice worksheet. Pictures are emoji so the page needs no images.
+    const MAR_DICT = ["तीन", "नदी", "समई", "पाटी", "आगगाडी", "फुले", "तुळस", "रुमाल", "फुगा", "सुहास",
+      "तूप", "दूध", "झाडू", "माणूस", "लाकूड", "भेळ", "शेपटी", "देवघर", "शेव", "केशर"];
+
+    const M_EE = "दुसरी वेलांटी ( ी )", M_U = "पहिला उकार ( ु )", M_OO = "दुसरा उकार ( ू )", M_E = "एक मात्रा ( े )";
+    const MAR_TOPICS = [
+      { id: "mDict", label: "श्रुतलेखन — बरोबर लेखन", facts: [
+        ["बरोबर शब्द निवडा (three · ३)", "तीन", ["तिन", "तीण", "तेन"]],
+        ["बरोबर शब्द निवडा (river)", "नदी", ["नदि", "नादी", "नदे"]],
+        ["बरोबर शब्द निवडा (brass lamp)", "समई", ["समाई", "सामई", "समइ"]],
+        ["बरोबर शब्द निवडा (slate)", "पाटी", ["पाटि", "पटी", "पाती"]],
+        ["बरोबर शब्द निवडा (train)", "आगगाडी", ["आगगाडि", "आगगडी", "अगगाडी"]],
+        ["बरोबर शब्द निवडा (flowers)", "फुले", ["फूले", "फुली", "फले"]],
+        ["बरोबर शब्द निवडा (tulsi plant)", "तुळस", ["तूळस", "तुलस", "तळस"]],
+        ["बरोबर शब्द निवडा (handkerchief)", "रुमाल", ["रूमाल", "रुमल", "रुमाळ"]],
+        ["बरोबर शब्द निवडा (balloon)", "फुगा", ["फूगा", "फगा", "फुघा"]],
+        ["बरोबर शब्द निवडा (a name)", "सुहास", ["सूहास", "सुहस", "सहास"]],
+        ["बरोबर शब्द निवडा (ghee)", "तूप", ["तुप", "तूफ", "टूप"]],
+        ["बरोबर शब्द निवडा (milk)", "दूध", ["दुध", "दूद", "धूद"]],
+        ["बरोबर शब्द निवडा (broom)", "झाडू", ["झाडु", "जाडू", "झडू"]],
+        ["बरोबर शब्द निवडा (man / person)", "माणूस", ["माणुस", "मानूस", "माणस"]],
+        ["बरोबर शब्द निवडा (wood)", "लाकूड", ["लाकुड", "लकूड", "लाकूर"]],
+        ["बरोबर शब्द निवडा (bhel)", "भेळ", ["भेल", "बेळ", "भळ"]],
+        ["बरोबर शब्द निवडा (tail)", "शेपटी", ["शेपटि", "शपटी", "शेपती"]],
+        ["बरोबर शब्द निवडा (prayer place at home)", "देवघर", ["देवगर", "दवघर", "देवघार"]],
+        ["बरोबर शब्द निवडा (sev)", "शेव", ["शव", "सेव", "शीव"]],
+        ["बरोबर शब्द निवडा (saffron)", "केशर", ["कशर", "केशार", "कीशर"]]
+      ]},
+      { id: "mEe", label: "ई — दुसरी वेलांटी ( ी )", facts: [
+        ["दुसरी वेलांटी कोणती?", "ी", ["ि", "ु", "े"]],
+        ["Which word has दुसरी वेलांटी ( ी )?", "नदी", ["तूप", "शेव", "फुगा"]],
+        ["Which word has दुसरी वेलांटी ( ी )?", "पाटी", ["दूध", "भेळ", "रुमाल"]],
+        ["Which word has दुसरी वेलांटी ( ी )?", "चिमणी", ["झाडू", "केशर", "तुळस"]],
+        ["‘तीन’ या शब्दात कोणती मात्रा आहे?", M_EE, [M_U, M_OO, M_E]],
+        ["‘आगगाडी’ या शब्दात कोणती मात्रा आहे?", M_EE, [M_U, M_OO, M_E]],
+        ["‘समई’ या शब्दाच्या शेवटी कोणते अक्षर आहे?", "ई", ["इ", "उ", "ए"]],
+        ["त + ी = ?", "ती", ["ति", "तु", "ते"]],
+        ["Which word does NOT have ‘ ी ’?", "तूप", ["तीन", "नदी", "पाटी"]],
+        ["सा__ (saree) — बरोबर अक्षर निवडा", "डी", ["डि", "डु", "डे"]],
+        ["पा__ (slate) — बरोबर अक्षर निवडा", "टी", ["ती", "टि", "ठी"]],
+        ["शेप__ (tail) — बरोबर अक्षर निवडा", "टी", ["टि", "ती", "टु"]],
+        ["Which pair both have दुसरी वेलांटी?", "पणती, बादली", ["तूप, दूध", "शेव, भेळ", "फुगा, तुळस"]]
+      ]},
+      { id: "mU", label: "उ — पहिला उकार ( ु )", facts: [
+        ["पहिला उकार कोणता?", "ु", ["ू", "ि", "े"]],
+        ["Which word has पहिला उकार ( ु )?", "फुगा", ["तूप", "नदी", "शेव"]],
+        ["Which word has पहिला उकार ( ु )?", "तुळस", ["दूध", "पाटी", "केशर"]],
+        ["Which word has पहिला उकार ( ु )?", "रुमाल", ["झाडू", "भेळ", "तीन"]],
+        ["‘फुले’ या शब्दात कोणती दोन चिन्हे आहेत?", "पहिला उकार आणि एक मात्रा", ["दुसरा उकार आणि वेलांटी", "फक्त वेलांटी", "फक्त काना"]],
+        ["‘सुहास’ या शब्दात कोणती मात्रा आहे?", M_U, [M_OO, M_EE, M_E]],
+        ["म + ु + ळा = ?", "मुळा", ["मूळा", "मळा", "मेळा"]],
+        ["प + ु + जा + री = ?", "पुजारी", ["पूजारी", "पुजारि", "पजारी"]],
+        ["ग + ु + ला + ब = ?", "गुलाब", ["गूलाब", "गुलब", "गलाब"]],
+        ["__माल (handkerchief) — बरोबर अक्षर निवडा", "रु", ["रू", "रा", "रे"]],
+        ["फु__ (balloon) — बरोबर अक्षर निवडा", "गा", ["घा", "गी", "गे"]],
+        ["Which word does NOT have ‘ ु ’?", "दूध", ["फुगा", "तुळस", "मुळा"]],
+        ["Short ‘u’ sound (उ) is written with —", "पहिला उकार ( ु )", ["दुसरा उकार ( ू )", "एक मात्रा ( े )", "दुसरी वेलांटी ( ी )"]]
+      ]},
+      { id: "mOo", label: "ऊ — दुसरा उकार ( ू )", facts: [
+        ["दुसरा उकार कोणता?", "ू", ["ु", "ी", "े"]],
+        ["Which word has दुसरा उकार ( ू )?", "तूप", ["फुगा", "नदी", "भेळ"]],
+        ["Which word has दुसरा उकार ( ू )?", "झाडू", ["रुमाल", "शेव", "पाटी"]],
+        ["Which word has दुसरा उकार ( ू )?", "लाकूड", ["तुळस", "केशर", "तीन"]],
+        ["‘दूध’ या शब्दात कोणती मात्रा आहे?", M_OO, [M_U, M_EE, M_E]],
+        ["‘माणूस’ या शब्दात कोणती मात्रा आहे?", M_OO, [M_U, M_EE, M_E]],
+        ["का + प + ू + स = ?", "कापूस", ["कापुस", "कपूस", "कापूश"]],
+        ["झा + ड + ू = ?", "झाडू", ["झाडु", "झाडी", "जाडू"]],
+        ["‘ऊस’ (sugarcane) सुरुवातीचे अक्षर कोणते?", "ऊ", ["उ", "ओ", "अ"]],
+        ["ला__ड (wood) — बरोबर अक्षर निवडा", "कू", ["कु", "की", "के"]],
+        ["ल__ण (garlic) — बरोबर अक्षर निवडा", "सू", ["सु", "शू", "से"]],
+        ["रा__ (a name) — बरोबर अक्षर निवडा", "मू", ["मु", "मी", "मे"]],
+        ["Which word has BOTH उकार ( ु and ू )?", "कुलूप", ["फुगा", "तूप", "दूध"]],
+        ["Long ‘oo’ sound (ऊ) is written with —", "दुसरा उकार ( ू )", ["पहिला उकार ( ु )", "एक मात्रा ( े )", "पहिली वेलांटी ( ि )"]]
+      ]},
+      { id: "mE", label: "ए — एक मात्रा ( े )", facts: [
+        ["एक मात्रा कोणती?", "े", ["ै", "ी", "ु"]],
+        ["Which word has एक मात्रा ( े )?", "शेव", ["तूप", "नदी", "फुगा"]],
+        ["Which word has एक मात्रा ( े )?", "भेळ", ["दूध", "पाटी", "रुमाल"]],
+        ["Which word has एक मात्रा ( े )?", "केशर", ["झाडू", "तीन", "तुळस"]],
+        ["‘देवघर’ या शब्दात कोणती मात्रा आहे?", M_E, [M_U, M_OO, M_EE]],
+        ["द + े + व = ?", "देव", ["दव", "दिव", "दैव"]],
+        ["भ + े + ळ = ?", "भेळ", ["भळ", "भेल", "बेळ"]],
+        ["श + े + प + टी = ?", "शेपटी", ["शपटी", "शेपटि", "सेपटी"]],
+        ["__ळ (bhel) — बरोबर अक्षर निवडा", "भे", ["बे", "भी", "भु"]],
+        ["के__र (saffron) — बरोबर अक्षर निवडा", "श", ["स", "ष", "से"]],
+        ["Which word does NOT have ‘ े ’?", "तीन", ["शेव", "भेळ", "देवघर"]],
+        ["‘बेडूक’ या शब्दात कोणती दोन चिन्हे आहेत?", "एक मात्रा आणि दुसरा उकार", ["पहिला उकार आणि वेलांटी", "फक्त एक मात्रा", "दोन मात्रा"]]
+      ]},
+      { id: "mJoin", label: "चिन्ह जोडा (Join the sign)", facts: [
+        ["द + ए ( े ) + व = ?", "देव", ["दव", "दीव", "दुव"]],
+        ["म + उ ( ु ) + ळा = ?", "मुळा", ["मूळा", "मळा", "मेळा"]],
+        ["प + ण + त + ई ( ी ) = ?", "पणती", ["पणति", "पणत", "पणते"]],
+        ["का + प + ऊ ( ू ) + स = ?", "कापूस", ["कापुस", "कपूस", "कापेस"]],
+        ["प + उ ( ु ) + जा + री = ?", "पुजारी", ["पूजारी", "पजारी", "पेजारी"]],
+        ["त + ई ( ी ) + न = ?", "तीन", ["तिन", "तून", "तेन"]],
+        ["न + द + ई ( ी ) = ?", "नदी", ["नदि", "नदू", "नदे"]],
+        ["त + ऊ ( ू ) + प = ?", "तूप", ["तुप", "तीप", "तेप"]],
+        ["द + ऊ ( ू ) + ध = ?", "दूध", ["दुध", "दीध", "देध"]],
+        ["फ + उ ( ु ) + गा = ?", "फुगा", ["फूगा", "फगा", "फेगा"]],
+        ["श + ए ( े ) + व = ?", "शेव", ["शव", "शीव", "शूव"]],
+        ["र + उ ( ु ) + मा + ल = ?", "रुमाल", ["रूमाल", "रमाल", "रीमाल"]],
+        ["मा + ण + ऊ ( ू ) + स = ?", "माणूस", ["माणुस", "माणस", "माणीस"]],
+        ["क + ए ( े ) + श + र = ?", "केशर", ["कशर", "कीशर", "कुशर"]],
+        ["‘पणती’ मध्ये कोणते चिन्ह जोडले?", "ी (दुसरी वेलांटी)", ["ु (पहिला उकार)", "ू (दुसरा उकार)", "े (एक मात्रा)"]]
+      ]},
+      { id: "mPic", label: "चित्र ओळखा (Pictures)", facts: [
+        ["🪟 हे काय आहे?", "खिडकी", ["खीडकी", "खिडकि", "दार"]],
+        ["⚖️ हे काय आहे?", "तराजू", ["तराजु", "तरजू", "तराझू"]],
+        ["💍 हे काय आहे?", "अंगठी", ["अंगठि", "अगंठी", "बांगडी"]],
+        ["🐸 हे काय आहे?", "बेडूक", ["बडूक", "बेदूक", "बेडुक"]],
+        ["🐦 हे काय आहे?", "चिमणी", ["चिमणि", "चिमनी", "चीमणी"]],
+        ["🌹 हे काय आहे?", "गुलाब", ["गुलब", "गूलब", "गूलाब"]],
+        ["🧹 हे काय आहे?", "झाडू", ["झाडी", "जादू", "झाडु"]],
+        ["🔒 हे काय आहे?", "कुलूप", ["कूलुप", "कुलुप", "किल्ली"]],
+        ["🪣 हे काय आहे?", "बादली", ["बादलि", "बदली", "बादळी"]],
+        ["🥭 हे काय आहे?", "आंबा", ["आबा", "अंबा", "आंबी"]],
+        ["🍎 हे काय आहे?", "सफरचंद", ["सफरचद", "सफारचंद", "आंबा"]],
+        ["🎈 हे काय आहे?", "फुगा", ["फूगा", "फुघा", "फगा"]],
+        ["🥛 हे काय आहे?", "दूध", ["दुध", "दूद", "पाणी"]],
+        ["🚂 हे काय आहे?", "आगगाडी", ["आगगाडि", "आगगडी", "बस"]],
+        ["🪔 हे काय आहे?", "पणती", ["पणति", "पनती", "पणत"]],
+        ["🥻 हे काय आहे?", "साडी", ["साडि", "सडी", "साठी"]],
+        ["🪵 हे काय आहे?", "लाकूड", ["लाकुड", "लकूड", "लाकूर"]],
+        ["🧄 हे काय आहे?", "लसूण", ["लसुण", "लसून", "लशूण"]],
+        ["🦋 हे काय आहे?", "फुलपाखरू", ["फूलपाखरू", "फुलपाखरु", "फुलपखरू"]],
+        ["🌸 बागेत खूप ___ फुलली आहेत.", "फुले", ["फूले", "फळे", "पाने"]],
+        ["राजा 🪟 ___ उघड.", "खिडकी", ["दूध", "फुगा", "झाडू"]],
+        ["रीमाने 💍 ___ घातली.", "अंगठी", ["साडी", "पाटी", "तराजू"]]
+      ]},
+      { id: "mMatch", label: "शब्द आणि मात्रा (Sort)", facts: [
+        ["Which group has only दुसरी वेलांटी ( ी ) words?", "तीन, नदी, पाटी", ["तूप, दूध, झाडू", "फुगा, तुळस, रुमाल", "शेव, भेळ, केशर"]],
+        ["Which group has only पहिला उकार ( ु ) words?", "फुगा, तुळस, रुमाल", ["तीन, नदी, पाटी", "तूप, दूध, झाडू", "शेव, भेळ, केशर"]],
+        ["Which group has only दुसरा उकार ( ू ) words?", "तूप, दूध, झाडू", ["फुगा, तुळस, रुमाल", "शेव, भेळ, केशर", "तीन, नदी, पाटी"]],
+        ["Which group has only एक मात्रा ( े ) words?", "शेव, भेळ, केशर", ["तीन, नदी, पाटी", "तूप, दूध, झाडू", "फुगा, तुळस, रुमाल"]],
+        ["‘शेपटी’ मध्ये कोणती दोन चिन्हे आहेत?", "एक मात्रा ( े ) आणि दुसरी वेलांटी ( ी )", ["दोन उकार", "पहिला उकार आणि काना", "फक्त वेलांटी"]],
+        ["‘पुजारी’ मध्ये कोणती दोन चिन्हे आहेत?", "पहिला उकार ( ु ) आणि दुसरी वेलांटी ( ी )", ["दुसरा उकार आणि एक मात्रा", "फक्त उकार", "फक्त वेलांटी"]],
+        ["‘फुलपाखरू’ मध्ये कोणते उकार आहेत?", "पहिला ( ु ) आणि दुसरा ( ू )", ["फक्त पहिला", "फक्त दुसरा", "एकही नाही"]],
+        ["Which word has NO matra at all (only letters)?", "समई", ["तीन", "तूप", "शेव"]],
+        ["‘ि’ ला काय म्हणतात?", "पहिली वेलांटी", ["दुसरी वेलांटी", "पहिला उकार", "एक मात्रा"]],
+        ["‘ ी ’ ला काय म्हणतात?", "दुसरी वेलांटी", ["पहिली वेलांटी", "दुसरा उकार", "एक मात्रा"]],
+        ["‘ ु ’ ला काय म्हणतात?", "पहिला उकार", ["दुसरा उकार", "पहिली वेलांटी", "एक मात्रा"]],
+        ["‘ ू ’ ला काय म्हणतात?", "दुसरा उकार", ["पहिला उकार", "दुसरी वेलांटी", "दोन मात्रा"]],
+        ["‘ े ’ ला काय म्हणतात?", "एक मात्रा", ["दोन मात्रा", "पहिला उकार", "दुसरी वेलांटी"]]
+      ]}
+    ];
+
+    const MAR_SKILLS = MAR_TOPICS.map(topic => ({
+      id: topic.id,
+      label: topic.label,
+      gen() {
+        const [q, a, distractors] = pick(topic.facts);
+        return choiceQ(q, a, distractors);
+      }
+    }));
+
+    // ---------------- Marathi dictation (श्रुतलेखन) ----------------
+    // Hear a word, write it in the notebook, then flip to check and mark it.
+    // Like the Hindi dictation, the word is only put in the DOM on reveal.
+    let dict = { order: [], i: 0, right: 0, marked: 0, shown: false, done: false };
+    const dictCardEl = document.getElementById("dictCard");
+    const dictWordEl = document.getElementById("dictWord");
+    const dictFrontEl = document.getElementById("dictFront");
+
+    function startDictation() {
+      dict = { order: shuffle(MAR_DICT.slice()), i: 0, right: 0, marked: 0, shown: false, done: false };
+      renderDict();
+    }
+    function renderDict() {
+      dict.shown = false;
+      dict.markedThis = false;
+      dictCardEl.classList.remove("flipped");
+      dictWordEl.textContent = "";
+      dictFrontEl.innerHTML = dict.done
+        ? `<div class="q">🎉</div><div>संपले! बरोबर ${dict.right} / ${dict.order.length}</div>`
+        : `<div class="q">❓</div><div>लिहून झाल्यावर कार्ड उलटा</div>`;
+      counterEl.textContent = dict.done ? "✔" : `${dict.i + 1} / ${dict.order.length}`;
+      setNameEl.textContent = `बरोबर ${dict.right} / ${dict.marked}`;
+    }
+    function speakDict() {
+      if (dict.done) return;
+      speak(dict.order[dict.i], { lang: "mr" });
+    }
+    function revealDict() {
+      if (dict.done) return;
+      dict.shown = !dict.shown;
+      if (dict.shown) dictWordEl.textContent = dict.order[dict.i];
+      dictCardEl.classList.toggle("flipped", dict.shown);
+    }
+    function nextDict(speakNext = true) {
+      if (dict.done) { startDictation(); return; }
+      dict.i++;
+      if (dict.i >= dict.order.length) { dict.done = true; renderDict(); return; }
+      renderDict();
+      if (speakNext) speakDict();
+    }
+    function markDict(ok) {
+      if (dict.done || dict.markedThis) return;
+      dict.markedThis = true;
+      dict.marked++;
+      if (ok) dict.right++;
+      if (!dict.shown) revealDict();
+      setNameEl.textContent = `बरोबर ${dict.right} / ${dict.marked}`;
+      setTimeout(() => nextDict(), 900);
+    }
+
     // ---------------- Science fact bank ----------------
     // Class-3 science book, chapter 1 (Living and Non-living Things) and
     // chapter 5 (Plants in the Surroundings). Like SST, the book is factual,
@@ -2865,6 +3100,88 @@
         controls: "worksheetControls",
         usesDeck: false,
         onEnter: () => renderWorksheet("grammarChallenge")
+      },
+      {
+        id: "marDictation",
+        group: "Marathi",
+        icon: "🎧",
+        label: "श्रुतलेखन — dictation (20 words)",
+        subtitle: "ऐका, वहीत लिहा, कार्ड उलटा आणि तपासा",
+        footer: "Keyboard: R ऐका · Space शब्द पाहा · → पुढचा · Y बरोबर · N चूक",
+        scene: "dictScene",
+        controls: "dictControls",
+        usesDeck: false,
+        onEnter: () => startDictation(),
+        onKey(e) {
+          if (e.key.toLowerCase() === "r") speakDict();
+          if (e.key === " ") { e.preventDefault(); revealDict(); }
+          if (e.key === "ArrowRight") nextDict();
+          if (e.key.toLowerCase() === "y") markDict(true);
+          if (e.key.toLowerCase() === "n") markDict(false);
+        }
+      },
+      {
+        id: "revMarathi",
+        group: "Marathi",
+        icon: "📖",
+        label: "मात्रा — revision notes",
+        subtitle: "ी ु ू े — rules, word lists and worksheet answers",
+        footer: "Tap a question to see its answer · 🖨️ Print includes all answers",
+        scene: "worksheetScene",
+        controls: "worksheetControls",
+        usesDeck: false,
+        onEnter: () => renderWorksheet("revMarathi")
+      },
+      {
+        id: "marPractice",
+        group: "Marathi",
+        icon: "🔤",
+        label: "मराठी practice quiz",
+        subtitle: "Pick a topic and answer as many questions as you like",
+        footer: "Keyboard: Enter · Check / Next question",
+        scene: "mathScene",
+        controls: "mathControls",
+        extras: ["skillFilter"],
+        usesDeck: false,
+        onEnter: () => startQuiz({ bank: MAR_SKILLS, bankId: "mar", test: false }),
+        onKey(e) { if (e.key === "Enter") { e.preventDefault(); checkAnswer(); } }
+      },
+      {
+        id: "marTest",
+        group: "Marathi",
+        icon: "🧾",
+        label: "मराठी test (20 questions)",
+        subtitle: "Twenty mixed Marathi questions — score at the end",
+        footer: "Keyboard: Enter · Check / Next question",
+        scene: "mathScene",
+        controls: "mathControls",
+        usesDeck: false,
+        onEnter: () => startQuiz({ bank: MAR_SKILLS, bankId: "mar", test: true, length: 20 }),
+        onKey(e) { if (e.key === "Enter") { e.preventDefault(); checkAnswer(); } }
+      },
+      {
+        id: "marathiWorksheet",
+        group: "Marathi",
+        icon: "📝",
+        label: "Test 2 practice worksheet (मराठी)",
+        subtitle: "The school worksheet — pictures shown as emoji",
+        footer: "Fill in your answers · 🖨️ Print to save as PDF",
+        scene: "worksheetScene",
+        controls: "worksheetControls",
+        usesDeck: false,
+        onEnter: () => renderWorksheet("marathiWorksheet")
+      },
+      {
+        id: "marathiExtra",
+        group: "Marathi",
+        icon: "⭐",
+        label: "जादा सराव (extra practice)",
+        subtitle: "New questions — sort, join, spell, fill, odd one out",
+        footer: "Fill in your answers · 🖨️ Print to save as PDF",
+        scene: "worksheetScene",
+        controls: "worksheetControls",
+        usesDeck: false,
+        onEnter: () => renderWorksheet("marathiExtra")
       }
     ];
 
@@ -4517,6 +4834,145 @@
         ]
       },
 
+      revMarathi: {
+        title: "मराठी · मात्रा आणि श्रुतलेखन",
+        sections: [
+          { type: "notes", heading: "📌 Test 2 अभ्यासक्रम (syllabus)", items: [
+            "<b>१. ई — दुसरी वेलांटी ( ी )</b> · <b>२. उ — पहिला उकार ( ु )</b> · <b>३. ऊ — दुसरा उकार ( ू )</b> · <b>४. ए — एक मात्रा ( े )</b>",
+            "श्रुतलेखन (dictation) साठी शिक्षकांनी दिलेले २० शब्द खाली आहेत — रोज सराव करा."
+          ] },
+          { type: "notes", heading: "✏️ चिन्हे कशी ओळखायची (how to spot each sign)", items: [
+            "<b>ई — दुसरी वेलांटी ( ी )</b>: अक्षराच्या <b>उजवीकडे</b> उभी रेघ, वर डावीकडून उजवीकडे वळलेली. लांब ‘ई’ आवाज. <span class=\"mr\">त + ी = <b>ती</b> · न + ी = <b>नी</b></span>",
+            "⚠️ पहिली वेलांटी ( ि ) अक्षराच्या <b>आधी</b> (डावीकडे) येते — लहान ‘इ’ आवाज: <b>कि</b>. दुसरी ( ी ) <b>नंतर</b> — <b>की</b>.",
+            "<b>उ — पहिला उकार ( ु )</b>: अक्षराच्या <b>खाली</b> छोटा वळलेला हुक. लहान ‘उ’ आवाज. <span class=\"mr\">फ + ु = <b>फु</b> · र + ु = <b>रु</b></span>",
+            "<b>ऊ — दुसरा उकार ( ू )</b>: अक्षराच्या <b>खाली</b> उलटा हुक. लांब ‘ऊ’ आवाज. <span class=\"mr\">त + ू = <b>तू</b> · द + ू = <b>दू</b></span>",
+            "⚠️ ‘र’ वर उकार वेगळा दिसतो: र + ु = <b>रु</b> (रुमाल), र + ू = <b>रू</b> (पेरू).",
+            "<b>ए — एक मात्रा ( े )</b>: अक्षराच्या <b>वर</b> एक तिरकी रेघ. <span class=\"mr\">द + े = <b>दे</b> · श + े = <b>शे</b></span> (दोन मात्रा ( ै ) = ऐ — वेगळे!)",
+            "आवाज लहान की लांब ते ऐकून ठरवा: <b>फुगा</b> (लहान उ) पण <b>तूप</b> (लांब ऊ)."
+          ] },
+          { type: "notes", heading: "🎧 श्रुतलेखन शब्द — मात्रेनुसार (dictation words by sign)", items: [
+            "<b>ी</b> दुसरी वेलांटी: <span class=\"mr\">तीन · नदी · पाटी · आगगाडी · शेपटी</span>",
+            "<b>ु</b> पहिला उकार: <span class=\"mr\">फुले · तुळस · रुमाल · फुगा · सुहास</span>",
+            "<b>ू</b> दुसरा उकार: <span class=\"mr\">तूप · दूध · झाडू · माणूस · लाकूड</span>",
+            "<b>े</b> एक मात्रा: <span class=\"mr\">भेळ · शेपटी · देवघर · शेव · केशर · फुले</span>",
+            "मात्रा नाही, स्वर ‘ई’: <span class=\"mr\">समई</span> (स + म + ई)",
+            "⚠️ अवघड: <b>तुळस</b>, <b>भेळ</b> — ‘ळ’ (ल नाही) · <b>माणूस</b> — ‘ण’ (न नाही) · <b>केशर</b> — ‘श’ · <b>देवघर</b> — ‘घ’ · <b>आगगाडी</b> — दोन ‘ग’"
+          ] },
+          { type: "notes", heading: "📚 आणखी शब्द (more practice words)", items: [
+            "<b>ी</b>: <span class=\"mr\">साडी · पणती · चिमणी · अंगठी · खिडकी · बादली · टोपी · वही · दही · खीर · गाडी · कळी</span>",
+            "<b>ु</b>: <span class=\"mr\">मुळा · पुजारी · गुलाब · सुई · सुरी · मुलगा · पुस्तक · कुत्रा</span>",
+            "<b>ू</b>: <span class=\"mr\">कापूस · बेडूक · ऊस · तराजू · लसूण · सूर्य · फूल · भूक · खजूर · पेरू · चूल</span>",
+            "<b>े</b>: <span class=\"mr\">देव · बेडूक · केळ · मेथी · शेत · खेळ · पेरू · मेणबत्ती · पेन · रेघ</span>",
+            "दोन्ही उकार: <span class=\"mr\">कुलूप · फुलपाखरू</span>"
+          ] },
+          { type: "qa", heading: "✅ Practice worksheet — उत्तरे", items: [
+            { q: "प्रश्न १. चित्र पाहून वाक्य पूर्ण करा", a: "<span class=\"mr\">१. राजा <b>खिडकी</b> उघड. · २. राजू <b>तराजू</b> आण. · ३. रीमाने <b>अंगठी</b> घातली. · ४. बागेत खूप <b>फुले</b> फुलली आहेत.</span>" },
+            { q: "प्रश्न २. चिन्ह जोडा", a: "<span class=\"mr\">१. ( े ) <b>देव</b> · २. ( ु ) <b>मुळा</b> · ३. ( ी ) <b>पणती</b> · ४. ( ू ) <b>कापूस</b> · ५. ( ु ) <b>पुजारी</b></span>" },
+            { q: "प्रश्न ३. बरोबर शब्दाला गोल करा", a: "<span class=\"mr\">१. 🐸 (ii) <b>बेडूक</b> · २. 🐦 (i) <b>चिमणी</b> · ३. 🌹 (i) <b>गुलाब</b> · ४. 🧹 (iii) <b>झाडू</b></span>" },
+            { q: "प्रश्न ४. जोड्या लावा", a: "<span class=\"mr\">१. 🔒 → (ii) <b>कुलूप</b> · २. ऊस-चित्र → (v) <b>ऊस</b> · ३. 🪣 → (i) <b>बादली</b> · ४. 🥭 → (iii) <b>आंबा</b> · (iv) सफरचंद — चित्र नाही</span>" },
+            { q: "प्रश्न ५. बरोबर अक्षर निवडा", a: "<span class=\"mr\">१. सा<b>डी</b> (साडी) · २. <b>भे</b>ळ (भेळ) · ३. ला<b>कू</b>ड (लाकूड) · ४. पा<b>टी</b> (पाटी) · ५. रा<b>मू</b> (रामू) · ६. ल<b>सू</b>ण (लसूण)</span>" }
+          ] }
+        ]
+      },
+
+      marathiWorksheet: {
+        title: "Vidya Valley — Test 2 Practice Worksheet (मराठी)",
+        sections: [
+          { type: "blanks", heading: "Question 1. Look at pictures and complete the sentences", items: [
+            "राजा 🪟 ____ उघड.",
+            "राजू ⚖️ ____ आण.",
+            "रीमाने 💍 ____ घातली.",
+            "बागेत खूप 🌼🌸 ____ फुलली आहेत."
+          ] },
+          { type: "fields", heading: "Question 2. Join the sign and complete the words (write the sign, then the word)", items: [
+            { label: "१. द + ए (  ) + व =", blanks: 2 },
+            { label: "२. म + उ (  ) + ळा =", blanks: 2 },
+            { label: "३. प + ण + त + ई (  ) =", blanks: 2 },
+            { label: "४. का + प + ऊ (  ) + स =", blanks: 2 },
+            { label: "५. प + उ (  ) + जा + री =", blanks: 2 }
+          ] },
+          { type: "mcq", key: "mq3", heading: "Question 3. Look at the pictures and circle (tap) the correct word", items: [
+            { q: "🐸", opts: ["बडूक", "बेडूक", "बेदूक"] },
+            { q: "🐦 (sparrow)", opts: ["चिमणी", "चिमणि", "चिमनी"] },
+            { q: "🌹", opts: ["गुलाब", "गुलब", "गूलब"] },
+            { q: "🧹", opts: ["झाडी", "जादू", "झाडू"] }
+          ] },
+          { type: "table", heading: "Question 4. Match the following (write i–v)", headers: ["चित्र", "उत्तर", "शब्द"], rows: [
+            ["१. 🔒", { input: true }, "(i) बादली"],
+            ["२. 🎋 (sugarcane)", { input: true }, "(ii) कुलूप"],
+            ["३. 🪣", { input: true }, "(iii) आंबा"],
+            ["४. 🥭", { input: true }, "(iv) सफरचंद"],
+            ["", "", "(v) ऊस"]
+          ] },
+          { type: "mcq", key: "mq5", heading: "Question 5. Choose the correct letter and complete the word", items: [
+            { q: "सा ___", opts: ["डि", "डी"] },
+            { q: "___ ळ", opts: ["बे", "भे"] },
+            { q: "ला ___ ड", opts: ["कू", "कु"] },
+            { q: "पा ___", opts: ["ती", "टी"] },
+            { q: "रा ___", opts: ["मू", "मु"] },
+            { q: "ल ___ ण", opts: ["सु", "सू"] }
+          ] },
+          { type: "qa", heading: "🔑 Answer key (tap to open — try first!)", items: [
+            { q: "Q1 & Q2", a: "<span class=\"mr\">Q1: खिडकी · तराजू · अंगठी · फुले<br>Q2: ( े ) देव · ( ु ) मुळा · ( ी ) पणती · ( ू ) कापूस · ( ु ) पुजारी</span>" },
+            { q: "Q3 & Q4", a: "<span class=\"mr\">Q3: बेडूक · चिमणी · गुलाब · झाडू<br>Q4: १ – (ii) कुलूप · २ – (v) ऊस · ३ – (i) बादली · ४ – (iii) आंबा</span>" },
+            { q: "Q5", a: "<span class=\"mr\">साडी (डी) · भेळ (भे) · लाकूड (कू) · पाटी (टी) · रामू (मू) · लसूण (सू)</span>" }
+          ] }
+        ]
+      },
+
+      marathiExtra: {
+        title: "मराठी — जादा सराव (extra practice)",
+        sections: [
+          { type: "fields", heading: "अ. शब्द मात्रेनुसार लिहा — sort the words: तीन, फुगा, तूप, शेव, नदी, रुमाल, दूध, भेळ, पाटी, तुळस, झाडू, केशर", items: [
+            { label: "ी दुसरी वेलांटी:", blanks: 3 },
+            { label: "ु पहिला उकार:", blanks: 3 },
+            { label: "ू दुसरा उकार:", blanks: 3 },
+            { label: "े एक मात्रा:", blanks: 3 }
+          ] },
+          { type: "fields", heading: "आ. चिन्ह जोडून शब्द तयार करा (join the sign)", items: [
+            { label: "त + ू + प =" }, { label: "न + द + ी =" }, { label: "श + े + व =" }, { label: "र + ु + मा + ल =" },
+            { label: "मा + ण + ू + स =" }, { label: "आ + ग + गा + ड + ी =" }, { label: "क + े + श + र =" }, { label: "ला + क + ू + ड =" }
+          ] },
+          { type: "mcq", key: "mx", heading: "इ. बरोबर शब्द निवडा (choose the correct spelling)", items: [
+            { q: "🥛", opts: ["दुध", "दूध", "दूद"] },
+            { q: "🎈", opts: ["फूगा", "फुगा", "फगा"] },
+            { q: "🚂", opts: ["आगगाडी", "आगगाडि", "आगगडी"] },
+            { q: "🪵", opts: ["लाकुड", "लकूड", "लाकूड"] },
+            { q: "👨 (man)", opts: ["माणूस", "माणुस", "मानूस"] },
+            { q: "🌿 (holy basil)", opts: ["तूळस", "तुळस", "तुलस"] }
+          ] },
+          { type: "blanks", heading: "ई. योग्य शब्द लिहा (fill in) — दूध, फुगा, नदी, झाडू, शेव, पाटी", items: [
+            "आई सकाळी ____ प्यायला देते.",
+            "मी वाढदिवसाला लाल ____ फुगवला.",
+            "गावाजवळ मोठी ____ वाहते.",
+            "आजी ____ ने अंगण झाडते.",
+            "भेळेवर बारीक ____ घालतात.",
+            "मी ____ वर अक्षरे गिरवतो."
+          ] },
+          { type: "fields", heading: "उ. प्रत्येक मात्रेचे दोन नवीन शब्द लिहा (two new words for each sign)", items: [
+            { label: "ी :", blanks: 2 }, { label: "ु :", blanks: 2 }, { label: "ू :", blanks: 2 }, { label: "े :", blanks: 2 }
+          ] },
+          { type: "odd", heading: "ऊ. वेगळा शब्द ओळखा (tap the odd one out — different sign)", groups: [
+            ["तीन", "नदी", "पाटी", "तूप"],
+            ["फुगा", "तुळस", "दूध", "रुमाल"],
+            ["झाडू", "माणूस", "शेव", "लाकूड"],
+            ["भेळ", "केशर", "देवघर", "समई"]
+          ] },
+          { type: "long", heading: "ए. चित्रावरून एक वाक्य लिहा (write one sentence)", items: [
+            { stem: "🐸 बेडूक", rows: 1 }, { stem: "🌹 गुलाब", rows: 1 }, { stem: "🚂 आगगाडी", rows: 1 }
+          ] },
+          { type: "qa", heading: "🔑 Answer key (tap to open — try first!)", items: [
+            { q: "अ", a: "<span class=\"mr\">ी: तीन, नदी, पाटी · ु: फुगा, रुमाल, तुळस · ू: तूप, दूध, झाडू · े: शेव, भेळ, केशर</span>" },
+            { q: "आ", a: "<span class=\"mr\">तूप · नदी · शेव · रुमाल · माणूस · आगगाडी · केशर · लाकूड</span>" },
+            { q: "इ", a: "<span class=\"mr\">दूध · फुगा · आगगाडी · लाकूड · माणूस · तुळस</span>" },
+            { q: "ई", a: "<span class=\"mr\">दूध · फुगा · नदी · झाडू · शेव · पाटी</span>" },
+            { q: "उ (उदाहरण)", a: "<span class=\"mr\">ी: साडी, टोपी · ु: मुळा, गुलाब · ू: ऊस, कापूस · े: देव, केळ</span>" },
+            { q: "ऊ", a: "<span class=\"mr\">तूप ( ू ) · दूध ( ू ) · शेव ( े ) · समई (मात्रा नाही)</span>" },
+            { q: "ए (उदाहरण)", a: "<span class=\"mr\">बेडूक पाण्यात उडी मारतो. · गुलाबाचे फूल लाल आहे. · आगगाडी रुळावरून धावते.</span>" }
+          ] }
+        ]
+      },
+
       weAreEqualWorksheet: {
         title: "Practice Worksheet – We Are Equal",
         sections: [
@@ -4938,6 +5394,14 @@
     document.getElementById("readAloudBtn").addEventListener("click", readChapterAloud);
     document.getElementById("stopReadBtn").addEventListener("click", stopReading);
     document.getElementById("wsClearBtn").addEventListener("click", clearWorksheet);
+    document.getElementById("dictEar").addEventListener("click", speakDict);
+    document.getElementById("dictRepeat").addEventListener("click", speakDict);
+    document.getElementById("dictShow").addEventListener("click", revealDict);
+    dictCardEl.addEventListener("click", revealDict);
+    document.getElementById("dictRight").addEventListener("click", () => markDict(true));
+    document.getElementById("dictWrong").addEventListener("click", () => markDict(false));
+    document.getElementById("dictNext").addEventListener("click", () => nextDict());
+    document.getElementById("dictRestart").addEventListener("click", startDictation);
     document.getElementById("wsPrintBtn").addEventListener("click", () => window.print());
     checkBtn.addEventListener("click", checkAnswer);
     document.getElementById("nextQBtn").addEventListener("click", nextQuestion);
