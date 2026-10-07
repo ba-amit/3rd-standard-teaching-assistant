@@ -1,7 +1,7 @@
 // Test 2 lives under the same github.io origin as Test 1, so both service
 // workers share one CacheStorage. Only ever touch caches with our own prefix.
 const PREFIX = "test2-";
-const CACHE = PREFIX + "v6";
+const CACHE = PREFIX + "v7";
 const ASSETS = ["./", "./index.html", "./manifest.json", "./icon-192.png", "./icon-512.png"];
 
 self.addEventListener("install", (e) => {
