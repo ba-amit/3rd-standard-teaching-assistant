@@ -1986,9 +1986,12 @@
         ttsAudio.muted = false;
       } catch (e) { /* nothing to prime */ }
     }
-    document.addEventListener("touchend", unlockSpeech, { once: true });
-    document.addEventListener("click", unlockSpeech, { once: true });
-    document.addEventListener("keydown", unlockSpeech, { once: true });
+    // Capture phase, so the unlock runs before the tapped button's own
+    // handler — otherwise priming the <audio> element overwrote the clip
+    // the first tap had just started.
+    document.addEventListener("touchend", unlockSpeech, { once: true, capture: true });
+    document.addEventListener("click", unlockSpeech, { once: true, capture: true });
+    document.addEventListener("keydown", unlockSpeech, { once: true, capture: true });
 
     // ---------------- Google Translate TTS ----------------
     // The endpoint wants the full query set — ie/tl/client/q plus idx, total

@@ -891,6 +891,7 @@
 
     <div class="controls hidden" id="dictControls">
       <button class="primary" id="dictRepeat">🔁 पुन्हा ऐका</button>
+      <button class="secondary" id="dictSlow">🐢</button>
       <button class="secondary" id="dictShow">👀 शब्द पाहा</button>
       <button class="secondary" id="dictRight">✅ बरोबर</button>
       <button class="secondary" id="dictWrong">❌ चूक</button>
@@ -2611,20 +2612,20 @@
     const DICT_SETS = {
       mr: { words: () => MAR_DICT, lang: "mr", hint: "ऐका आणि वहीत लिहा", note: "पुन्हा ऐकण्यासाठी 🔊 दाबा",
         front: "लिहून झाल्यावर कार्ड उलटा", done: "संपले! बरोबर", score: "बरोबर",
-        btns: ["🔁 पुन्हा ऐका", "👀 शब्द पाहा", "✅ बरोबर", "❌ चूक", "पुढचा →", "🔀 पुन्हा सुरू"] },
+        btns: ["🔁 पुन्हा ऐका", "👀 शब्द पाहा", "✅ बरोबर", "❌ चूक", "पुढचा →", "🔀 पुन्हा सुरू", "🐢 हळू"] },
       hi: { words: () => HIN_DICT, lang: "hi", hint: "सुनो और कॉपी में लिखो", note: "फिर से सुनने के लिए 🔊 दबाओ",
         front: "लिखने के बाद कार्ड पलटो", done: "पूरा हुआ! सही", score: "सही",
-        btns: ["🔁 फिर से सुनो", "👀 शब्द देखो", "✅ सही", "❌ गलत", "अगला →", "🔀 फिर से शुरू"] },
+        btns: ["🔁 फिर से सुनो", "👀 शब्द देखो", "✅ सही", "❌ गलत", "अगला →", "🔀 फिर से शुरू", "🐢 धीरे"] },
       hiAll: { words: () => HIN_MATRA_WORDS, lang: "hi", hint: "सुनो और कॉपी में लिखो", note: "फिर से सुनने के लिए 🔊 दबाओ",
         front: "लिखने के बाद कार्ड पलटो", done: "पूरा हुआ! सही", score: "सही",
-        btns: ["🔁 फिर से सुनो", "👀 शब्द देखो", "✅ सही", "❌ गलत", "अगला →", "🔀 फिर से शुरू"] }
+        btns: ["🔁 फिर से सुनो", "👀 शब्द देखो", "✅ सही", "❌ गलत", "अगला →", "🔀 फिर से शुरू", "🐢 धीरे"] }
     };
     let dictSet = DICT_SETS.mr;
     function startDictation(setId) {
       if (typeof setId === "string") dictSet = DICT_SETS[setId];
       document.getElementById("dictHint").textContent = dictSet.hint;
       document.getElementById("dictNote").textContent = dictSet.note;
-      ["dictRepeat", "dictShow", "dictRight", "dictWrong", "dictNext", "dictRestart"].forEach((id, k) => {
+      ["dictRepeat", "dictShow", "dictRight", "dictWrong", "dictNext", "dictRestart", "dictSlow"].forEach((id, k) => {
         document.getElementById(id).textContent = dictSet.btns[k];
       });
       dict = { order: shuffle(dictSet.words().slice()), i: 0, right: 0, marked: 0, shown: false, done: false };
@@ -2641,9 +2642,12 @@
       counterEl.textContent = dict.done ? "✔" : `${dict.i + 1} / ${dict.order.length}`;
       setNameEl.textContent = `${dictSet.score} ${dict.right} / ${dict.marked}`;
     }
-    function speakDict() {
+    function speakDict(slow = false) {
       if (dict.done) return;
-      speak(dict.order[dict.i], { lang: dictSet.lang });
+      speak(dict.order[dict.i], { lang: dictSet.lang, slow });
+      // Warm the HTTP cache for the next word so it plays instantly.
+      const next = dict.order[dict.i + 1];
+      if (next) { const a = new Audio(); a.preload = "auto"; a.src = ttsUrl(next, dictSet.lang, false); }
     }
     function revealDict() {
       if (dict.done) return;
@@ -3672,13 +3676,29 @@
       speechSynthesis.onvoiceschanged = pickVoice;
     }
 
+    // Fallback voice per language: prefer the device's own voice for that
+    // language (best "enhanced"/Google one first); Marathi falls back to a
+    // Hindi voice, which reads Devanagari far better than an English one.
+    const BCP47 = { hi: "hi-IN", mr: "mr-IN", en: "en-IN" };
+    function voiceFor(lang) {
+      if (!("speechSynthesis" in window)) return null;
+      const voices = speechSynthesis.getVoices();
+      const rank = v => (/google|enhanced|premium|neural/i.test(v.name) ? 0 : 1);
+      const find = code => voices.filter(v => v.lang && v.lang.replace("_", "-").startsWith(code))
+        .sort((a, b) => rank(a) - rank(b))[0];
+      return find(BCP47[lang] || lang) || find(lang) || (lang === "mr" ? (find("hi-IN") || hindiVoice) : null)
+        || (lang === "hi" ? hindiVoice : null);
+    }
+
     function speakBrowser(text, opts = {}) {
       if (!("speechSynthesis" in window)) { opts.onend && opts.onend(); return; }
       speechSynthesis.cancel();
+      const lang = opts.lang || "hi";
       const utter = new SpeechSynthesisUtterance(text);
-      utter.lang = "hi-IN";
-      if (hindiVoice) utter.voice = hindiVoice;
-      utter.rate = opts.rate || 0.6;
+      const voice = voiceFor(lang);
+      utter.lang = voice ? voice.lang : (BCP47[lang] || "hi-IN");
+      if (voice) utter.voice = voice;
+      utter.rate = opts.rate || (opts.slow ? 0.6 : 0.85);
       utter.pitch = 1;
       utter.volume = 1;
       utter.onstart = () => opts.onstart && opts.onstart();
@@ -3708,9 +3728,13 @@
         ttsAudio.muted = false;
       } catch (e) { /* nothing to prime */ }
     }
-    document.addEventListener("touchend", unlockSpeech, { once: true });
-    document.addEventListener("click", unlockSpeech, { once: true });
-    document.addEventListener("keydown", unlockSpeech, { once: true });
+    // Capture phase, so the unlock runs before the tapped button's own
+    // handler — otherwise priming the <audio> element overwrote the word the
+    // first tap had just started, and the first word fell back to the
+    // robotic device voice.
+    document.addEventListener("touchend", unlockSpeech, { once: true, capture: true });
+    document.addEventListener("click", unlockSpeech, { once: true, capture: true });
+    document.addEventListener("keydown", unlockSpeech, { once: true, capture: true });
 
     // ---------------- Google Translate TTS ----------------
     // The endpoint wants the full query set — ie/tl/client/q plus idx, total
@@ -3772,7 +3796,7 @@
         // Drop the pending clip, so a slow response cannot play on top of the
         // browser voice a few seconds later.
         abortAudio();
-        speakBrowser(text, { rate: opts.rate, onstart: opts.onstart, onend: opts.onend });
+        speakBrowser(text, { lang, slow: opts.slow, rate: opts.rate, onstart: opts.onstart, onend: opts.onend });
       };
 
       if ("speechSynthesis" in window) speechSynthesis.cancel();
@@ -3780,7 +3804,9 @@
 
       // src first, handlers after: the empty-src error from abortAudio() above
       // is then already past and cannot be mistaken for this clip failing.
-      ttsAudio.src = ttsUrl(text, lang, opts.slow !== false);
+      // Normal speed by default: the endpoint's slow mode barely slows a word
+      // but time-stretches it, which makes it sound muffled.
+      ttsAudio.src = ttsUrl(text, lang, opts.slow === true);
       ttsAudio.onerror = fallback;
       ttsAudio.onstalled = fallback;
       ttsAudio.onplaying = () => {
@@ -3794,7 +3820,9 @@
       // paused is already false by then — so watch for "no sound yet" instead
       // and hand over to the browser voice rather than leaving the kid in
       // silence.
-      setTimeout(() => { if (!started) fallback(); }, 1800);
+      // Give a slow mobile connection time before dropping to the robotic
+      // device voice.
+      setTimeout(() => { if (!started) fallback(); }, 4000);
     }
 
     function stopSpeaking() {
@@ -6034,8 +6062,9 @@
     document.getElementById("readAloudBtn").addEventListener("click", readChapterAloud);
     document.getElementById("stopReadBtn").addEventListener("click", stopReading);
     document.getElementById("wsClearBtn").addEventListener("click", clearWorksheet);
-    document.getElementById("dictEar").addEventListener("click", speakDict);
-    document.getElementById("dictRepeat").addEventListener("click", speakDict);
+    document.getElementById("dictEar").addEventListener("click", () => speakDict());
+    document.getElementById("dictRepeat").addEventListener("click", () => speakDict());
+    document.getElementById("dictSlow").addEventListener("click", () => speakDict(true));
     document.getElementById("dictShow").addEventListener("click", revealDict);
     dictCardEl.addEventListener("click", revealDict);
     document.getElementById("dictRight").addEventListener("click", () => markDict(true));
