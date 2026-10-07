@@ -676,6 +676,15 @@
       color: var(--muted);
       padding-left: 14px;
     }
+    button.navGroup {
+      display: flex; align-items: center; justify-content: space-between; width: 100%;
+      background: none; border: 0; cursor: pointer; font-family: inherit; text-align: left;
+      padding: 8px 10px 8px 14px; border-radius: 10px;
+    }
+    button.navGroup:hover { background: rgba(59,130,246,.06); }
+    button.navGroup .chev { transition: transform .2s; font-size: .9rem; }
+    button.navGroup[aria-expanded="false"] .chev { transform: rotate(-90deg); }
+    .navGroupBody[hidden] { display: none; }
 
     /* --- side panel --- */
     .sidebar {
@@ -3834,16 +3843,39 @@
       if (autoSpeakEl.checked) speakLetter();
     }
 
+    // Subject groups collapse; the open/closed state is a per-viewer
+    // convenience in localStorage. The active activity's group always opens.
+    let navOpen = {};
+    try { navOpen = JSON.parse(localStorage.getItem("test2NavOpen") || "{}"); } catch (e) { navOpen = {}; }
+    function setGroupOpen(group, open) {
+      navOpen[group] = open;
+      try { localStorage.setItem("test2NavOpen", JSON.stringify(navOpen)); } catch (e) { /* storage blocked */ }
+      navEl.querySelectorAll("button.navGroup").forEach(h => {
+        if (h.dataset.group !== group) return;
+        h.setAttribute("aria-expanded", String(open));
+        h.nextElementSibling.hidden = !open;
+      });
+    }
     function buildNav() {
       navEl.innerHTML = "";
-      let group = null;
+      let group = null, body = navEl;
       ACTIVITIES.forEach(a => {
         if (a.group && a.group !== group) {
           group = a.group;
-          const h = document.createElement("div");
+          const g = group;
+          const h = document.createElement("button");
           h.className = "navGroup";
-          h.textContent = group;
+          h.dataset.group = g;
+          h.innerHTML = `<span></span><span class="chev">▾</span>`;
+          h.firstChild.textContent = g;
+          body = document.createElement("div");
+          body.className = "navGroupBody";
+          const open = navOpen[g] === true;
+          h.setAttribute("aria-expanded", String(open));
+          body.hidden = !open;
+          h.addEventListener("click", () => setGroupOpen(g, h.getAttribute("aria-expanded") !== "true"));
           navEl.appendChild(h);
+          navEl.appendChild(body);
         }
         const btn = document.createElement("button");
         btn.className = "navItem";
@@ -3852,7 +3884,7 @@
         btn.querySelector(".ico").textContent = a.icon;
         btn.querySelector(".lbl").textContent = a.label;
         btn.addEventListener("click", () => { setMode(a.id); closeDrawer(); });
-        navEl.appendChild(btn);
+        body.appendChild(btn);
       });
     }
 
@@ -3868,6 +3900,7 @@
         const el = document.getElementById(id);
         if (el) el.classList.toggle("hidden", !shown.has(id));
       }));
+      if (a.group && navOpen[a.group] !== true) setGroupOpen(a.group, true);
       navEl.querySelectorAll(".navItem").forEach(b =>
         b.classList.toggle("active", b.dataset.id === a.id));
       setFilterEl.classList.toggle("hidden", !a.usesSetFilter);
